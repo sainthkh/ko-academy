@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start-dev-win": ".\\node_modules\\.bin\\webpack-dev-server --progress --inline --hot --config .\\build\\webpack.debug.config.js"
   },
   "keywords": [],
   "author": "",
