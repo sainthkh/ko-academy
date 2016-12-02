@@ -3,7 +3,7 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 import Layout from './components/Layout'
-import IndexPage from './components/IndexPage'
+import IndexPage from './components/index/PageLayout'
 
 const routes = (
 	<Route path="/" component={Layout}>
