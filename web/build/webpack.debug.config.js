@@ -6,6 +6,7 @@ const path = require('path');
 module.exports = {
 	devtool: 'inline-sourcemap',
 	entry: path.join(__dirname, '..', 'app', 'client.js'),
+	watch: true,
 	devServer: {
 		inline: true,
 		port: 3333,
