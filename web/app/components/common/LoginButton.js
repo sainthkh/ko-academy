@@ -1,10 +1,14 @@
 'use strict'
 import React from 'react'
+import CSSModules from 'react-css-modules';
+import styles from './LoginButton.css'
 
-export default class LoginButton extends React.Component {
+class LoginButton extends React.Component {
 	render() {
 		return (
-			<button>Login</button>
+			<button styleName="login-btn">Login</button>
 		);
 	}
 }
+
+export default CSSModules(LoginButton, styles)

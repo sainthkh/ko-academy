@@ -1,0 +1,12 @@
+@import './global.css';
+
+.login-btn {
+	background: none;
+	padding: 5px 15px;
+	color: white;
+	border: 1px solid white;
+
+	&:hover {
+		background: color($main-bg lightness(40%))
+	}
+}

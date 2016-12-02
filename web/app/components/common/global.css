@@ -1,0 +1,13 @@
+:global {
+	.wrap {
+		width: 100%;
+		@media(min-width: 75rem) {
+			width: 75rem;
+			margin: 0 auto;
+		}
+	}
+}
+
+$main-bg: #192867;
+
+@import './base.css'

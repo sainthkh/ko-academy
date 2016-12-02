@@ -3,16 +3,18 @@
 import React from 'react';
 import MenuBar from '../common/MenuBar'
 import CTA from './CTA'
+import CSSModules from 'react-css-modules'
+import styles from "./PageLayout.css"
 
-export default class IndexPage extends React.Component {
+class IndexPage extends React.Component {
 	render() {
 		return (
-			<div className="home">
-				<div styleName="">
-					<MenuBar />
-					<CTA />
-				</div>
+			<div styleName="home">
+				<MenuBar />
+				<CTA />
 			</div>
 		);
 	}
 }
+
+export default CSSModules(IndexPage, styles)
