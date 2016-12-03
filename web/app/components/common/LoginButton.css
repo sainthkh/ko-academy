@@ -1,4 +1,4 @@
-@import './variables.css';
+@import './global.css';
 
 .login-btn {
 	background: none;
@@ -11,7 +11,7 @@
 		background: color($main-bg lightness(40%))
 	}
 
-	@media(width>=45rem){
+	@media(--medium){
 		padding: 5px 15px;
 		font-size: 1rem;
 	}

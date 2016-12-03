@@ -1,3 +1,5 @@
+@import '../common/global.css';
+
 .cta-signup {
 	$cta-bg: #ce4e15;
 	font-size: 1rem;
@@ -14,7 +16,7 @@
 		background: color($cta-bg lightness(40%))
 	}
 
-	@media(width>=45rem){
+	@media(--medium){
 		font-size: 2rem;
 		margin-top: 2.5rem;
 		padding: 15px 35px;

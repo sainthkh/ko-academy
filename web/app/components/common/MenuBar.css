@@ -1,5 +1,4 @@
-@import './variables.css';
-@import './mixin.css';
+@import './global.css';
 
 .menubar {
 	background: $main-bg;
@@ -23,7 +22,7 @@
 			color: white;
 			margin-left: 0.5rem;
 			font-size: 1.2rem;
-			@media(width>=45rem) {
+			@media(--medium) {
 				font-size: 1.5rem;
 			}
 		}

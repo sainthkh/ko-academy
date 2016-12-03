@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import SignupDialog from './common/SignupDialog'
 import CSSModules from 'react-css-modules';
-import styles from './common/global.css'
+import styles from './Layout.css'
 
 class Layout extends React.Component {
 	render() {

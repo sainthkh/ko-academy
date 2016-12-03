@@ -1,4 +1,4 @@
-@import './mixin.css';
+@import './global.css';
 
 .modal {
 	position: fixed 0 0 0 0;

@@ -1,5 +1,4 @@
-@import '../common/variables.css';
-@import '../common/mixin.css';
+@import '../common/global.css';
 
 .hero {
 	background: $main-bg;
@@ -7,7 +6,7 @@
 	display: flex;
 	align-items: center;
 
-	@media(width>=45rem) {
+	@media(--medium) {
 		height: 20rem;
 	}
 }
@@ -23,7 +22,7 @@
 		text-align: center;
 		font-size: 1.3rem;
 
-		@media(width>=45rem) {
+		@media(--medium) {
 			font-size: 2.5rem;
 		}
 	}

@@ -1,11 +1,30 @@
+/* media query definitions */
+@custom-media --medium (width >= 45rem);
+@custom-media --big (width >= 75rem);
+
+/* global style */
 :global {
 	.wrap {
 		size: 100%;
-		@media(min-width >= 75rem) {
+		@media(--big) {
 			width: 75rem;
 			margin: 0 auto;
 		}
 	}
 }
 
-@import './base.css'
+/* global variables */
+$main-bg: #192867;
+
+
+/* global mixins */
+@define-mixin flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@define-mixin limit-width $width {
+	width: $width;
+	max-width: $width;
+}
