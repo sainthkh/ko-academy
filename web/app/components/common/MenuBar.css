@@ -1,11 +1,12 @@
-@import '../common/global.css';
+@import './variables.css';
 
 .menubar {
 	background: $main-bg;
 	font-size: 1rem;
-	min-height: 2.75rem;
+	min-height: 4rem;
 	display: flex;
 	align-items: center;
+	border-bottom: 1px solid #9eaff6;
 }
 
 .content {
@@ -17,12 +18,17 @@
 
 .logo {
 	margin-right: 1rem;
-}
-
-.title {
-	color: white;
-	margin-left: 0.5rem;
-	font-size: 1.5rem;
+	a {
+		text-decoration: none;
+		.title {
+			color: white;
+			margin-left: 0.5rem;
+			font-size: 1.2rem;
+			@media(width>=45rem) {
+				font-size: 1.5rem;
+			}
+		}
+	}
 }
 
 .action {

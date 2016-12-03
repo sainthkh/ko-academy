@@ -1,12 +1,18 @@
-@import './global.css';
+@import './variables.css';
 
 .login-btn {
 	background: none;
-	padding: 5px 15px;
+	padding: 3px 10px;
 	color: white;
 	border: 1px solid white;
+	font-size: 0.9rem;
 
 	&:hover {
 		background: color($main-bg lightness(40%))
+	}
+
+	@media(width>=45rem){
+		padding: 5px 15px;
+		font-size: 1rem;
 	}
 }

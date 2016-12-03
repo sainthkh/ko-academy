@@ -1,10 +1,14 @@
 'use strict'
 import React from 'react'
+import CSSModules from 'react-css-modules';
+import styles from './CTAButton.css'
 
-export default class CTAButton extends React.Component {
+class CTAButton extends React.Component {
 	render() {
 		return (
-			<button>Start Now</button>
+			<button styleName="cta-signup">Start Now</button>
 		);
 	}
 }
+
+export default CSSModules(CTAButton, styles)

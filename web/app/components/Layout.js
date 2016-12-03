@@ -2,8 +2,10 @@
 
 import React from 'react';
 import { Link } from 'react-router';
+import CSSModules from 'react-css-modules';
+import styles from './common/global.css'
 
-export default class Layout extends React.Component {
+class Layout extends React.Component {
 	render() {
 		return (
 			<div className="app-container">
@@ -12,3 +14,5 @@ export default class Layout extends React.Component {
 		);
 	}
 }
+
+export default CSSModules(Layout, styles)
