@@ -1,4 +1,5 @@
 @import './variables.css';
+@import './mixin.css';
 
 .menubar {
 	background: $main-bg;
@@ -10,10 +11,8 @@
 }
 
 .content {
-	display: flex;
-	align-items: center;
+	@mixin flex-center;
 	padding: 0 1rem;
-	justify-content: center;
 }
 
 .logo {
