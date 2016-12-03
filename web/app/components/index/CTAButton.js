@@ -6,7 +6,7 @@ import styles from './CTAButton.css'
 class CTAButton extends React.Component {
 	render() {
 		return (
-			<button styleName="cta-signup">Start Now</button>
+			<a styleName="cta-signup" href="#signup">Start Now</a>
 		);
 	}
 }

@@ -1,0 +1,105 @@
+@import './mixin.css';
+
+.modal {
+	position: fixed 0 0 0 0;
+	opacity: 0;
+	transition: opacity 250ms ease-in;
+	pointer-events: none;
+	@mixin flex-center;
+}
+
+.modal:target {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.bg-close {
+	&::before {
+		content: "";
+		display: block;
+		position: fixed 0 0 0 0;
+		background: rgba(0, 0, 0, 0.6);
+	}
+}
+
+.modal-content {
+	position: relative;
+	@mixin limit-width 100%;
+	margin: 0 5px;
+	padding: 0 10px;
+	background: linear-gradient(#fff, #eee);
+}
+
+@define-mixin section-border {
+	border-bottom: 1px solid #ddd;
+}
+@define-mixin section-padding {
+	padding: 10px 0;
+}
+@define-mixin dialog-font-size {
+	font-size: 1.1rem;
+}
+
+.modal-header {
+	@mixin flex-center;
+	@mixin section-padding;
+	@mixin section-border;
+
+	a {
+		text-decoration: none;
+		margin-left: auto;
+		font-weight: 900;
+		size: 1.2rem;
+		background: #ddd;
+		text-align: center;
+		vertical-align: center;
+		line-height: 1.2rem;
+		color: #999;
+		border-radius: 0.6rem;
+
+		&:hover {
+			background: #bbb;
+			color: #777;
+		}
+	}
+
+	h2 {
+		@mixin dialog-font-size;
+		margin: 0;
+	}
+}
+
+@define-mixin form-element {
+	@mixin limit-width 100%;
+	height: 2rem;
+	margin-top: 0.5rem;
+	padding: 0;
+}
+
+.field {
+	@mixin form-element;
+	box-sizing: border-box;
+	
+	&::placeholder {
+		@mixin dialog-font-size;
+		padding-left: 0.5rem;
+		font-weight: 300;
+	}
+}
+
+.submit {
+	@mixin form-element;
+	@mixin dialog-font-size;
+	font-weight: bold;
+}
+
+.modal-main {
+	@mixin section-padding;
+	@mixin section-border;
+}
+
+.modal-footer {
+	@mixin section-padding;
+	text-align: center;
+	color: #666;
+}
