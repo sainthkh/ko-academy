@@ -1,4 +1,4 @@
-@import '../common/global.css';
+@import '../components/common/global.css';
 
 .cta-signup {
 	$cta-bg: #ce4e15;

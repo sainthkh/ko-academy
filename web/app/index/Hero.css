@@ -1,4 +1,4 @@
-@import '../common/global.css';
+@import '../components/common/global.css';
 
 .hero {
 	background: $main-bg;
