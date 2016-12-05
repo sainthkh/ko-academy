@@ -4,6 +4,8 @@ const config = require('../config')
 export const REQUEST_SIGNUP = "REQUEST_SIGNUP"
 export const SUCCEEDED_SIGNUP = "SUCCESS_SIGNUP"
 export const FAILED_SIGNUP = "FAILED_SIGNUP"
+export const SERVER_DOWN = "SERVER_DOWN"
+export const OTHER_ERROR = "OTHER_ERROR"
 
 export function receivedSignup(result) {
 	var action = {}
@@ -25,13 +27,36 @@ export function requestSignup(user) {
 	}
 }
 
+export function serverDown() {
+	return {
+		type: SERVER_DOWN
+	}
+}
+
+export function otherError(err, username, time) {
+	return {
+		type: OTHER_ERROR,
+		error: err,
+		username,
+		time,
+	}
+}
+
 export function fetchSignupResult(user) {
-	return dispatch => {
+	return (dispatch, getState) => {
 		dispatch(requestSignup(user))
 		client.basicAuth("guest", config.apiKey)
 		
 		client.post('/create-user', user, (err, req, res, obj) => { 
-			dispatch(receivedSignup(obj))
+			if(err) {
+				if(err.code && err.code == "ECONNREFUSED") {
+					dispatch(serverDown())
+				} else {
+					dispatch(otherError(err, getState().username, new Date()))
+				}
+			} else {
+				dispatch(receivedSignup(obj))
+			}
 		})
 	}
 }

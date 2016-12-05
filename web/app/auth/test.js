@@ -7,16 +7,65 @@ const config = require('../config')
 import { 
 	FAILED_SIGNUP, SUCCEEDED_SIGNUP, receivedSignup, 
 	REQUEST_SIGNUP, requestSignup,
+	SERVER_DOWN, OTHER_ERROR
 } from './action'
 
 test("fetchSignupResult with correct userdata", t => {
 	testRequestedSignup(t)
 	testBasicAuthCall(t)
 	testCorrectAPICall(t)
-	testDispatchCalledTwice(t)
+	//testDispatchCallCount(t, 2)
 	testFetchSignupSuccess(t)
 	testFetchSignupFail(t)
 	
+	t.end()
+})
+
+test("fetchSignupResult with client error", t => {
+	testRequestedSignup(t)
+	testBasicAuthCall(t, 2)
+
+	var err = {restCode:'ResourceNotFound'}
+	var post = sinon.stub().yields(err, null, null, null)
+	var fetchSignupResult = mockFetchSignupResult(null, post)
+	var thunk = fetchSignupResult({
+		username: "validuser",
+		email: "validemail@yahoo.com",
+		password: "p@@sswor!d"
+	})
+	
+	var dispatch = sinon.spy()
+	var getState = sinon.stub().returns({username:"guest"})
+	thunk(dispatch, getState)
+
+	var actionObj = dispatch.secondCall.args[0]
+	t.equal(actionObj.type, OTHER_ERROR, "Action type: other error")
+	t.deepEqual(actionObj.error, err, "correct error object")
+	t.equal(actionObj.username, "guest", "username should be guest")
+	t.equal(actionObj.time instanceof Date, true, "time should be Date object")
+
+	testDispatchCallCount(t, dispatch, 2)
+	t.end()
+})
+
+test("fetchSignupResult with server down", t => {
+	testRequestedSignup(t)
+	testBasicAuthCall(t, 1)
+
+	var post = sinon.stub().yields({code:'ECONNREFUSED'}, null, null, null)
+	var fetchSignupResult = mockFetchSignupResult(null, post)
+	var thunk = fetchSignupResult({
+		username: "validuser",
+		email: "validemail@yahoo.com",
+		password: "p@@sswor!d"
+	})
+	
+	var dispatch = sinon.spy()
+	thunk(dispatch)
+
+	t.equal(dispatch.secondCall.args[0].type, SERVER_DOWN, "Action type: server down")
+
+	testDispatchCallCount(t, dispatch, 2)
 	t.end()
 })
 
@@ -49,21 +98,12 @@ const testBasicAuthCall = t => {
 	t.equal(basicAuth.firstCall.args[1], config.apiKey, "correct auth api key")
 }
 
-const testDispatchCalledTwice = t => {
-	var fetchSignupResult = mockFetchSignupResult(null, sinon.stub().yields(null, null, null, { success: false, msg: {}}))
-	var thunk = fetchSignupResult({
-		username: "andrew",
-		email: "email@naver.com",
-		password: "p@ssw0rd"
-	})
-	var dispatch = sinon.spy()
-	thunk(dispatch)
-
-	t.equal(dispatch.callCount, 2, "dispatch is called twice: request, receive")
+const testDispatchCallCount = (t, dispatch, count) => {
+	t.equal(dispatch.callCount, count, `dispatch is called ${count} time(s)`)
 }
 
 const testCorrectAPICall = t => {
-	console.log('>>> Correct API Call <<<')
+	console.log('>>> Correct API Call Start')
 	var post = sinon.spy()
 	var fetchSignupResult = mockFetchSignupResult(null, post)
 	var req = {
@@ -78,7 +118,8 @@ const testCorrectAPICall = t => {
 	// correct post call. 
 	t.equal(post.callCount, 1, "post is only called once")
 	t.equal(post.firstCall.args[0], '/create-user', "correct API path")
-	t.deepEqual(post.firstCall.args[1], req)
+	t.deepEqual(post.firstCall.args[1], req, "user object should not be changed")
+	console.log('<<< Correct API Call Done')
 }
 
 const testFetchSignupSuccess = t => {
