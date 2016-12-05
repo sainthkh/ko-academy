@@ -232,19 +232,19 @@ const succeededSignup = (msg, t) => {
 const failedSignup = (msg, t) => {
 	var action = receivedSignup({
 		success: false,
-		msg: {
-			username: "testuser is already in use",
-			email: "your@email.com has been signed up. Do you want to find password?",
-			password: "Password is too short. Password should be longer than 7 characters."
+		error: {
+			LONG_USERNAME,
+			DUPLICATE_EMAIL,
+			SHORT_PASSWORD,
 		}
 	})
 
 	t.deepEqual(action, {
 		type: FAILED_SIGNUP,
-		msg: {
-			username: "testuser is already in use",
-			email: "your@email.com has been signed up. Do you want to find password?",
-			password: "Password is too short. Password should be longer than 7 characters."
+		error: {
+			LONG_USERNAME,
+			DUPLICATE_EMAIL,
+			SHORT_PASSWORD,
 		}
 	}, msg)
 }

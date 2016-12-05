@@ -15,7 +15,7 @@ export function receivedSignup(result) {
 		action.token = result.token
 	} else {
 		action.type = FAILED_SIGNUP
-		action.msg = result.msg
+		action.error = result.error
 	}
 
 	return action;
