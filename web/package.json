@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start-dev-win": ".\\node_modules\\.bin\\webpack-dev-server --progress --inline --hot --config .\\build\\webpack.debug.config.js",
-    "test": "node .\\test\\logic.js",
-    "test-current": "node .\\test\\current.js",
-    "test-all": "node .\\test\\all.js",
+    "test": ".\\node_modules\\.bin\\babel-node --presets es2015 .\\test\\logic.js | .\\node_modules\\.bin\\tap-spec",
+    "test-current": ".\\node_modules\\.bin\\babel-node --presets es2015 .\\test\\current.js | .\\node_modules\\.bin\\tap-spec",
+    "test-all": ".\\node_modules\\.bin\\babel-node --presets es2015 .\\test\\all.js",
     "test-react": ".\\node_modules\\.bin\\babel-node --presets react,es2015 .\\test\\react.js"
   },
   "keywords": [],
