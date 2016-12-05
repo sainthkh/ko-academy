@@ -2,14 +2,14 @@ const test = require('tape')
 const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 
-const config = require('../config')
+const config = require('../../config')
 
 import { 
 	FAILED_SIGNUP, SUCCEEDED_SIGNUP, receivedSignup, 
 	REQUEST_SIGNUP, requestSignup,
 	SERVER_DOWN, OTHER_ERROR,
 	LONG_USERNAME, DUPLICATE_EMAIL, SHORT_PASSWORD, COMMON_PASSWORD,
-} from './action'
+} from '../action'
 
 test("fetchSignupResult with correct userdata", t => {
 	testRequestedSignup(t)
@@ -185,7 +185,7 @@ const testCorrectAPICall = t => {
 const mockFetchSignupResult = (basicAuth, post) => {
 	var basicAuth = basicAuth ? basicAuth:sinon.spy()
 	var post = post ? post:sinon.spy()
-	var action = proxyquire('./action', {
+	var action = proxyquire('../action', {
 		'../data/rest': {
 			basicAuth: basicAuth,
 			post: post, 
