@@ -42,7 +42,7 @@ export function otherError(err, username, time) {
 		type: OTHER_ERROR,
 		error: err,
 		username,
-		time,
+		time: new Date(),
 	}
 }
 
@@ -56,7 +56,7 @@ export function fetchSignupResult(user) {
 				if(err.code && err.code == "ECONNREFUSED") {
 					dispatch(serverDown())
 				} else {
-					dispatch(otherError(err, getState().username, new Date()))
+					dispatch(otherError(err, getState().username))
 				}
 			} else {
 				dispatch(receivedSignup(obj))

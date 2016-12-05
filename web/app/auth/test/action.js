@@ -7,7 +7,7 @@ const config = require('../../config')
 import { 
 	FAILED_SIGNUP, SUCCEEDED_SIGNUP, receivedSignup, 
 	REQUEST_SIGNUP, requestSignup,
-	SERVER_DOWN, OTHER_ERROR,
+	serverDown, otherError, SERVER_DOWN, OTHER_ERROR,
 	LONG_USERNAME, DUPLICATE_EMAIL, SHORT_PASSWORD, COMMON_PASSWORD,
 } from '../action'
 
@@ -195,7 +195,7 @@ const mockFetchSignupResult = (basicAuth, post) => {
 	return action.fetchSignupResult
 }
 
-test("requestSignup", t => {
+test("requestSignup in any condition", t => {
 	var action = requestSignup({
 		username: "testuser2",
 		email: "my@email.com",
@@ -209,7 +209,7 @@ test("requestSignup", t => {
 	t.end()
 })
 
-test("receivedSignup", t => {
+test("receivedSignup in any condition", t => {
 	succeededSignup("returned correct action object with username and token", t)
 	failedSignup("returned correct action object with correct message", t)
 	t.end()
@@ -248,3 +248,28 @@ const failedSignup = (msg, t) => {
 		}
 	}, msg)
 }
+
+test("serverDown in any condition", t => {
+	var action = serverDown()
+
+	t.deepEqual(action, {
+		type: SERVER_DOWN
+	}, "returned an object which has only type: SERVER_DOWN")
+
+	t.end()
+})
+
+test("otherError in any condition", t => {
+	var err = {code:'TestError'}
+	var action = otherError(err, "random user") 
+	var time = action.time //current time
+
+	t.deepEqual(action, {
+		type: OTHER_ERROR,
+		error: err,
+		username: "random user", 
+		time: time,
+	}, "returned a correct object with type: OTHER_ERROR and other values liek error, username, time")
+
+	t.end()
+})
