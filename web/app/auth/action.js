@@ -6,6 +6,10 @@ export const SUCCEEDED_SIGNUP = "SUCCESS_SIGNUP"
 export const FAILED_SIGNUP = "FAILED_SIGNUP"
 export const SERVER_DOWN = "SERVER_DOWN"
 export const OTHER_ERROR = "OTHER_ERROR"
+export const LONG_USERNAME = "LONG_USERNAME"
+export const DUPLICATE_EMAIL = "DUPLICATE_EMAIL"
+export const SHORT_PASSWORD = "SHORT_PASSWORD"
+export const COMMON_PASSWORD = "COMMON_PASSWORD"
 
 export function receivedSignup(result) {
 	var action = {}

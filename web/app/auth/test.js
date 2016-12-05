@@ -7,23 +7,82 @@ const config = require('../config')
 import { 
 	FAILED_SIGNUP, SUCCEEDED_SIGNUP, receivedSignup, 
 	REQUEST_SIGNUP, requestSignup,
-	SERVER_DOWN, OTHER_ERROR
+	SERVER_DOWN, OTHER_ERROR,
+	LONG_USERNAME, DUPLICATE_EMAIL, SHORT_PASSWORD, COMMON_PASSWORD,
 } from './action'
 
 test("fetchSignupResult with correct userdata", t => {
 	testRequestedSignup(t)
 	testBasicAuthCall(t)
 	testCorrectAPICall(t)
-	//testDispatchCallCount(t, 2)
-	testFetchSignupSuccess(t)
-	testFetchSignupFail(t)
+
+	var username = "testuser3"
+	var token = "random token 3"
+	var post = sinon.stub().yields(null, null, null, {
+		success: true,
+		username,
+		token
+	})
+	var fetchSignupResult = mockFetchSignupResult(null, post)
+	var thunk = fetchSignupResult({
+		username,
+		email: "another@gmail.com",
+		password: "hello secret",
+	})
+	var dispatch = sinon.spy()
+	thunk(dispatch)
+
+	t.deepEqual(dispatch.secondCall.args[0], {
+		type: SUCCEEDED_SIGNUP,
+		username,
+		token,
+	}, "Correct Action: Succeeded Signup")
 	
+	testDispatchCallCount(t, dispatch, 2)
+	t.end()
+})
+
+test("fetchSignupResult with incorrect userdata", t => {
+	testRequestedSignup(t)
+	testBasicAuthCall(t)
+	testCorrectAPICall(t)
+
+	var long_username = "aasdaaa asdliuaksadfujm asfd asdluf;ljkas dfasdfasdfau"
+	var common_password = "12345678"
+	var post = sinon.stub().yields(null, null, null, {
+		success: false,
+		error: {
+			LONG_USERNAME,
+			DUPLICATE_EMAIL,
+			COMMON_PASSWORD,
+		}
+	})
+	var fetchSignupResult = mockFetchSignupResult(null, post)
+	var thunk = fetchSignupResult({
+		username: long_username,
+		email: "duplicate@email.co.ru",
+		password: common_password,
+	})
+	var dispatch = sinon.spy()
+	thunk(dispatch)
+
+	t.deepEqual(dispatch.secondCall.args[0], {
+		type: FAILED_SIGNUP,
+		error: {
+			LONG_USERNAME,
+			DUPLICATE_EMAIL,
+			COMMON_PASSWORD,
+		}
+	}, "Correct Action: Failed Signup")
+
+	testDispatchCallCount(t, dispatch, 2)
 	t.end()
 })
 
 test("fetchSignupResult with client error", t => {
 	testRequestedSignup(t)
 	testBasicAuthCall(t, 2)
+	testCorrectAPICall(t)
 
 	var err = {restCode:'ResourceNotFound'}
 	var post = sinon.stub().yields(err, null, null, null)
@@ -51,6 +110,7 @@ test("fetchSignupResult with client error", t => {
 test("fetchSignupResult with server down", t => {
 	testRequestedSignup(t)
 	testBasicAuthCall(t, 1)
+	testCorrectAPICall(t)
 
 	var post = sinon.stub().yields({code:'ECONNREFUSED'}, null, null, null)
 	var fetchSignupResult = mockFetchSignupResult(null, post)
@@ -120,66 +180,6 @@ const testCorrectAPICall = t => {
 	t.equal(post.firstCall.args[0], '/create-user', "correct API path")
 	t.deepEqual(post.firstCall.args[1], req, "user object should not be changed")
 	console.log('<<< Correct API Call Done')
-}
-
-const testFetchSignupSuccess = t => {
-	var username = "testuser3"
-	var token = "random token 3"
-	const {dispatch, basicAuth} = setupFetch({
-		username,
-		email: "another@gmail.com",
-		password: "hello secret",
-	}, {
-		success: true,
-		username,
-		token
-	}, null, t)
-
-	t.deepEqual(dispatch.secondCall.args[0], {
-		type: SUCCEEDED_SIGNUP,
-		username,
-		token,
-	}, "Action: Succeeded Signup")
-}
-
-const testFetchSignupFail = t => {
-	var username = "testuser4"
-	var token = "random token 4"
-	const {dispatch, basicAuth} = setupFetch({
-		username,
-		email: "another2mail@gmail.com",
-		password: "hello secret 5",
-	}, {
-		success: false,
-		msg: {
-			username: "testuser is already in use",
-			email: "your@email.com has been signed up. Do you want to find password?",
-			password: "Password is too short. Password should be longer than 7 characters."
-		}
-	}, null, t)
-
-	t.deepEqual(dispatch.secondCall.args[0], {
-		type: FAILED_SIGNUP,
-		msg: {
-			username: "testuser is already in use",
-			email: "your@email.com has been signed up. Do you want to find password?",
-			password: "Password is too short. Password should be longer than 7 characters."
-		}
-	}, "Correct Action: Failed Signup")
-}
-
-const setupFetch = (req, res, err, t) => {
-	var basicAuth = sinon.spy()
-	var post = sinon.stub().yields(err, null, null, res)
-	var fetchSignupResult = mockFetchSignupResult(basicAuth, post)
-	var thunk = fetchSignupResult(req)
-	var dispatch = sinon.spy()
-	thunk(dispatch)
-
-	return {
-		dispatch,
-		basicAuth,
-	}
 }
 
 const mockFetchSignupResult = (basicAuth, post) => {
