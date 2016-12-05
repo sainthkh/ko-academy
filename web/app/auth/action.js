@@ -11,6 +11,12 @@ export const DUPLICATE_EMAIL = "DUPLICATE_EMAIL"
 export const SHORT_PASSWORD = "SHORT_PASSWORD"
 export const COMMON_PASSWORD = "COMMON_PASSWORD"
 
+export function requestSignup(user) {
+	return {
+		type: REQUEST_SIGNUP
+	}
+}
+
 export function receivedSignup(result) {
 	var action = {}
 	if(result.success){
@@ -23,27 +29,6 @@ export function receivedSignup(result) {
 	}
 
 	return action;
-}
-
-export function requestSignup(user) {
-	return {
-		type: REQUEST_SIGNUP
-	}
-}
-
-export function serverDown() {
-	return {
-		type: SERVER_DOWN
-	}
-}
-
-export function otherError(err, username, time) {
-	return {
-		type: OTHER_ERROR,
-		error: err,
-		username,
-		time: new Date(),
-	}
 }
 
 export function fetchSignupResult(user) {
@@ -62,5 +47,20 @@ export function fetchSignupResult(user) {
 				dispatch(receivedSignup(obj))
 			}
 		})
+	}
+}
+
+export function serverDown() {
+	return {
+		type: SERVER_DOWN
+	}
+}
+
+export function otherError(err, username, time) {
+	return {
+		type: OTHER_ERROR,
+		error: err,
+		username,
+		time: new Date(),
 	}
 }
