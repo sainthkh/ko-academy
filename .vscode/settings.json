@@ -2,6 +2,6 @@
 {
 	"files.associations": {
 		"*.hbs":"html",
-		"*.css":"scss"
+		"*.pcss":"scss"
 	}
 }
