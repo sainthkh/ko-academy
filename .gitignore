@@ -39,3 +39,4 @@ jspm_packages
 # Project
 temp/
 web/app/config.js
+*.css.ts
