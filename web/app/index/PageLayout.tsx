@@ -1,12 +1,12 @@
 'use strict';
 
-import React from 'react';
+import * as React from 'react';
 import MenuBar from '../common/MenuBar'
 import Hero from './Hero'
-import CSSModules from 'react-css-modules'
+import * as CSSModules from 'react-css-modules'
 import styles from "./PageLayout.css"
 
-class IndexPage extends React.Component {
+class IndexPage extends React.Component<{}, {}> {
 	render() {
 		return (
 			<div styleName="home">

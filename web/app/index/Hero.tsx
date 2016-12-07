@@ -1,10 +1,10 @@
 'use strict'
-import React from 'react'
+import * as React from 'react'
 import CTAButton from './CTAButton'
-import CSSModules from 'react-css-modules';
+import * as CSSModules from 'react-css-modules';
 import styles from './Hero.css'
 
-class Hero extends React.Component {
+class Hero extends React.Component<{}, {}> {
 	render() {
 		return (
 			<div styleName="hero">

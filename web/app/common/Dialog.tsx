@@ -1,9 +1,16 @@
 'use strict'
-import React from 'react'
-import CSSModules from 'react-css-modules';
+import * as React from 'react'
+import * as CSSModules from 'react-css-modules';
 import styles from './Dialog.css'
 
-class Dialog extends React.Component {
+interface DialogProps {
+	readonly ID: string
+	readonly title: string
+	readonly main: JSX.Element
+	readonly footer?: JSX.Element
+}
+
+class Dialog extends React.Component<DialogProps, {}> {
 	render() {
 		return (
 			<div id={this.props.ID} styleName="modal">

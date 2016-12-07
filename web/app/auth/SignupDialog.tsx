@@ -1,10 +1,10 @@
 'use strict'
-import React from 'react'
+import * as React from 'react'
 import Dialog from '../common/Dialog'
-import CSSModules from 'react-css-modules';
+import * as CSSModules from 'react-css-modules';
 import styles from './SignupDialog.css'
 
-class SignupDialog extends React.Component {
+class SignupDialog extends React.Component<{}, {}> {
 	render() {
 		var title = "Sign up and start your Korean journey!"
 		var main = (

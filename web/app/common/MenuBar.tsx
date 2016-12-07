@@ -1,11 +1,11 @@
 'use strict'
-import React from 'react'
+import * as React from 'react'
 import { Link } from 'react-router';
 import LoginButton from './LoginButton'
-import CSSModules from 'react-css-modules';
+import * as CSSModules from 'react-css-modules';
 import styles from './MenuBar.css'
 
-class MenuBar extends React.Component {
+class MenuBar extends React.Component<{}, {}> {
 	render() {
 		return (
 			<header styleName="menubar">

@@ -1,12 +1,12 @@
 'use strict';
 
-import React from 'react';
+import * as React from 'react';
 import { Link } from 'react-router';
 import AuthUI from './auth/UIPackage'
-import CSSModules from 'react-css-modules';
+import * as CSSModules from 'react-css-modules';
 import styles from './Layout.css'
 
-class Layout extends React.Component {
+class Layout extends React.Component<{}, {}> {
 	render() {
 		return (
 			<div className="app-container">

@@ -1,18 +1,18 @@
 'use strict';
 
-const express = require('express');
-const bodyparser = require('body-parser')
-const path = require('path');
-const exphbs = require('express-handlebars')
-import React from 'react';
+import * as express from 'express'
+import * as bodyparser from 'body-parser'
+import * as path from 'path'
+import * as exphbs from 'express-handlebars'
+import * as React from 'react';
 import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
 
-import routes from './routes';
+import { routes } from './routes';
 
 const app = express();
 
-app.use(express.static('static'))
+app.use(express.static('../static'))
 app.use(bodyparser.urlencoded({ extended: false }))
 app.use(bodyparser.json())
 
@@ -50,7 +50,7 @@ app.get('*', (req, res) => {
 				markup = renderToString(<RouterContext {...renderProps}/>);
 			} else {
 				// otherwise we can render a 404 page
-				markup = renderToString(<NotFoundPage/>);
+				//markup = renderToString(<NotFoundPage/>);
 				res.status(404);
 			}
 

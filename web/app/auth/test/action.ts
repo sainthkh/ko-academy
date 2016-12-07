@@ -81,7 +81,7 @@ test("fetchSignupResult with incorrect userdata", t => {
 
 test("fetchSignupResult with client error", t => {
 	testRequestedSignup(t)
-	testBasicAuthCall(t, 2)
+	testBasicAuthCall(t)
 	testCorrectAPICall(t)
 
 	var err = {restCode:'ResourceNotFound'}
@@ -109,7 +109,7 @@ test("fetchSignupResult with client error", t => {
 
 test("fetchSignupResult with server down", t => {
 	testRequestedSignup(t)
-	testBasicAuthCall(t, 1)
+	testBasicAuthCall(t)
 	testCorrectAPICall(t)
 
 	var post = sinon.stub().yields({code:'ECONNREFUSED'}, null, null, null)
@@ -182,7 +182,7 @@ const testCorrectAPICall = t => {
 	console.log('<<< Correct API Call Done')
 }
 
-const mockFetchSignupResult = (basicAuth, post) => {
+const mockFetchSignupResult = (basicAuth?, post?) => {
 	var basicAuth = basicAuth ? basicAuth:sinon.spy()
 	var post = post ? post:sinon.spy()
 	var action = proxyquire('../action', {
@@ -262,7 +262,7 @@ test("serverDown in any condition", t => {
 test("otherError in any condition", t => {
 	var err = {code:'TestError'}
 	var action = otherError(err, "random user") 
-	var time = action.time //current time
+	var time = action.time //to check current time
 
 	t.deepEqual(action, {
 		type: OTHER_ERROR,

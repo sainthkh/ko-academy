@@ -1,5 +1,5 @@
-const client = require('../data/rest')
-const config = require('../config')
+import { client } from '../data/rest'
+import { config } from '../config'
 
 export const REQUEST_SIGNUP = "REQUEST_SIGNUP"
 export const SUCCEEDED_SIGNUP = "SUCCESS_SIGNUP"
@@ -11,6 +11,13 @@ export const DUPLICATE_EMAIL = "DUPLICATE_EMAIL"
 export const SHORT_PASSWORD = "SHORT_PASSWORD"
 export const COMMON_PASSWORD = "COMMON_PASSWORD"
 
+interface signUpAction {
+	type: string
+	username: string
+	token?: string
+	error?: any
+}
+
 export function requestSignup(user) {
 	return {
 		type: REQUEST_SIGNUP
@@ -18,7 +25,7 @@ export function requestSignup(user) {
 }
 
 export function receivedSignup(result) {
-	var action = {}
+	let action: signUpAction = <signUpAction>{};
 	if(result.success){
 		action.type = SUCCEEDED_SIGNUP
 		action.username = result.username
@@ -56,7 +63,7 @@ export function serverDown() {
 	}
 }
 
-export function otherError(err, username, time) {
+export function otherError(err, username) {
 	return {
 		type: OTHER_ERROR,
 		error: err,
