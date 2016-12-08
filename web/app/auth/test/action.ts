@@ -1,29 +1,34 @@
 const test = require('tape')
 const proxyquire = require('proxyquire')
 const sinon = require('sinon')
+const sinonPromised = require('sinon-as-promised')
 
-const config = require('../../config')
+import {config} from '../../config'
 
 import { 
 	FAILED_SIGNUP, SUCCEEDED_SIGNUP, receivedSignup, 
 	REQUEST_SIGNUP, requestSignup,
 	serverDown, otherError, SERVER_DOWN, OTHER_ERROR,
 	LONG_USERNAME, DUPLICATE_EMAIL, SHORT_PASSWORD, COMMON_PASSWORD,
+	pageNotFound, internalServerError,
+	PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR
 } from '../action'
 
 test("fetchSignupResult with correct userdata", t => {
 	testRequestedSignup(t)
-	testBasicAuthCall(t)
 	testCorrectAPICall(t)
 
 	var username = "testuser3"
 	var token = "random token 3"
-	var post = sinon.stub().yields(null, null, null, {
-		success: true,
-		username,
-		token
+	var fetch = sinon.stub().resolves({
+		status: 200,
+		json: () => ({
+			success: true,
+			username,
+			token
+		})	
 	})
-	var fetchSignupResult = mockFetchSignupResult(null, post)
+	var fetchSignupResult = mockFetchSignupResult(fetch)
 	var thunk = fetchSignupResult({
 		username,
 		email: "another@gmail.com",
@@ -31,33 +36,36 @@ test("fetchSignupResult with correct userdata", t => {
 	})
 	var dispatch = sinon.spy()
 	thunk(dispatch)
-
-	t.deepEqual(dispatch.secondCall.args[0], {
-		type: SUCCEEDED_SIGNUP,
-		username,
-		token,
-	}, "Correct Action: Succeeded Signup")
-	
-	testDispatchCallCount(t, dispatch, 2)
-	t.end()
+	.then(() => {
+		t.deepEqual(dispatch.secondCall.args[0], {
+			type: SUCCEEDED_SIGNUP,
+			username,
+			token,
+		}, "Correct Action: Succeeded Signup")
+		
+		testDispatchCallCount(t, dispatch, 2)//*/
+		t.end()
+	})
 })
 
 test("fetchSignupResult with incorrect userdata", t => {
 	testRequestedSignup(t)
-	testBasicAuthCall(t)
 	testCorrectAPICall(t)
 
 	var long_username = "aasdaaa asdliuaksadfujm asfd asdluf;ljkas dfasdfasdfau"
 	var common_password = "12345678"
-	var post = sinon.stub().yields(null, null, null, {
-		success: false,
-		error: {
-			LONG_USERNAME,
-			DUPLICATE_EMAIL,
-			COMMON_PASSWORD,
-		}
+	var fetch = sinon.stub().resolves({
+		status: 200,
+		json: () => ({
+			success: false,
+			error: {
+				LONG_USERNAME,
+				DUPLICATE_EMAIL,
+				COMMON_PASSWORD,
+			}
+		})
 	})
-	var fetchSignupResult = mockFetchSignupResult(null, post)
+	var fetchSignupResult = mockFetchSignupResult(fetch)
 	var thunk = fetchSignupResult({
 		username: long_username,
 		email: "duplicate@email.co.ru",
@@ -65,55 +73,29 @@ test("fetchSignupResult with incorrect userdata", t => {
 	})
 	var dispatch = sinon.spy()
 	thunk(dispatch)
+	.then(() => {
+		t.deepEqual(dispatch.secondCall.args[0], {
+			type: FAILED_SIGNUP,
+			error: {
+				LONG_USERNAME,
+				DUPLICATE_EMAIL,
+				COMMON_PASSWORD,
+			}
+		}, "Correct Action: Failed Signup")
 
-	t.deepEqual(dispatch.secondCall.args[0], {
-		type: FAILED_SIGNUP,
-		error: {
-			LONG_USERNAME,
-			DUPLICATE_EMAIL,
-			COMMON_PASSWORD,
-		}
-	}, "Correct Action: Failed Signup")
-
-	testDispatchCallCount(t, dispatch, 2)
-	t.end()
-})
-
-test("fetchSignupResult with client error", t => {
-	testRequestedSignup(t)
-	testBasicAuthCall(t)
-	testCorrectAPICall(t)
-
-	var err = {restCode:'ResourceNotFound'}
-	var post = sinon.stub().yields(err, null, null, null)
-	var fetchSignupResult = mockFetchSignupResult(null, post)
-	var thunk = fetchSignupResult({
-		username: "validuser",
-		email: "validemail@yahoo.com",
-		password: "p@@sswor!d"
+		testDispatchCallCount(t, dispatch, 2)
+		t.end()
 	})
-	
-	var dispatch = sinon.spy()
-	var getState = sinon.stub().returns({username:"guest"})
-	thunk(dispatch, getState)
-
-	var actionObj = dispatch.secondCall.args[0]
-	t.equal(actionObj.type, OTHER_ERROR, "Action type: other error")
-	t.deepEqual(actionObj.error, err, "correct error object")
-	t.equal(actionObj.username, "guest", "username should be guest")
-	t.equal(actionObj.time instanceof Date, true, "time should be Date object")
-
-	testDispatchCallCount(t, dispatch, 2)
-	t.end()
 })
 
 test("fetchSignupResult with server down", t => {
 	testRequestedSignup(t)
-	testBasicAuthCall(t)
 	testCorrectAPICall(t)
 
-	var post = sinon.stub().yields({code:'ECONNREFUSED'}, null, null, null)
-	var fetchSignupResult = mockFetchSignupResult(null, post)
+	var fetch = sinon.spy().rejects({
+		code: "ECONNREFUSED"
+	})
+	var fetchSignupResult = mockFetchSignupResult(fetch)
 	var thunk = fetchSignupResult({
 		username: "validuser",
 		email: "validemail@yahoo.com",
@@ -122,40 +104,102 @@ test("fetchSignupResult with server down", t => {
 	
 	var dispatch = sinon.spy()
 	thunk(dispatch)
+	.then(err => {
+		t.equal(dispatch.secondCall.args[0].type, SERVER_DOWN, "Action type: server down")
 
-	t.equal(dispatch.secondCall.args[0].type, SERVER_DOWN, "Action type: server down")
+		testDispatchCallCount(t, dispatch, 2)
+		t.end()
+	})
+})
 
-	testDispatchCallCount(t, dispatch, 2)
-	t.end()
+test("fetchSignupResult with page not found", t => {
+	testRequestedSignup(t)
+	testCorrectAPICall(t)
+
+	var fetch = sinon.spy().resolves({
+		status: 404
+	})
+	var fetchSignupResult = mockFetchSignupResult(fetch)
+	var thunk = fetchSignupResult({
+		username: "validuser",
+		email: "validemail@yahoo.com",
+		password: "p@@sswor!d"
+	})
+	
+	var dispatch = sinon.spy()
+	thunk(dispatch)
+	.then(err => {
+		t.equal(dispatch.secondCall.args[0].type, PAGE_NOT_FOUND, "Action type: page not found")
+
+		testDispatchCallCount(t, dispatch, 2)
+		t.end()
+	})
+})
+
+test("fetchSignupResult with internal server error", t => {
+	testRequestedSignup(t)
+	testCorrectAPICall(t)
+
+	var fetch = sinon.spy().resolves({
+		status: 500
+	})
+	var fetchSignupResult = mockFetchSignupResult(fetch)
+	var thunk = fetchSignupResult({
+		username: "validuser",
+		email: "validemail@yahoo.com",
+		password: "p@@sswor!d"
+	})
+	
+	var dispatch = sinon.spy()
+	thunk(dispatch)
+	.then(err => {
+		t.equal(dispatch.secondCall.args[0].type, INTERNAL_SERVER_ERROR, "Action type: Internal server error")
+
+		testDispatchCallCount(t, dispatch, 2)
+		t.end()
+	})
+})
+
+test("fetchSignupResult with other error", t => {
+	testRequestedSignup(t)
+	testCorrectAPICall(t)
+
+	var fetch = sinon.spy().resolves({
+		status: 504
+	})
+	var fetchSignupResult = mockFetchSignupResult(fetch)
+	var thunk = fetchSignupResult({
+		username: "validuser",
+		email: "validemail@yahoo.com",
+		password: "p@@sswor!d"
+	})
+	
+	var dispatch = sinon.spy()
+	var getState = sinon.stub().returns({
+		username: "guest"
+	})
+	thunk(dispatch, getState)
+	.then(err => {
+		t.equal(dispatch.secondCall.args[0].type, OTHER_ERROR, "Action type: Other Error")
+
+		testDispatchCallCount(t, dispatch, 2)
+		t.end()
+	})
 })
 
 const testRequestedSignup = t => {
-	var fetchSignupResult = mockFetchSignupResult()
-	var thunk = fetchSignupResult({
+	var req = {
 		username: "andrew",
 		email: "email@naver.com",
 		password: "p@ssw0rd"
-	})
-	var dispatch = sinon.spy()
-	thunk(dispatch)
-
-	t.equal(dispatch.firstCall.args[0].type, REQUEST_SIGNUP, "request started correctly")
-}
-
-const testBasicAuthCall = t => {
-	var basicAuth = sinon.spy()
-	var fetchSignupResult = mockFetchSignupResult(basicAuth, null)
-	var req = {
-		username: "good-tester",
-		email: "goodmail@gmail.com",
-		password: "random gen token"
 	}
+	var fetchSignupResult = mockFetchSignupResult()
 	var thunk = fetchSignupResult(req)
 	var dispatch = sinon.spy()
 	thunk(dispatch)
-
-	t.equal(basicAuth.firstCall.args[0], "guest", "correct auth name")
-	t.equal(basicAuth.firstCall.args[1], config.apiKey, "correct auth api key")
+	.then(() => {
+		t.equal(dispatch.firstCall.args[0].type, REQUEST_SIGNUP, "request started correctly")
+	})
 }
 
 const testDispatchCallCount = (t, dispatch, count) => {
@@ -163,32 +207,37 @@ const testDispatchCallCount = (t, dispatch, count) => {
 }
 
 const testCorrectAPICall = t => {
-	console.log('>>> Correct API Call Start')
-	var post = sinon.spy()
-	var fetchSignupResult = mockFetchSignupResult(null, post)
 	var req = {
 		username: "good-tester",
 		email: "goodmail@gmail.com",
 		password: "random gen token"
 	}
+	var fetch = sinon.spy().resolves({
+		status: 200,
+		json: () => (req)
+	})
+	var fetchSignupResult = mockFetchSignupResult(fetch)
 	var thunk = fetchSignupResult(req)
 	var dispatch = sinon.spy()
 	thunk(dispatch)
-
-	// correct post call. 
-	t.equal(post.callCount, 1, "post is only called once")
-	t.equal(post.firstCall.args[0], '/create-user', "correct API path")
-	t.deepEqual(post.firstCall.args[1], req, "user object should not be changed")
-	console.log('<<< Correct API Call Done')
+	.then(() => {
+		// correct post call. 
+		t.deepEqual(fetch.firstCall.args[1].username, "guest", "auth name should be guest when signing up")
+		t.equal(fetch.callCount, 1, "fetch should be called only once")
+		t.equal(fetch.firstCall.args[0], '/create-user', "correct API path")
+		t.deepEqual(fetch.firstCall.args[1].args, req, "user object should not be changed")
+		console.log('')
+	})
 }
 
-const mockFetchSignupResult = (basicAuth?, post?) => {
-	var basicAuth = basicAuth ? basicAuth:sinon.spy()
-	var post = post ? post:sinon.spy()
+const mockFetchSignupResult = (fetch?) => {
+	var fetch = fetch ? fetch: sinon.spy().resolves({
+		status: 200,
+		json: () => ({})
+	})
 	var action = proxyquire('../action', {
-		'../data/rest': {
-			basicAuth: basicAuth,
-			post: post, 
+		'../data/fetch': {
+			default: fetch.promised? fetch.promised: fetch,
 		}
 	})
 
@@ -255,6 +304,28 @@ test("serverDown in any condition", t => {
 	t.deepEqual(action, {
 		type: SERVER_DOWN
 	}, "returned an object which has only type: SERVER_DOWN")
+
+	t.end()
+})
+
+test("pageNotFound in any condition", t => {
+	var action = pageNotFound()
+
+	t.deepEqual(action, {
+		type: PAGE_NOT_FOUND
+	}, "returned an object which has only type: PAGE_NOT_FOUND")
+
+	t.end()
+})
+
+test("internalServerError in any condition", t => {
+	var err = {code:'FetchError'}
+	var action = internalServerError(err)
+
+	t.deepEqual(action, {
+		type: INTERNAL_SERVER_ERROR,
+		err: err
+	}, "returned an object which has only type: PAGE_NOT_FOUND and err object")
 
 	t.end()
 })

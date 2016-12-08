@@ -1,4 +1,4 @@
-import { client } from '../data/rest'
+import fetch from '../data/fetch'
 import { config } from '../config'
 
 export const REQUEST_SIGNUP = "REQUEST_SIGNUP"
@@ -10,6 +10,8 @@ export const LONG_USERNAME = "LONG_USERNAME"
 export const DUPLICATE_EMAIL = "DUPLICATE_EMAIL"
 export const SHORT_PASSWORD = "SHORT_PASSWORD"
 export const COMMON_PASSWORD = "COMMON_PASSWORD"
+export const PAGE_NOT_FOUND = "PAGE_NOT_FOUND"
+export const INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR"
 
 interface signUpAction {
 	type: string
@@ -41,18 +43,37 @@ export function receivedSignup(result) {
 export function fetchSignupResult(user) {
 	return (dispatch, getState) => {
 		dispatch(requestSignup(user))
-		client.basicAuth("guest", config.apiKey)
-		
-		client.post('/create-user', user, (err, req, res, obj) => { 
+		return fetch('/create-user', {
+			username: "guest",
+			method: 'POST',
+			args: user,
+		})
+		.then(response => {
+			if (response.status >= 200 && response.status < 300) {
+				return Promise.resolve(response.json())
+			} else {
+				var error = <any> new Error(`${response.status}`)
+				error.response = response
+				return Promise.reject(error)
+			}
+		})
+		.then(json => {
+			dispatch(receivedSignup(json))
+		})
+		.catch(err => {
 			if(err) {
 				if(err.code && err.code == "ECONNREFUSED") {
 					dispatch(serverDown())
 				} else {
-					dispatch(otherError(err, getState().username))
+					if(err.response.status == 404){
+						dispatch(pageNotFound())
+					} else if (err.response.status == 500) {
+						dispatch(internalServerError(err))
+					} else {
+						dispatch(otherError(err, getState().username))
+					}
 				}
-			} else {
-				dispatch(receivedSignup(obj))
-			}
+			} 
 		})
 	}
 }
@@ -69,5 +90,18 @@ export function otherError(err, username) {
 		error: err,
 		username,
 		time: new Date(),
+	}
+}
+
+export function pageNotFound() {
+	return {
+		type: PAGE_NOT_FOUND
+	}
+}
+
+export function internalServerError(err) {
+	return {
+		type: INTERNAL_SERVER_ERROR,
+		err: err
 	}
 }
