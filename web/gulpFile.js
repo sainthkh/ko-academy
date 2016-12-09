@@ -8,9 +8,13 @@ const replace = require('gulp-replace')
 const $if = require('gulp-if')
 const changed = require('gulp-changed')
 const watch = require('gulp-watch')
+const rename = require('gulp-rename')
 
 const postcss = require('gulp-postcss')
 const modules = require('postcss-modules')
+
+const uglify = require('gulp-uglify')
+const cleanCSS = require('gulp-clean-css')
 
 const rollup = require('rollup').rollup
 const commonjs = require('rollup-plugin-commonjs')
@@ -32,12 +36,14 @@ function options() {
 	let o = {}
 	o.compileOnlyChangedTs = true
 	o.compileOnlyChangedPcss = true
-	o.dest = (argv.p || argv.production)? '.production': '.debug'
+	o.production = argv.p || argv.production 
+	o.dest = o.production ? '.production' : '.debug'
 	o.path = p => {
 		return path.join(__dirname, o.dest, p)
 	}
 	o.app = o.path('app')
 	o.client = o.path('.client')
+	o.static = o.path('static')
 
 	return o
 }
@@ -162,8 +168,9 @@ gulp.task('compile-css-ts', () => {
 
 gulp.task('create-style-css', () => {
 	return gulp.src(opts.path('.client/**/*.pcss'))
-		.pipe(concat('style.css'))
-		.pipe(gulp.dest(opts.path('static')))
+		.pipe(concat(opts.production ? 'style.min.css' : 'style.css'))
+		.pipe($if(opts.production, cleanCSS()))
+		.pipe(gulp.dest(opts.static))
 })
 
 // Compile TS
@@ -200,11 +207,15 @@ gulp.task('compile-changed-ts-to-es6', () => {
 // Client Js bundle
 
 gulp.task('bundle-client-js', (done) => {
-	seq(
+	let tasks = [
 		'replace-import',
 		'rollup',
-		done
-	)
+	]
+	if(opts.production) {
+		tasks.push('minify-js')
+	}
+	tasks.push(done)
+	this.apply(seq, tasks)
 })
 
 gulp.task('replace-import', () => {
@@ -244,6 +255,13 @@ gulp.task('rollup', done => {
 	}).then(bundle => {
 		done()
 	})
+})
+
+gulp.task('minify-js', () => {
+	return gulp.src(opts.path('static/bundle.js'))
+		.pipe(rename('bundle.min.js'))
+		.pipe(uglify())
+		.pipe(gulp.dest(opts.static))
 })
 
 // nodemon server
