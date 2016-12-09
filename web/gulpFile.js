@@ -207,7 +207,7 @@ gulp.task('replace-import', () => {
 		.pipe(gulp.dest(opts.clientBundle))
 })
 
-gulp.task('rollup', () => {
+gulp.task('rollup', done => {
 	return rollup({
 		entry: 'temp/client/client.js',
 		context: 'window',
@@ -231,6 +231,8 @@ gulp.task('rollup', () => {
 			format: 'iife',
 			dest: 'temp/dist/static/bundle.js'
 		});
+	}).then(bundle => {
+		done()
 	})
 })
 
