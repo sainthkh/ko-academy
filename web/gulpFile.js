@@ -184,30 +184,11 @@ gulp.task('compile-changed-ts-to-es6', () => {
 		.pipe(gulp.dest(opts.clientBundle))
 })
 
+//
 // Run Server/Client
-gulp.task('compile-changed-ts', done => {
-	opts.compileOnlyChangedTs = true
-	seq(
-		'compile-ts',
-		done
-	)
-})
+//
 
-gulp.task('compile-and-bundle-changed-ts', done => {
-	seq(
-		['compile-changed-ts', 'compile-changed-ts-to-es6'],
-		'bundle-client-js',
-		done
-	)
-})
-
-gulp.task('compile-changed-pcss', done => {
-	opts.compileOnlyChangedPcss = true
-	seq(
-		'compile-postcss',
-		done
-	)
-})
+// Client Js bundle
 
 gulp.task('bundle-client-js', (done) => {
 	seq(
@@ -254,6 +235,8 @@ gulp.task('rollup', () => {
 	})
 })
 
+// nodemon server
+
 var server;
 
 gulp.task('start-test-server', (done) => {
@@ -295,10 +278,36 @@ gulp.task('start-test-server', (done) => {
 	})
 })
 
+gulp.task('compile-changed-ts', done => {
+	opts.compileOnlyChangedTs = true
+	seq(
+		'compile-ts',
+		done
+	)
+})
+
+gulp.task('compile-and-bundle-changed-ts', done => {
+	seq(
+		['compile-changed-ts', 'compile-changed-ts-to-es6'],
+		'bundle-client-js',
+		done
+	)
+})
+
+gulp.task('compile-changed-pcss', done => {
+	opts.compileOnlyChangedPcss = true
+	seq(
+		'compile-postcss',
+		done
+	)
+})
+
 gulp.task('restart-server', done => {
 	server.emit('restart')
 	done()
 })
+
+// Browser Sync
 
 gulp.task('init-browser-sync', done => {
 	bs.init({
@@ -317,6 +326,9 @@ gulp.task('reload-client', () => {
 	return bs.reload({stream: true})
 })
 
+//
+// Unit Tests
+//
 gulp.task('run-unit-test', (done) => {
 	var test = require('./test/current.js')
 	test = path.join(__dirname, opts.distApp, test)
