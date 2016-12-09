@@ -179,7 +179,6 @@ gulp.task('compile-changed-ts-to-es6', () => {
 			module: "es6",
 			target: "es5",
 			moduleResolution: "node",
-			//allowSyntheticDefaultImports: true,
 		}))
 		.pipe(gulp.dest(opts.clientBundle))
 })
