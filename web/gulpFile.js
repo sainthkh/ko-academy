@@ -215,7 +215,7 @@ gulp.task('bundle-client-js', (done) => {
 		tasks.push('minify-js')
 	}
 	tasks.push(done)
-	this.apply(seq, tasks)
+	seq.apply(this, tasks)
 })
 
 gulp.task('replace-import', () => {
@@ -287,17 +287,14 @@ gulp.task('start-test-server', (done) => {
 			})
 			exts = _.uniq(exts)
 
-			restartTasks = []
+			var tasks = []
 			if(_.includes(exts, '.pcss')) {
-				restartTasks.push('compile-changed-pcss')
+				tasks.push('pcss-changed')
+			} else if(_.includes(exts, '.ts') || _.includes(exts, '.tsx')) {
+				tasks.push('ts-changed')
 			}
 
-			if(_.includes(exts, '.ts') || _.includes(exts, '.tsx')) {
-				restartTasks.push('compile-and-bundle-changed-ts')
-			}
-			restartTasks.push('reload-client')
-
-			return ['run-restart-tasks']
+			return tasks
 		}
 	})
 	.on('start', () => {
@@ -308,9 +305,12 @@ gulp.task('start-test-server', (done) => {
 	})
 })
 
-gulp.task('run-restart-tasks', done => {
-	restartTasks.push(done)
-	this.apply(seq, restartTasks)
+gulp.task('pcss-changed', done => {
+	seq(
+		'compile-changed-pcss',
+		'reload-client',
+		done
+	)
 })
 
 gulp.task('compile-changed-ts', done => {
@@ -321,10 +321,11 @@ gulp.task('compile-changed-ts', done => {
 	)
 })
 
-gulp.task('compile-and-bundle-changed-ts', done => {
+gulp.task('ts-changed', done => {
 	seq(
 		['compile-changed-ts', 'compile-changed-ts-to-es6'],
 		'bundle-client-js',
+		'reload-client',
 		done
 	)
 })
