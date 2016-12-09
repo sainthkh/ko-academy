@@ -237,6 +237,7 @@ gulp.task('rollup', () => {
 // nodemon server
 
 var server;
+var restartTasks;
 
 gulp.task('start-test-server', (done) => {
 	var started = false
@@ -256,17 +257,17 @@ gulp.task('start-test-server', (done) => {
 			})
 			exts = _.uniq(exts)
 
-			let tasks = []
+			restartTasks = []
 			if(_.includes(exts, '.pcss')) {
-				tasks.push('compile-changed-pcss')
+				restartTasks.push('compile-changed-pcss')
 			}
 
 			if(_.includes(exts, '.ts') || _.includes(exts, '.tsx')) {
-				tasks.push('compile-and-bundle-changed-ts')
+				restartTasks.push('compile-and-bundle-changed-ts')
 			}
-			tasks.push('reload-client')
+			restartTasks.push('reload-client')
 
-			return tasks
+			return ['run-restart-tasks']
 		}
 	})
 	.on('start', () => {
@@ -275,6 +276,11 @@ gulp.task('start-test-server', (done) => {
 			done()
 		}
 	})
+})
+
+gulp.task('run-restart-tasks', done => {
+	restartTasks.push(done)
+	this.apply(seq, restartTasks)
 })
 
 gulp.task('compile-changed-ts', done => {
