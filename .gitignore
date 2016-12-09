@@ -42,3 +42,5 @@ web/app/config.js
 *.css.ts
 web/app/config.ts
 web/test/current.js
+.debug/
+.production/

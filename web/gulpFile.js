@@ -22,18 +22,27 @@ const json = require('rollup-plugin-json')
 const bs = require('browser-sync').create()
 
 const _ = require('lodash')
+const argv = require('yargs').argv
 
 const fs = require('fs-path')
 const path = require('path')
 const exec = require('child_process').exec;
 
-var opts = {
-	compileOnlyChangedTs: true,
-	compileOnlyChangedPcss: true,
-	dist: 'temp/dist',
-	distApp: 'temp/dist/app',
-	clientBundle: 'temp/client',
+function options() {
+	let o = {}
+	o.compileOnlyChangedTs = true
+	o.compileOnlyChangedPcss = true
+	o.dest = (argv.p || argv.production)? '.production': '.debug'
+	o.path = p => {
+		return path.join(__dirname, o.dest, p)
+	}
+	o.app = o.path('app')
+	o.client = o.path('.client')
+
+	return o
 }
+
+var opts = options()
 
 //
 // Basic Commands
@@ -70,7 +79,7 @@ gulp.task('compile', (done) => {
 })
 
 gulp.task('clean', () => {
-	return gulp.src('temp/**/*.*', {read: false})
+	return gulp.src(opts.path('/**/*.*'), {read: false})
 		.pipe(clean())
 })
 
@@ -81,7 +90,7 @@ gulp.task('clean', () => {
 // Just copy index.js
 gulp.task('move-index-js', () => {
 	return gulp.src('index.js')
-		.pipe(gulp.dest('temp/dist'))
+		.pipe(gulp.dest(opts.dest))
 })
 
 
@@ -100,20 +109,19 @@ gulp.task('compile-postcss', (done) => {
 
 gulp.task('pcss-dependency', () => {
 	return gulp.src('app/common/{global,base}.pcss')
-		.pipe(gulp.dest(opts.distApp + '/common'))
+		.pipe(gulp.dest(opts.path('app/common')))
 })
 
 gulp.task('compile-pcss', () => {
 	cssTsFiles = []
 	return gulp.src('app/**/*.pcss')
-		.pipe($if(opts.compileOnlyChangedPcss, changed(opts.distApp)))
-		.pipe(gulp.dest(opts.distApp))
+		.pipe($if(opts.compileOnlyChangedPcss, changed(opts.app)))
+		.pipe(gulp.dest(opts.app))
 		.pipe(postcss([
 			modules({
 				generateScopedName: '[local]_[hash:base64:5]',
 				getJSON: (filePath, obj) => {
-					const relativeFilePath = filePath.substr(__dirname.length)
-					const tsFilePath = (path.join(__dirname, relativeFilePath) + '.ts').replace("pcss", "css")
+					const tsFilePath = (filePath + '.ts').replace("pcss", "css")
 					let file = {}
 					file.path = tsFilePath
 					file.content =  
@@ -127,13 +135,15 @@ gulp.task('compile-pcss', () => {
 			require('postcss-short'),
 			require('postcss-cssnext'),
 		]))
-		.pipe(gulp.dest(opts.clientBundle))
+		.pipe(gulp.dest(opts.client))
 })
 
 gulp.task('create-css-ts', () => {
 	cssTsFiles.forEach(file => {
 		fs.writeFileSync(file.path, file.content)
-		let path = file.path.replace('dist\\app', 'client')
+
+		// write files for bundle
+		let path = file.path.replace(opts.app, opts.client)
 		fs.writeFileSync(path, file.content)
 		path = path.replace(".ts", ".js")
 		fs.writeFileSync(path, file.content)
@@ -142,45 +152,45 @@ gulp.task('create-css-ts', () => {
 })
 
 gulp.task('compile-css-ts', () => {
-	return gulp.src('temp/dist/app/**/*.css.ts')
+	return gulp.src(opts.path('app/**/*.css.ts'))
 		.pipe(ts({
 			module: "commonjs",
 			target: "es5",
 		}))
-		.pipe(gulp.dest('temp/dist/app'))
+		.pipe(gulp.dest(opts.app))
 })
 
 gulp.task('create-style-css', () => {
-	return gulp.src(opts.clientBundle + '/**/*.pcss')
+	return gulp.src(opts.path('.client/**/*.pcss'))
 		.pipe(concat('style.css'))
-		.pipe(gulp.dest('temp/dist/static'))
+		.pipe(gulp.dest(opts.path('static')))
 })
 
 // Compile TS
 gulp.task('compile-ts', () => {
 	return gulp.src('app/**/*.{ts,tsx}')
-		.pipe($if(opts.compileOnlyChangedTs, changed(opts.distApp)))
-		.pipe(gulp.dest(opts.distApp))
+		.pipe($if(opts.compileOnlyChangedTs, changed(opts.app)))
+		.pipe(gulp.dest(opts.app))
 		.pipe(ts({
 			jsx: "react",
 			module: "commonjs",
 			target: "es5",
 			sourceMap: true
 		}))
-		.pipe(gulp.dest('temp/dist/app'))
+		.pipe(gulp.dest(opts.app))
 })
 
 gulp.task('compile-changed-ts-to-es6', () => {
 	return gulp.src('app/**/*.{ts,tsx}')
-		.pipe($if(opts.compileOnlyChangedTs, changed(opts.clientBundle)))
-		.pipe(gulp.dest(opts.clientBundle))
+		.pipe($if(opts.compileOnlyChangedTs, changed(opts.client)))
+		.pipe(gulp.dest(opts.client))
 		.pipe(ts({
 			jsx: "react",
 			module: "es6",
 			target: "es5",
 			moduleResolution: "node",
 		}))
-		.pipe(gulp.dest(opts.clientBundle))
+		.pipe(gulp.dest(opts.client))
 })
 
 //
@@ -202,14 +212,14 @@ gulp.task('replace-import', () => {
 		"CSSModules",
 		"isoFetch"
 	]
-	return gulp.src('temp/client/**/*.js')
+	return gulp.src(opts.path('.client/**/*.js'))
 		.pipe(replace(new RegExp(`import \\* as (${replacements.join('|')})`, 'g'), "import $1"))
-		.pipe(gulp.dest(opts.clientBundle))
+		.pipe(gulp.dest(opts.client))
 })
 
 gulp.task('rollup', done => {
 	return rollup({
-		entry: 'temp/client/client.js',
+		entry: opts.path('.client/client.js'),
 		context: 'window',
 		plugins: [
 			nodeResolve({ 
@@ -229,7 +239,7 @@ gulp.task('rollup', done => {
 	}).then(bundle => {
 		return bundle.write({
 			format: 'iife',
-			dest: 'temp/dist/static/bundle.js'
+			dest: opts.path('static/bundle.js')
 		});
 	}).then(bundle => {
 		done()
@@ -244,7 +254,7 @@ var restartTasks = [];
 gulp.task('start-test-server', (done) => {
 	var started = false
 	server = nodemon({
-		script: path.join(__dirname, 'temp/dist/index.js'),
+		script: opts.path('index.js'),
 		watch: [
 			"app"
 		],
@@ -322,7 +332,7 @@ gulp.task('init-browser-sync', done => {
 			target: "localhost:3000",
 			ws: true,
 		},
-		files: "temp/dist/**/*",
+		files: opts.path("/**/*"),
 		browser: ["firefox", "chrome", "iexplore", path.join(__dirname, ".bin", "edge.exe")], /* edge launcher from https://github.com/MicrosoftEdge/edge-launcher */
 		port: 5101,
 	})
@@ -337,10 +347,7 @@ gulp.task('reload-client', () => {
 // Unit Tests
 //
 gulp.task('run-unit-test', (done) => {
-	var test = require('./test/current.js')
-	test = path.join(__dirname, opts.distApp, test)
-	console.log(test)
-	exec(`node ${test}|.\\node_modules\\.bin\\tap-spec`, (err, stdout, stderr) => {
+	exec(`node ${opts.app + require('./test/current.js')}|.\\node_modules\\.bin\\tap-spec`, (err, stdout, stderr) => {
 		console.log(stdout)
 		console.log(stderr)
 		done()
