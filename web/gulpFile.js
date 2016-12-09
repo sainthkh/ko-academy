@@ -237,7 +237,7 @@ gulp.task('rollup', () => {
 // nodemon server
 
 var server;
-var restartTasks;
+var restartTasks = [];
 
 gulp.task('start-test-server', (done) => {
 	var started = false
