@@ -67,6 +67,7 @@ gulp.task('test', (done) => {
 gulp.task('run', done => {
 	seq(
 		'compile', 
+		'bundle-client-js',
 		'move-index-js',
 		'start-test-server',
 		'init-browser-sync',
@@ -80,7 +81,7 @@ gulp.task('compile', (done) => {
 	seq(
 		'clean',
 		'compile-postcss',
-		'compile-ts',
+		['compile-ts', 'compile-changed-ts-to-es6'],
 		done
 	)
 })
@@ -208,15 +209,12 @@ gulp.task('compile-changed-ts-to-es6', () => {
 // Client Js bundle
 
 gulp.task('bundle-client-js', (done) => {
-	let tasks = [
+	seq(
 		'replace-import',
 		'rollup',
-	]
-	if(opts.production) {
-		tasks.push('minify-js')
-	}
-	tasks.push(done)
-	seq.apply(this, tasks)
+		'minify-js',
+		done
+	)
 })
 
 gulp.task('replace-import', () => {
@@ -260,10 +258,14 @@ gulp.task('rollup', done => {
 })
 
 gulp.task('minify-js', () => {
-	return gulp.src(opts.path('static/bundle.js'))
-		.pipe(rename('bundle.min.js'))
-		.pipe(uglify())
-		.pipe(gulp.dest(opts.static))
+	if(opts.production) {
+		return gulp.src(opts.path('static/bundle.js'))
+			.pipe(rename('bundle.min.js'))
+			.pipe(uglify())
+			.pipe(gulp.dest(opts.static))
+	} else {
+		return "done"
+	}
 })
 
 // nodemon server
