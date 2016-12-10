@@ -69,6 +69,7 @@
     "rollup-plugin-node-builtins": "^2.0.0",
     "rollup-plugin-node-globals": "^1.1.0",
     "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-replace": "^1.1.1",
     "run-sequence": "^1.2.2",
     "sinon": "^1.17.6",
     "sinon-as-promised": "^4.0.2",
