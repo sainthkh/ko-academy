@@ -370,7 +370,7 @@ gulp.task('reload-client', () => {
 // Unit Tests
 //
 gulp.task('run-unit-test', (done) => {
-	exec(`node ${opts.app + require('./test/current.js')}|.\\node_modules\\.bin\\tap-spec`, (err, stdout, stderr) => {
+	exec(`node ${path.join(opts.app, require('./test/current.js'))}|.\\node_modules\\.bin\\tap-spec`, (err, stdout, stderr) => {
 		console.log(stdout)
 		console.log(stderr)
 		done()
