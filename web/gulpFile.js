@@ -355,8 +355,8 @@ gulp.task('init-browser-sync', done => {
 			target: "localhost:3000",
 			ws: true,
 		},
-		files: opts.path("/**/*"),
-		browser: ["firefox", "chrome", "iexplore", path.join(__dirname, ".bin", "edge.exe")], /* edge launcher from https://github.com/MicrosoftEdge/edge-launcher */
+		files: false, //nodemon watches
+		browser: (argv.a || argv.all) ? ["firefox", "chrome", "iexplore", path.join(__dirname, ".bin", "edge.exe")] : ["chrome"], /* edge launcher from https://github.com/MicrosoftEdge/edge-launcher */ 
 		port: 5101,
 	})
 	done()
