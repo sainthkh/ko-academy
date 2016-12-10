@@ -22,6 +22,7 @@ const nodeResolve = require('rollup-plugin-node-resolve')
 const nodeGlobals = require('rollup-plugin-node-globals')
 const nodeBuiltins = require('rollup-plugin-node-builtins')
 const json = require('rollup-plugin-json')
+const rollupReplace = require('rollup-plugin-replace')
 
 const bs = require('browser-sync').create()
 
@@ -221,7 +222,9 @@ gulp.task('bundle-client-js', (done) => {
 gulp.task('replace-import', () => {
 	let replacements = [
 		"CSSModules",
-		"isoFetch"
+		"isoFetch", 
+		"React",
+		"ReactDom",
 	]
 	return gulp.src(opts.path('.client/**/*.js'))
 		.pipe(replace(new RegExp(`import \\* as (${replacements.join('|')})`, 'g'), "import $1"))
@@ -229,20 +232,19 @@ gulp.task('replace-import', () => {
 })
 
 gulp.task('rollup', done => {
-	return rollup({
+	rollup({
 		entry: opts.path('.client/client.js'),
 		context: 'window',
 		plugins: [
+			rollupReplace({
+				'process.env.NODE_ENV': JSON.stringify( 'production' ),
+			}),
 			nodeResolve({ 
 				browser: true, 
 				preferBuiltins: true,
 			}),
 			json(),
 			commonjs({
-				namedExports: {
-					'node_modules/react/react.js' : ['Component', 'Children', 'createElement', 'PropTypes'],
-					'node_modules/react-dom/index.js' : ['render']
-				}
 			}),
 			nodeGlobals(),
 			nodeBuiltins(),
