@@ -222,6 +222,7 @@ gulp.task('replace-import', () => {
 		"isoFetch", 
 		"React",
 		"ReactDom",
+		"Immutable",
 	]
 	return gulp.src(opts.path('.client/**/*.js'))
 		.pipe(replace(new RegExp(`import \\* as (${replacements.join('|')})`, 'g'), "import $1"))
