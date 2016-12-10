@@ -124,6 +124,7 @@ gulp.task('compile-pcss', () => {
 		.pipe($if(opts.compileOnlyChangedPcss, changed(opts.app)))
 		.pipe(gulp.dest(opts.app))
 		.pipe(postcss([
+			require('precss'),
 			modules({
 				generateScopedName: '[local]_[hash:base64:5]',
 				getJSON: (filePath, obj) => {
@@ -137,7 +138,6 @@ gulp.task('compile-pcss', () => {
 				}
 			}),
 			require('postcss-utilities'),
-			require('precss'),
 			require('postcss-short'),
 			require('postcss-cssnext'),
 		]))
