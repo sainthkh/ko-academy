@@ -3,5 +3,10 @@
 	"files.associations": {
 		"*.hbs":"html",
 		"*.pcss":"scss"
+	},
+
+	"files.exclude": {
+		"**/.debug": true,
+		"**/.production": true
 	}
 }
