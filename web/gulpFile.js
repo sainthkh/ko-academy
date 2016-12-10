@@ -7,7 +7,6 @@ const clean = require('gulp-clean')
 const replace = require('gulp-replace')
 const $if = require('gulp-if')
 const changed = require('gulp-changed')
-const watch = require('gulp-watch')
 const rename = require('gulp-rename')
 
 const postcss = require('gulp-postcss')
