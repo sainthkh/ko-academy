@@ -68,7 +68,7 @@ export function fetchSignupResult(user) {
 					if(err.response.status == 404){
 						dispatch(pageNotFound())
 					} else if (err.response.status == 500) {
-						dispatch(internalServerError(err))
+						dispatch(internalServerError(err, getState().username))
 					} else {
 						dispatch(otherError(err, getState().username))
 					}
@@ -99,9 +99,13 @@ export function pageNotFound() {
 	}
 }
 
-export function internalServerError(err) {
+export function internalServerError(err, username) {
 	return {
 		type: INTERNAL_SERVER_ERROR,
-		err: err
+		error: {
+			obj: err,
+			username: username,
+			time: new Date(),
+		},
 	}
 }

@@ -151,7 +151,10 @@ test("fetchSignupResult with internal server error", t => {
 	})
 	
 	var dispatch = sinon.spy()
-	thunk(dispatch)
+	var getState = sinon.stub().returns({
+		username: "guest"
+	})
+	thunk(dispatch, getState)
 	.then(err => {
 		t.equal(dispatch.secondCall.args[0].type, INTERNAL_SERVER_ERROR, "Action type: Internal server error")
 
@@ -320,11 +323,16 @@ test("pageNotFound in any condition", t => {
 
 test("internalServerError in any condition", t => {
 	var err = {code:'FetchError'}
-	var action = internalServerError(err)
+	var action = internalServerError(err, "guest")
+	var currentTime = action.error.time
 
 	t.deepEqual(action, {
 		type: INTERNAL_SERVER_ERROR,
-		err: err
+		error: {
+			obj: err,
+			username: "guest",
+			time: currentTime,
+		}
 	}, "returned an object which has only type: PAGE_NOT_FOUND and err object")
 
 	t.end()
