@@ -341,13 +341,15 @@ test("internalServerError in any condition", t => {
 test("otherError in any condition", t => {
 	var err = {code:'TestError'}
 	var action = otherError(err, "random user") 
-	var time = action.time //to check current time
+	var time = action.error.time //to check current time
 
 	t.deepEqual(action, {
 		type: OTHER_ERROR,
-		error: err,
-		username: "random user", 
-		time: time,
+		error: {
+			obj: err,
+			username: "random user", 
+			time: time,
+		}
 	}, "returned a correct object with type: OTHER_ERROR and other values liek error, username, time")
 
 	t.end()

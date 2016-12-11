@@ -87,9 +87,11 @@ export function serverDown() {
 export function otherError(err, username) {
 	return {
 		type: OTHER_ERROR,
-		error: err,
-		username,
-		time: new Date(),
+		error: {
+			obj: err,
+			username,
+			time: new Date(),
+		} 
 	}
 }
 
