@@ -2,14 +2,16 @@ const test = require('tape')
 const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 require('tape-for-immutable')
-import { Map } from 'immutable'
+import { Map, List } from 'immutable'
 
 import {
 	signup
 } from '../reducer'
 
 import {
-	REQUEST_SIGNUP, SUCCEEDED_SIGNUP,
+	REQUEST_SIGNUP, SUCCEEDED_SIGNUP, FAILED_SIGNUP,
+	LONG_USERNAME, DUPLICATE_EMAIL, COMMON_PASSWORD, SHORT_PASSWORD,
+	SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR,
 } from '../action'
 
 test("signup with initialState and the empty action", t => {
@@ -18,7 +20,12 @@ test("signup with initialState and the empty action", t => {
 	t.immutableEqual(resultState, Map({
 		username: "guest",
 		token: null,
-		onSigningUp: false,
+		waitingSignUp: false,
+		signupDialog: Map({
+			on: true,
+			error: null,
+		}), 
+		error: null,
 	}), "current state is returned")
 	t.end()
 })
@@ -31,8 +38,13 @@ test("signup with initialState and requestSignup", t => {
 	t.immutableEqual(resultState, Map({
 		username: "guest",
 		token: null,
-		onSigningUp: true,
-	}), "onSigningUp became true")
+		waitingSignUp: true,
+		signupDialog: Map({
+			on: true,
+			error: null,
+		}), 
+		error: null,
+	}), "waitingSignUp became true")
 
 	t.end()
 })
@@ -47,8 +59,123 @@ test("signup with initialState and receivedSignup:success", t => {
 	t.immutableEqual(resultState, Map({
 		username: "signedup-username",
 		token: "random-string",
-		onSigningUp: false,
-	}), "username, token should be indentical with action. onSigningUp should be false")
+		waitingSignUp: false,
+		signupDialog: false,
+		error: null,
+	}), "username, token should be indentical with action. waitingSignUp should be false")
 
+	t.end()
+})
+
+test("signup with initialState and receivedSignup:failed", t => {
+	var resultState = signup(undefined, {
+		type: FAILED_SIGNUP,
+		error: [
+			LONG_USERNAME,
+			DUPLICATE_EMAIL,
+			SHORT_PASSWORD,
+		]
+	})
+
+	t.immutableEqual(resultState, Map({
+		username: "guest",
+		token: null,
+		waitingSignUp: false,
+		signupDialog: Map({
+			on: true,
+			error: List([
+				LONG_USERNAME,
+				DUPLICATE_EMAIL,
+				SHORT_PASSWORD,
+			])
+		}), 
+		error: null,
+	}), "signupDialog contains errors correctly")
+	t.end()
+})
+
+test("signup with initialState and serverDown", t => {
+	var resultState = signup(undefined, {
+		type: SERVER_DOWN,
+	})
+
+	t.immutableEqual(resultState, Map({
+		username: "guest",
+		token: null,
+		waitingSignUp: false,
+		signupDialog: false,
+		error: Map({
+			type: SERVER_DOWN,
+			obj: null,
+		})
+	}), "signupDialog is closed(false) and correct error is on.")
+	t.end()
+})
+
+test("signup with initialState and pageNotFound", t => {
+	var resultState = signup(undefined, {
+		type: PAGE_NOT_FOUND,
+	})
+
+	t.immutableEqual(resultState, Map({
+		username: "guest",
+		token: null,
+		waitingSignUp: false,
+		signupDialog: false,
+		error: Map({
+			type: PAGE_NOT_FOUND,
+			obj: null,
+		})
+	}), "signupDialog is closed(false) and correct error is on.")
+	t.end()
+})
+
+test("signup with initialState and internalServerError", t => {
+	var currentTime = new Date()
+	var err = {
+		obj: new Error('Testing feature'),
+		username: "guest",
+		time: currentTime,
+	}
+	var resultState = signup(undefined, {
+		type: INTERNAL_SERVER_ERROR,
+		error: err
+	})
+
+	t.immutableEqual(resultState, Map({
+		username: "guest",
+		token: null,
+		waitingSignUp: false,
+		signupDialog: false,
+		error: Map({
+			type: INTERNAL_SERVER_ERROR,
+			obj: Map(err),
+		})
+	}), "signupDialog is closed(false) and correct error is on.")
+	t.end()
+})
+
+test("signup with initialState and otherError", t => {
+	var currentTime = new Date()
+	var err = {
+		obj: new Error('Unexpected Error'),
+		username: "guest",
+		time: currentTime,
+	}
+	var resultState = signup(undefined, {
+		type: OTHER_ERROR,
+		error: err
+	})
+
+	t.immutableEqual(resultState, Map({
+		username: "guest",
+		token: null,
+		waitingSignUp: false,
+		signupDialog: false,
+		error: Map({
+			type: OTHER_ERROR,
+			obj: Map(err),
+		})
+	}), "signupDialog is closed(false) and correct error is on.")
 	t.end()
 })
