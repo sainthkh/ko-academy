@@ -2,9 +2,9 @@
 import * as React from 'react'
 import Dialog from '../common/Dialog'
 import * as CSSModules from 'react-css-modules';
-import styles from './SignupDialog.css'
+import styles from './SignupDialogContent.css'
 
-class SignupDialog extends React.Component<{}, {}> {
+class SignupDialogContent extends React.Component<{}, {}> {
 	render() {
 		var title = "Sign up and start your Korean journey!"
 		var main = (
@@ -26,4 +26,4 @@ class SignupDialog extends React.Component<{}, {}> {
 	}
 }
 
-export default CSSModules(SignupDialog, styles)
+export default CSSModules(SignupDialogContent, styles)
