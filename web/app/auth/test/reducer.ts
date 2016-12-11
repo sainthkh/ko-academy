@@ -179,3 +179,107 @@ test("signup with initialState and otherError", t => {
 	}), "signupDialog is closed(false) and correct error is on.")
 	t.end()
 })
+
+test("signup with failedSignup and requestSignup", t => {
+	var state = Map({
+		username: "guest",
+		token: null,
+		waitingSignUp: false,
+		signupDialog: Map({
+			on: true,
+			error: List([
+				LONG_USERNAME,
+				DUPLICATE_EMAIL,
+				COMMON_PASSWORD,
+			]),
+		}), 
+		error: null,
+	})
+	var resultState = signup(state, {
+		type: REQUEST_SIGNUP,
+	})
+
+	t.immutableEqual(resultState, Map({
+		username: "guest",
+		token: null,
+		waitingSignUp: true,
+		signupDialog: Map({
+			on: true,
+			error: List([
+				LONG_USERNAME,
+				DUPLICATE_EMAIL,
+				COMMON_PASSWORD,
+			]),
+		}), 
+		error: null,
+	}), "waitingSignUp became true")
+
+	t.end()
+})
+
+test("signup with initialState and receivedSignup:success", t => {
+	var state = Map({
+		username: "guest",
+		token: null,
+		waitingSignUp: false,
+		signupDialog: Map({
+			on: true,
+			error: List([
+				LONG_USERNAME,
+				COMMON_PASSWORD,
+			]),
+		}), 
+		error: null,
+	})
+	var resultState = signup(state, {
+		type: SUCCEEDED_SIGNUP,
+		username: "finallypassed",
+		token: "random-string-2",
+	})
+
+	t.immutableEqual(resultState, Map({
+		username: "finallypassed",
+		token: "random-string-2",
+		waitingSignUp: false,
+		signupDialog: false,
+		error: null,
+	}), "username, token should be indentical with action. waitingSignUp should be false")
+
+	t.end()
+})
+
+test("signup with initialState and receivedSignup:failed", t => {
+	var state = Map({
+		username: "guest",
+		token: null,
+		waitingSignUp: false,
+		signupDialog: Map({
+			on: true,
+			error: List([
+				DUPLICATE_EMAIL,
+				COMMON_PASSWORD,
+			]),
+		}), 
+		error: null,
+	})
+	var resultState = signup(undefined, {
+		type: FAILED_SIGNUP,
+		error: [
+			SHORT_PASSWORD,
+		]
+	})
+
+	t.immutableEqual(resultState, Map({
+		username: "guest",
+		token: null,
+		waitingSignUp: false,
+		signupDialog: Map({
+			on: true,
+			error: List([
+				SHORT_PASSWORD,
+			])
+		}), 
+		error: null,
+	}), "signupDialog contains errors correctly")
+	t.end()
+})
