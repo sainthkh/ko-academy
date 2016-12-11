@@ -1,1 +1,2 @@
 require('./action')
+require('./reducer')
