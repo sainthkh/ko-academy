@@ -284,20 +284,20 @@ const succeededSignup = (msg, t) => {
 const failedSignup = (msg, t) => {
 	var action = receivedSignup({
 		success: false,
-		error: {
+		error: [
 			LONG_USERNAME,
 			DUPLICATE_EMAIL,
 			SHORT_PASSWORD,
-		}
+		]
 	})
 
 	t.deepEqual(action, {
 		type: FAILED_SIGNUP,
-		error: {
+		error: [
 			LONG_USERNAME,
 			DUPLICATE_EMAIL,
 			SHORT_PASSWORD,
-		}
+		]
 	}, msg)
 }
 
