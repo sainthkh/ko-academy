@@ -62,7 +62,7 @@ test("signup with initialState and receivedSignup:success", t => {
 		waitingSignUp: false,
 		signupDialog: false,
 		error: null,
-	}), "username, token should be indentical with action. waitingSignUp should be false")
+	}), "username, token should be indentical with action. waitingSignUp and signupDialog should be false")
 
 	t.end()
 })
@@ -243,7 +243,7 @@ test("signup with initialState and receivedSignup:success", t => {
 		waitingSignUp: false,
 		signupDialog: false,
 		error: null,
-	}), "username, token should be indentical with action. waitingSignUp should be false")
+	}), "username, token should be indentical with action. waitingSignUp and signupDialog should be false")
 
 	t.end()
 })
@@ -280,6 +280,6 @@ test("signup with initialState and receivedSignup:failed", t => {
 			])
 		}), 
 		error: null,
-	}), "signupDialog contains errors correctly")
+	}), "signupDialog contains new errors correctly")
 	t.end()
 })
