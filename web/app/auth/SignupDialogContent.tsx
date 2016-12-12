@@ -4,7 +4,12 @@ import Dialog from '../common/Dialog'
 import * as CSSModules from 'react-css-modules';
 import styles from './SignupDialogContent.css'
 
-class SignupDialogContent extends React.Component<{}, {}> {
+export interface SignupDialogContentProps {
+	waitingSignUp: boolean
+	signupErrors: any
+}
+
+class SignupDialogContentReact extends React.Component<SignupDialogContentProps, {}> {
 	render() {
 		var title = "Sign up and start your Korean journey!"
 		var main = (
@@ -26,4 +31,4 @@ class SignupDialogContent extends React.Component<{}, {}> {
 	}
 }
 
-export default CSSModules(SignupDialogContent, styles)
+export const SignupDialogContent = CSSModules(SignupDialogContentReact, styles) 

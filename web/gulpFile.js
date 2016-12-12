@@ -243,6 +243,9 @@ gulp.task('rollup', done => {
 			}),
 			json(),
 			commonjs({
+				namedExports: {
+					'node_modules/immutable/dist/immutable.js': [ 'Map', 'List'],
+				}
 			}),
 			nodeGlobals(),
 			nodeBuiltins(),
