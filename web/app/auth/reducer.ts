@@ -5,15 +5,6 @@ import {
 	FAILED_SIGNUP, SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR, 
 } from './action'
 
-export default function username(state = "", action) {
-	switch(action.type) {
-		case "SUCCESS_LOGIN":
-			return action.username
-		default:
-			return state
-	}
-} 
-
 const initialState = Map<string, any>({
 	username: "guest",
 	token: null,
