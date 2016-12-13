@@ -1,6 +1,6 @@
 'use strict'
 import * as React from 'react'
-import Dialog from '../../common/Dialog'
+import { default as Dialog, openDialog } from '../../common/Dialog'
 import * as CSSModules from 'react-css-modules';
 import styles from './SignupDialogContent.css'
 
@@ -24,7 +24,7 @@ class SignupDialogContentReact extends React.Component<SignupDialogContentProps,
 		)
 		var footer = (
 			<div>
-				Did you mean to <a href="#login">login</a>?
+				Did you mean to <a href="#login" onClick={ e => openDialog(e, 'login')}>login</a>?
 			</div>
 		)
 		return <Dialog ID="signup" title={title} main={main} footer={footer}/>;
