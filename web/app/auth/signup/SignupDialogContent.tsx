@@ -1,6 +1,6 @@
 'use strict'
 import * as React from 'react'
-import Dialog from '../common/Dialog'
+import Dialog from '../../common/Dialog'
 import * as CSSModules from 'react-css-modules';
 import styles from './SignupDialogContent.css'
 
