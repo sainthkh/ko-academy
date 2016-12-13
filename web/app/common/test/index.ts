@@ -1,2 +1,0 @@
-require('./action')
-require('./reducer')
