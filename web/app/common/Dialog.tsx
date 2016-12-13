@@ -14,11 +14,11 @@ class DialogReact extends React.Component<DialogContentProps, {}> {
 	render() {
 		return (
 			<div id={this.props.ID} styleName="modal">
-				<a href="#" styleName="bg-close" onClick={e => this.close(e)}></a>
+				<a href="#" styleName="bg-close" onClick={e => closeDialog(e, this.props.ID)}></a>
 				<div styleName="modal-content">
 					<div styleName="modal-header">
 						<h2>{this.props.title}</h2>
-						<a href="#" title="Close" onClick={e => this.close(e)}>X</a>
+						<a href="#" title="Close" onClick={e => closeDialog(e, this.props.ID)}>X</a>
 					</div>
 					<div styleName="modal-main">
 						{this.props.main}
@@ -32,13 +32,26 @@ class DialogReact extends React.Component<DialogContentProps, {}> {
 			</div>
 		);
 	}
+}
 
-	close(e) {
-		e.preventDefault()
+export function closeDialog(e, id) {
+	e.preventDefault()
 
-		var dlg = document.getElementById(this.props.ID)
-		dlg.classList.remove('show-dialog')
+	var dlg = document.getElementById(id)
+	dlg.classList.remove('show-dialog')
+}
+
+export function openDialog(e, id) {
+	e.preventDefault() 
+
+	var dlgs = document.getElementsByClassName('show-dialog')
+	
+	for(let i = 0; i < dlgs.length; i++) {
+		dlgs[i].classList.remove('show-dialog')
 	}
+
+	var dlg = document.getElementById(id)
+	dlg.classList.add('show-dialog')
 }
 
 export default CSSModules(DialogReact, styles)
