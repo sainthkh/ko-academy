@@ -4,14 +4,13 @@ import * as React from 'react'
 import * as express from 'express'
 import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
-import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 
 import * as http from 'http'
 import * as path from 'path'
 
 import { routes } from './routes';
-import reducer from './reducer'
+import { createStore } from './store'
 
 const app = express();
 app.use(express.static(path.join(__dirname, '..', 'static')))
@@ -35,7 +34,7 @@ app.use('*', (req, res) => {
 		'</html>',
 	].join('')
 
-	let store = createStore(reducer) 
+	let store = createStore() 
 
 	match(
 		{ routes, location: req.url },

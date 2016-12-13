@@ -3,12 +3,11 @@
 import * as React from 'react';
 import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
 
 import {routes} from './routes'
-import reducer from './reducer'
+import { createStore } from './store'
 
-let store = createStore(reducer)
+let store = createStore()
 
 export default class App extends React.Component<{}, {}> {
 	render() {
