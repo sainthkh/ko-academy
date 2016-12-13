@@ -5,7 +5,12 @@
 	opacity: 0;
 	transition: opacity 250ms ease-in;
 	pointer-events: none;
-	@mixin flex-center;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	@media(--big) {
+		align-items: center;
+	}
 }
 
 .modal:target {
@@ -25,7 +30,19 @@
 .modal-content {
 	position: relative;
 	@mixin limit-width 100%;
-	margin: 0 5px;
+	@media(--medium) {
+		@mixin limit-width 70%;
+	}
+	@media(--big) {
+		@mixin limit-width 45%;
+	}
+	margin: 30px 5px 0;
+	@media(--medium) {
+		margin: 50px 5px 0;
+	}
+	@media(--big) {
+		margin: 0;
+	}
 	padding: 0 10px;
 	background: linear-gradient(#fff, #eee);
 }
@@ -35,9 +52,21 @@
 }
 @define-mixin section-padding {
 	padding: 10px 0;
+	@media(--medium) {
+		padding: 20px;
+	}
+	@media(--big) {
+		padding: 30px;
+	}
 }
 @define-mixin dialog-font-size {
 	font-size: 1.1rem;
+	@media(--medium) {
+		font-size: 1.3rem;
+	}
+	@media(--big) {
+		font-size: 1.6rem;
+	}
 }
 
 .modal-header {
@@ -72,6 +101,12 @@
 @define-mixin form-element {
 	@mixin limit-width 100%;
 	height: 2rem;
+	@media(--medium) {
+		height: 2.5rem;
+	}
+	@media(--big) {
+		height: 3rem;
+	}
 	margin-top: 0.5rem;
 	padding: 0;
 }
@@ -79,7 +114,8 @@
 .field {
 	@mixin form-element;
 	box-sizing: border-box;
-	
+	@mixin dialog-font-size;
+
 	&::placeholder {
 		@mixin dialog-font-size;
 		padding-left: 0.5rem;
