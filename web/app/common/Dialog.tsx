@@ -5,6 +5,7 @@ import styles from './Dialog.css'
 
 export interface DialogContentProps {
 	readonly ID: string
+	readonly freeze?: boolean
 	readonly title?: string
 	readonly main: JSX.Element
 	readonly footer?: JSX.Element
@@ -14,12 +15,12 @@ class DialogReact extends React.Component<DialogContentProps, {}> {
 	render() {
 		return (
 			<div id={this.props.ID} styleName="modal">
-				<a href="#" styleName="bg-close" onClick={e => closeDialog(e, this.props.ID)}></a>
+				<a href="#" styleName="bg-close" onClick={e => this.close(e)}></a>
 				<div styleName="modal-content">
 					{this.props.title && (
 						<div styleName="modal-header">
 							<h2>{this.props.title}</h2>
-							<a href="#" title="Close" onClick={e => closeDialog(e, this.props.ID)}>X</a>
+							<a href="#" title="Close" onClick={e => this.close(e)}>X</a>
 						</div>
 					)}
 					<div styleName="modal-main">
@@ -34,11 +35,16 @@ class DialogReact extends React.Component<DialogContentProps, {}> {
 			</div>
 		);
 	}
+
+	close(e) {
+		e.preventDefault()
+		if(!this.props.freeze) {
+			closeDialog(this.props.ID)
+		}
+	}
 }
 
-export function closeDialog(e, id) {
-	e.preventDefault()
-
+export function closeDialog(id) {
 	var dlg = document.getElementById(id)
 	dlg.classList.remove('show-dialog')
 }

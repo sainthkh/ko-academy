@@ -40,7 +40,7 @@ class SignupDialogContentReact extends React.Component<SignupDialogContentProps,
 					</div>
 				</div>
 			)
-			return <Dialog ID="signup" main={main} />
+			return <Dialog ID="signup" freeze={true} main={main} />
 		}
 	}
 }
