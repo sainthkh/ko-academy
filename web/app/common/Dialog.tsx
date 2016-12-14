@@ -5,7 +5,7 @@ import styles from './Dialog.css'
 
 export interface DialogContentProps {
 	readonly ID: string
-	readonly title: string
+	readonly title?: string
 	readonly main: JSX.Element
 	readonly footer?: JSX.Element
 }
@@ -16,10 +16,12 @@ class DialogReact extends React.Component<DialogContentProps, {}> {
 			<div id={this.props.ID} styleName="modal">
 				<a href="#" styleName="bg-close" onClick={e => closeDialog(e, this.props.ID)}></a>
 				<div styleName="modal-content">
-					<div styleName="modal-header">
-						<h2>{this.props.title}</h2>
-						<a href="#" title="Close" onClick={e => closeDialog(e, this.props.ID)}>X</a>
-					</div>
+					{this.props.title && (
+						<div styleName="modal-header">
+							<h2>{this.props.title}</h2>
+							<a href="#" title="Close" onClick={e => closeDialog(e, this.props.ID)}>X</a>
+						</div>
+					)}
 					<div styleName="modal-main">
 						{this.props.main}
 					</div>

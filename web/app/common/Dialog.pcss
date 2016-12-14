@@ -141,6 +141,24 @@
 	@mixin section-border;
 }
 
+.message {
+	height: 200px;
+	@mixin flex-center;
+	flex-direction: column;
+	text-align: center;
+
+	div {
+		margin: 10px 0;
+	}
+
+
+	p {
+		@mixin dialog-font-size;
+		color: #484848;
+		margin: 5px;
+	}
+}
+
 .modal-footer {
 	@mixin section-padding;
 	text-align: center;
