@@ -239,7 +239,7 @@ const mockFetchSignupResult = (fetch?) => {
 		json: () => ({})
 	})
 	var action = proxyquire('../action', {
-		'../data/fetch': {
+		'../../data/fetch': {
 			default: fetch.promised? fetch.promised: fetch,
 		}
 	})
