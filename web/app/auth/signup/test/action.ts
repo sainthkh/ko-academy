@@ -129,7 +129,7 @@ const mockFetchSignupResult = (fetch?) => {
 	var fetch = fetch ? fetch: sinon.stub().resolves({})
 	var action = proxyquire('../action', {
 		'../../data/fetch': {
-			default: fetch.promised? fetch.promised: fetch,
+			fetch: fetch.promised? fetch.promised: fetch,
 		}
 	})
 

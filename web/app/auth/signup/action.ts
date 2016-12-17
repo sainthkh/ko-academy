@@ -1,4 +1,6 @@
-import fetch from '../../data/fetch'
+import { 
+	fetch, 
+} from '../../data/fetch'
 import { config } from '../../config'
 
 export const REQUEST_SIGNUP = "REQUEST_SIGNUP"

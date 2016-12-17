@@ -16,7 +16,7 @@ function btoa(str) {
 	return buffer.toString('base64')
 }
 
-export default function fetch (resource: string, username: string, opts:fetchOptions) {
+export function fetch (resource: string, username: string, opts:fetchOptions) {
 	opts.headers = opts.headers? opts.headers: {}
 	opts.headers['Authorization'] = "Basic " + btoa(`${username}:${config.apiKey}`)
 	opts.body = JSON.stringify(opts.args)

@@ -122,5 +122,5 @@ const mockFetch = (fetch?) => {
 		'isomorphic-fetch': fetch.promised? fetch.promised: fetch,
 	})
 
-	return action.default
+	return action.fetch
 }
