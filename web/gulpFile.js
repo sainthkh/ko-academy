@@ -373,9 +373,15 @@ gulp.task('reload-client', () => {
 // Unit Tests
 //
 gulp.task('run-unit-test', (done) => {
-	exec(`node ${path.join(opts.app, require('./test/current.js'))}|.\\node_modules\\.bin\\tap-spec`, (err, stdout, stderr) => {
-		console.log(stdout)
-		console.log(stderr)
-		done()
+	var testPaths = require('./test/current.js')
+	if (!Array.isArray(testPaths)) {
+		testPaths = [testPaths]
+	}
+	testPaths.forEach(p => {
+		exec(`node ${path.join(opts.app, p)}|.\\node_modules\\.bin\\tap-spec`, (err, stdout, stderr) => {
+			console.log(stdout)
+			console.log(stderr)
+		})
 	})
+	done()
 })
