@@ -1,5 +1,5 @@
 import { 
-	fetch, 
+	fetch, FETCH_SUCCESS
 } from '../../data/fetch'
 import { config } from '../../config'
 
@@ -45,13 +45,12 @@ export function fetchSignupResult(user) {
 			method: 'POST',
 			args: user,
 		})
-		.then(json => {
-			dispatch(receivedSignup(json))
-		})
-		.catch(err => {
-			if(err) {
-				dispatch(err)
-			} 
+		.then(result => {
+			if(result.type == FETCH_SUCCESS) {
+				dispatch(receivedSignup(result.data))
+			} else {
+				dispatch(result)
+			}
 		})
 	}
 }

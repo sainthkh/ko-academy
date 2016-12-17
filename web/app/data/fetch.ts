@@ -12,12 +12,17 @@ interface fetchOptions extends RequestInit {
 	args: any
 }
 
+interface fetchResult {
+	type: string
+	data?: any
+}
+
 function btoa(str) {
 	let buffer = str instanceof Buffer? str: new Buffer(str.toString(), 'binary');
 	return buffer.toString('base64')
 }
 
-export function fetch (resource: string, username: string, opts:fetchOptions) {
+export function fetch (resource: string, username: string, opts:fetchOptions): Promise<fetchResult> {
 	opts.headers = opts.headers? opts.headers: {}
 	opts.headers['Authorization'] = "Basic " + btoa(`${username}:${config.apiKey}`)
 	opts.body = JSON.stringify(opts.args)
