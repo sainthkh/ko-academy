@@ -8,5 +8,24 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "jsonwebtoken": "^7.2.1",
+    "restify": "^4.3.0",
+    "sequelize": "^3.27.0"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^7.1.33",
+    "@types/restify": "^2.0.35",
+    "@types/sequelize": "^4.0.39",
+    "gulp": "^3.9.1",
+    "gulp-changed": "^1.3.2",
+    "gulp-clean": "^0.3.2",
+    "gulp-if": "^2.0.2",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-typescript": "^3.1.3",
+    "run-sequence": "^1.2.2",
+    "typescript": "^2.1.4",
+    "yargs": "^6.5.0"
+  }
 }
