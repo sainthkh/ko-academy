@@ -2,8 +2,12 @@ import { Map, List } from 'immutable'
 
 import {
 	REQUEST_SIGNUP, SUCCEEDED_SIGNUP,
-	FAILED_SIGNUP, SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR, 
+	FAILED_SIGNUP,
 } from './action'
+
+import {
+	SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR,
+} from '../../data/fetch'
 
 const initialState = Map<string, any>({
 	username: "guest",

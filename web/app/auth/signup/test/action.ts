@@ -8,11 +8,12 @@ import {config} from '../../../config'
 import { 
 	FAILED_SIGNUP, SUCCEEDED_SIGNUP, receivedSignup, 
 	REQUEST_SIGNUP, requestSignup,
-	serverDown, otherError, SERVER_DOWN, OTHER_ERROR,
 	LONG_USERNAME, DUPLICATE_EMAIL, SHORT_PASSWORD, COMMON_PASSWORD,
-	pageNotFound, internalServerError,
-	PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR
 } from '../action'
+
+import {
+	SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR
+} from '../../../data/fetch'
 
 test("fetchSignupResult with correct userdata", t => {
 	testRequestedSignup(t)
@@ -21,13 +22,10 @@ test("fetchSignupResult with correct userdata", t => {
 	var username = "testuser3"
 	var token = "random token 3"
 	var fetch = sinon.stub().resolves({
-		status: 200,
-		json: () => ({
-			success: true,
-			username,
-			token
-		})	
-	})
+		success: true,
+		username,
+		token
+	})	
 	var fetchSignupResult = mockFetchSignupResult(fetch)
 	var thunk = fetchSignupResult({
 		username,
@@ -55,15 +53,12 @@ test("fetchSignupResult with incorrect userdata", t => {
 	var long_username = "aasdaaa asdliuaksadfujm asfd asdluf;ljkas dfasdfasdfau"
 	var common_password = "12345678"
 	var fetch = sinon.stub().resolves({
-		status: 200,
-		json: () => ({
-			success: false,
-			error: {
-				LONG_USERNAME,
-				DUPLICATE_EMAIL,
-				COMMON_PASSWORD,
-			}
-		})
+		success: false,
+		error: {
+			LONG_USERNAME,
+			DUPLICATE_EMAIL,
+			COMMON_PASSWORD,
+		}
 	})
 	var fetchSignupResult = mockFetchSignupResult(fetch)
 	var thunk = fetchSignupResult({
@@ -82,108 +77,6 @@ test("fetchSignupResult with incorrect userdata", t => {
 				COMMON_PASSWORD,
 			}
 		}, "Correct Action: Failed Signup")
-
-		testDispatchCallCount(t, dispatch, 2)
-		t.end()
-	})
-})
-
-test("fetchSignupResult with server down", t => {
-	testRequestedSignup(t)
-	testCorrectAPICall(t)
-
-	var fetch = sinon.spy().rejects({
-		code: "ECONNREFUSED"
-	})
-	var fetchSignupResult = mockFetchSignupResult(fetch)
-	var thunk = fetchSignupResult({
-		username: "validuser",
-		email: "validemail@yahoo.com",
-		password: "p@@sswor!d"
-	})
-	
-	var dispatch = sinon.spy()
-	thunk(dispatch)
-	.then(err => {
-		t.equal(dispatch.secondCall.args[0].type, SERVER_DOWN, "Action type: server down")
-
-		testDispatchCallCount(t, dispatch, 2)
-		t.end()
-	})
-})
-
-test("fetchSignupResult with page not found", t => {
-	testRequestedSignup(t)
-	testCorrectAPICall(t)
-
-	var fetch = sinon.spy().resolves({
-		status: 404
-	})
-	var fetchSignupResult = mockFetchSignupResult(fetch)
-	var thunk = fetchSignupResult({
-		username: "validuser",
-		email: "validemail@yahoo.com",
-		password: "p@@sswor!d"
-	})
-	
-	var dispatch = sinon.spy()
-	thunk(dispatch)
-	.then(err => {
-		t.equal(dispatch.secondCall.args[0].type, PAGE_NOT_FOUND, "Action type: page not found")
-
-		testDispatchCallCount(t, dispatch, 2)
-		t.end()
-	})
-})
-
-test("fetchSignupResult with internal server error", t => {
-	testRequestedSignup(t)
-	testCorrectAPICall(t)
-
-	var fetch = sinon.spy().resolves({
-		status: 500
-	})
-	var fetchSignupResult = mockFetchSignupResult(fetch)
-	var thunk = fetchSignupResult({
-		username: "validuser",
-		email: "validemail@yahoo.com",
-		password: "p@@sswor!d"
-	})
-	
-	var dispatch = sinon.spy()
-	var getState = sinon.stub().returns({
-		username: "guest"
-	})
-	thunk(dispatch, getState)
-	.then(err => {
-		t.equal(dispatch.secondCall.args[0].type, INTERNAL_SERVER_ERROR, "Action type: Internal server error")
-
-		testDispatchCallCount(t, dispatch, 2)
-		t.end()
-	})
-})
-
-test("fetchSignupResult with other error", t => {
-	testRequestedSignup(t)
-	testCorrectAPICall(t)
-
-	var fetch = sinon.spy().resolves({
-		status: 504
-	})
-	var fetchSignupResult = mockFetchSignupResult(fetch)
-	var thunk = fetchSignupResult({
-		username: "validuser",
-		email: "validemail@yahoo.com",
-		password: "p@@sswor!d"
-	})
-	
-	var dispatch = sinon.spy()
-	var getState = sinon.stub().returns({
-		username: "guest"
-	})
-	thunk(dispatch, getState)
-	.then(err => {
-		t.equal(dispatch.secondCall.args[0].type, OTHER_ERROR, "Action type: Other Error")
 
 		testDispatchCallCount(t, dispatch, 2)
 		t.end()
@@ -225,19 +118,15 @@ const testCorrectAPICall = t => {
 	thunk(dispatch)
 	.then(() => {
 		// correct post call. 
-		t.deepEqual(fetch.firstCall.args[1].username, "guest", "auth name should be guest when signing up")
-		t.equal(fetch.callCount, 1, "fetch should be called only once")
 		t.equal(fetch.firstCall.args[0], '/create-user', "correct API path")
-		t.deepEqual(fetch.firstCall.args[1].args, req, "user object should not be changed")
-		console.log('')
+		t.deepEqual(fetch.firstCall.args[1], "guest", "auth name should be guest when signing up")
+		t.deepEqual(fetch.firstCall.args[2].args, req, "user object should not be changed")
+		t.equal(fetch.callCount, 1, "fetch should be called only once")
 	})
 }
 
 const mockFetchSignupResult = (fetch?) => {
-	var fetch = fetch ? fetch: sinon.spy().resolves({
-		status: 200,
-		json: () => ({})
-	})
+	var fetch = fetch ? fetch: sinon.stub().resolves({})
 	var action = proxyquire('../action', {
 		'../../data/fetch': {
 			default: fetch.promised? fetch.promised: fetch,
@@ -300,57 +189,3 @@ const failedSignup = (msg, t) => {
 		]
 	}, msg)
 }
-
-test("serverDown in any condition", t => {
-	var action = serverDown()
-
-	t.deepEqual(action, {
-		type: SERVER_DOWN
-	}, "returned an object which has only type: SERVER_DOWN")
-
-	t.end()
-})
-
-test("pageNotFound in any condition", t => {
-	var action = pageNotFound()
-
-	t.deepEqual(action, {
-		type: PAGE_NOT_FOUND
-	}, "returned an object which has only type: PAGE_NOT_FOUND")
-
-	t.end()
-})
-
-test("internalServerError in any condition", t => {
-	var err = {code:'FetchError'}
-	var action = internalServerError(err, "guest")
-	var currentTime = action.error.time
-
-	t.deepEqual(action, {
-		type: INTERNAL_SERVER_ERROR,
-		error: {
-			obj: err,
-			username: "guest",
-			time: currentTime,
-		}
-	}, "returned an object which has only type: PAGE_NOT_FOUND and err object")
-
-	t.end()
-})
-
-test("otherError in any condition", t => {
-	var err = {code:'TestError'}
-	var action = otherError(err, "random user") 
-	var time = action.error.time //to check current time
-
-	t.deepEqual(action, {
-		type: OTHER_ERROR,
-		error: {
-			obj: err,
-			username: "random user", 
-			time: time,
-		}
-	}, "returned a correct object with type: OTHER_ERROR and other values liek error, username, time")
-
-	t.end()
-})

@@ -11,8 +11,11 @@ import {
 import {
 	REQUEST_SIGNUP, SUCCEEDED_SIGNUP, FAILED_SIGNUP,
 	LONG_USERNAME, DUPLICATE_EMAIL, COMMON_PASSWORD, SHORT_PASSWORD,
-	SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR,
 } from '../action'
+
+import {
+	SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR,
+} from '../../../data/fetch'
 
 test("signup with initialState and the empty action", t => {
 	var resultState = signup(undefined, {})
