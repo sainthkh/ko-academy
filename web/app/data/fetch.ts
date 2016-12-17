@@ -2,6 +2,7 @@
 import {config} from '../config'
 import * as isoFetch from 'isomorphic-fetch'
 
+export const FETCH_SUCCESS = "FETCH_SUCCESS"
 export const SERVER_DOWN = "SERVER_DOWN"
 export const PAGE_NOT_FOUND = "PAGE_NOT_FOUND"
 export const INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR"
@@ -23,7 +24,10 @@ export function fetch (resource: string, username: string, opts:fetchOptions) {
 	return isoFetch(config.restServer + resource, opts)
 		.then(response => {
 			if (response.status >= 200 && response.status < 300) {
-				return Promise.resolve(response.json())
+				return Promise.resolve({
+					type: FETCH_SUCCESS,
+					data: response.json()
+				})
 			} else {
 				var error = <any> new Error(`${response.status}`)
 				error.response = response

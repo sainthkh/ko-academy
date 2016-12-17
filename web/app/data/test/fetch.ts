@@ -5,7 +5,7 @@ const sinonPromised = require('sinon-as-promised')
 
 import {
 	serverDown, pageNotFound, internalServerError, otherError,
-	SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR
+	FETCH_SUCCESS, SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR
 } from '../fetch'
 
 test("serverDown in any condition", t => {
@@ -60,6 +60,20 @@ test("otherError in any condition", t => {
 	}, "returned a correct object with type: OTHER_ERROR and other values liek error, username, time")
 
 	t.end()
+})
+
+test("fetch success", t => {
+	var fetchStub = sinon.stub().resolves({
+		status: 200,
+		json: () => ({})
+	})
+	var fetch = mockFetch(fetchStub)
+
+	fetch('/success', 'user0', {a: 'test0'})
+	.then(err => {
+		t.equal(err.type, FETCH_SUCCESS, "Action type: fetch success")
+		t.end()
+	})
 })
 
 test("fetch with server down", t => {
