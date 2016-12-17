@@ -22,17 +22,14 @@ function btoa(str) {
 	return buffer.toString('base64')
 }
 
-export function fetch (resource: string, username: string, opts:fetchOptions): Promise<fetchResult> {
+export function fetch (resource: string, username: string, opts:fetchOptions): Promise<any> {
 	opts.headers = opts.headers? opts.headers: {}
 	opts.headers['Authorization'] = "Basic " + btoa(`${username}:${config.apiKey}`)
 	opts.body = JSON.stringify(opts.args)
 	return isoFetch(config.restServer + resource, opts)
 		.then(response => {
 			if (response.status >= 200 && response.status < 300) {
-				return Promise.resolve({
-					type: FETCH_SUCCESS,
-					data: response.json()
-				})
+				return Promise.resolve(response.json())
 			} else {
 				var error = <any> new Error(`${response.status}`)
 				error.response = response
@@ -42,14 +39,14 @@ export function fetch (resource: string, username: string, opts:fetchOptions): P
 		.catch(err => {
 			if(err) {
 				if(err.code && err.code == "ECONNREFUSED") {
-					return serverDown()
+					throw serverDown()
 				} else {
 					if(err.response.status == 404){
-						return pageNotFound()
+						throw pageNotFound()
 					} else if (err.response.status == 500) {
-						return internalServerError(err, username)
+						throw internalServerError(err, username)
 					} else {
-						return otherError(err, username)
+						throw otherError(err, username)
 					}
 				}
 			} 

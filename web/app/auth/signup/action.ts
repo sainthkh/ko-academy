@@ -45,12 +45,11 @@ export function fetchSignupResult(user) {
 			method: 'POST',
 			args: user,
 		})
-		.then(result => {
-			if(result.type == FETCH_SUCCESS) {
-				dispatch(receivedSignup(result.data))
-			} else {
-				dispatch(result)
-			}
+		.then(json => {
+			dispatch(receivedSignup(json))
+		})
+		.catch(err => {
+			dispatch(err)
 		})
 	}
 }

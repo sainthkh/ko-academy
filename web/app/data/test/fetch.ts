@@ -5,7 +5,7 @@ const sinonPromised = require('sinon-as-promised')
 
 import {
 	serverDown, pageNotFound, internalServerError, otherError,
-	FETCH_SUCCESS, SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR
+	SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR
 } from '../fetch'
 
 test("serverDown in any condition", t => {
@@ -70,8 +70,8 @@ test("fetch success", t => {
 	var fetch = mockFetch(fetchStub)
 
 	fetch('/success', 'user0', {a: 'test0'})
-	.then(err => {
-		t.equal(err.type, FETCH_SUCCESS, "Action type: fetch success")
+	.then(json => {
+		t.deepEqual(json, {}, "correct return json object")
 		t.end()
 	})
 })
@@ -83,7 +83,7 @@ test("fetch with server down", t => {
 	var fetch = mockFetch(fetchStub)
 
 	fetch('/abc', 'user', {a: 'test'})
-	.then(err => {
+	.catch(err => {
 		t.equal(err.type, SERVER_DOWN, "Action type: server down")
 		t.end()
 	})
@@ -96,7 +96,7 @@ test("fetch with page not found", t => {
 	var fetch = mockFetch(fetchStub)
 
 	fetch('/cba', 'user2', {d: 'test-for-you'})
-	.then(err => {
+	.catch(err => {
 		t.equal(err.type, PAGE_NOT_FOUND, "Action type: page not found")
 		t.end()
 	})
@@ -109,7 +109,7 @@ test("fetch with internal server error", t => {
 	var fetch = mockFetch(fetchStub)
 
 	fetch('/cde', 'user3', {d: 'tes'})
-	.then(err => {
+	.catch(err => {
 		t.equal(err.type, INTERNAL_SERVER_ERROR, "Action type: internal server error")
 		t.equal(err.error.username, 'user3', "Username: user3")
 		t.end()
@@ -123,7 +123,7 @@ test("fetch with other error", t => {
 	var fetch = mockFetch(fetchStub)
 
 	fetch('/cfe', 'user4', {d: 'tes1'})
-	.then(err => {
+	.catch(err => {
 		t.equal(err.type, OTHER_ERROR, "Action type: other error")
 		t.equal(err.error.username, 'user4', "Username: user4")
 		t.end()
