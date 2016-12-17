@@ -37,7 +37,7 @@ app.use('*', (req, res) => {
 	let store = createStore() 
 
 	match(
-		{ routes, location: req.url },
+		{ routes, location: req.originalUrl },
 		(err, redirectLocation, renderProps) => {
 			// in case of error display the error message
 			if (err) {
