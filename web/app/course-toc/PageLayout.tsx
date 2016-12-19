@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import MenuBar from '../common/MenuBar'
+import Overview from './Overview'
 import * as CSSModules from 'react-css-modules'
 import styles from "./PageLayout.css"
 
@@ -10,7 +11,7 @@ class CourseTocPage extends React.Component<{}, {}> {
 		return (
 			<div styleName="home">
 				<MenuBar />
-				<div>Courses</div>
+				<Overview title="Start your journey with Hangeul" details="You will learn how to read and write Hangeul, Korean Alphabet." />
 			</div>
 		);
 	}
