@@ -32,6 +32,7 @@ var opts = options()
 gulp.task('test', (done) => {
 	seq(
 		'compile-ts',
+		'move-txt',
 		'run-unit-test',
 		done
 	)
@@ -40,6 +41,7 @@ gulp.task('test', (done) => {
 gulp.task('run', done => {
 	seq(
 		'compile', 
+		'move-txt',
 		'move-index-js',
 		'start-test-server',
 		done
@@ -68,6 +70,11 @@ gulp.task('clean', () => {
 gulp.task('move-index-js', () => {
 	return gulp.src('index.js')
 		.pipe(gulp.dest(opts.dest))
+})
+
+gulp.task('move-txt', () => {
+	return gulp.src('src/**/*.txt')
+		.pipe(gulp.dest(opts.src))
 })
 
 // Compile TS

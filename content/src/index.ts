@@ -1,6 +1,7 @@
 'use strict';
 
 import * as restify from 'restify'
+import * as auth from './auth'
 
 const server = restify.createServer({
     name: "WiseInit-Academy-Content-Service",
@@ -8,11 +9,17 @@ const server = restify.createServer({
 });
 
 server.use(restify.authorizationParser());
-server.use(check);
 server.use(restify.queryParser());
 server.use(restify.bodyParser({
     mapParams: true
 }));
+server.use((req, res, next) => {
+    //simple json parser
+    req.params = JSON.parse(req.body)
+    next()
+})
+
+auth.init(server)
 
 // Mimic API Key authentication.
 
