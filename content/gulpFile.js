@@ -20,8 +20,6 @@ function options() {
 		return path.join(__dirname, o.dest, p)
 	}
 	o.src = o.path('src')
-	console.log(o.src)
-
 	return o
 }
 

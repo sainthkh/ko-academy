@@ -24,7 +24,6 @@ class Video extends React.Component<VideoProps, {}> {
 		return (
 			<div className="wrap">
 				<Measure onMeasure={dimensions => {
-					console.log(dimensions)
 					this.setState({dimensions})
 				}}>
 					<div styleName="video">
