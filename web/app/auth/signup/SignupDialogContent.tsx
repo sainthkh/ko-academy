@@ -1,20 +1,23 @@
 'use strict'
 import * as React from 'react'
-import { default as Dialog, openDialog } from '../../common/Dialog'
+import { default as Dialog, openDialog, closeDialog } from '../../common/Dialog'
 import { default as Spinner } from '../../common/Spinner'
 import * as CSSModules from 'react-css-modules';
 import styles from './SignupDialogContent.css'
 
 export interface SignupDialogContentProps {
 	waitingSignUp: boolean
+	signupDone: boolean
 	signupErrors: any
 	fetchSignup: any
 }
 
 class SignupDialogContentReact extends React.Component<SignupDialogContentProps, {}> {
+	private ID: string
 	constructor(props) {
 		super(props)
 		this.submit = this.submit.bind(this)
+		this.ID = "signup"
 	}
 
 	render() {
@@ -35,7 +38,7 @@ class SignupDialogContentReact extends React.Component<SignupDialogContentProps,
 					Did you mean to <a href="#login" onClick={ e => openDialog(e, 'login')}>login</a>?
 				</div>
 			)
-			return <Dialog ID="signup" title={title} main={main} footer={footer}/>;
+			return <Dialog ID={this.ID} title={title} main={main} footer={footer}/>;
 		} else {
 			var main = (
 				<div styleName="message">
@@ -46,11 +49,17 @@ class SignupDialogContentReact extends React.Component<SignupDialogContentProps,
 					</div>
 				</div>
 			)
-			return <Dialog ID="signup" freeze={true} main={main} />
+			return <Dialog ID={this.ID} freeze={true} main={main} />
 		}
 	}
 
-	submit(e) {
+	componentDidUpdate() {
+		if(this.props.signupDone) {
+			closeDialog(this.ID)
+		}
+	}
+
+	private submit(e) {
 		e.preventDefault()
 
 		var form = document.forms['signup']
