@@ -24,6 +24,7 @@ function btoa(str) {
 
 export function fetch (resource: string, username: string, opts:fetchOptions): Promise<any> {
 	opts.headers = opts.headers? opts.headers: {}
+	opts.mode = 'cors'
 	opts.headers['Authorization'] = "Basic " + btoa(`${username}:${config.apiKey}`)
 	opts.body = JSON.stringify(opts.args)
 	return isoFetch(config.restServer + resource, opts)
