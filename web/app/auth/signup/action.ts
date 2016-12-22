@@ -6,7 +6,9 @@ import { config } from '../../config'
 export const REQUEST_SIGNUP = "REQUEST_SIGNUP"
 export const SUCCEEDED_SIGNUP = "SUCCESS_SIGNUP"
 export const FAILED_SIGNUP = "FAILED_SIGNUP"
+
 export const LONG_USERNAME = "LONG_USERNAME"
+export const INVALID_EMAIL = "INVALID_EMAIL"
 export const DUPLICATE_EMAIL = "DUPLICATE_EMAIL"
 export const SHORT_PASSWORD = "SHORT_PASSWORD"
 export const COMMON_PASSWORD = "COMMON_PASSWORD"
