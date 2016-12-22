@@ -8,15 +8,21 @@ import styles from './SignupDialogContent.css'
 export interface SignupDialogContentProps {
 	waitingSignUp: boolean
 	signupErrors: any
+	fetchSignup: any
 }
 
 class SignupDialogContentReact extends React.Component<SignupDialogContentProps, {}> {
+	constructor(props) {
+		super(props)
+		this.submit = this.submit.bind(this)
+	}
+
 	render() {
 		if(!this.props.waitingSignUp) {
 			var title = "Sign up and start your Korean journey!"
 			var main = (
 				<div>
-					<form method="POST" role="form">
+					<form method="POST" name="signup" role="form" onSubmit={this.submit}>
 						<input type="text" styleName="field" name="username" id="username" placeholder="user name" />
 						<input type="email" styleName="field" name="email" id="email" placeholder="email" />
 						<input type="password" styleName="field" name="password" id="password" placeholder="password" />
@@ -42,6 +48,19 @@ class SignupDialogContentReact extends React.Component<SignupDialogContentProps,
 			)
 			return <Dialog ID="signup" freeze={true} main={main} />
 		}
+	}
+
+	submit(e) {
+		e.preventDefault()
+
+		var form = document.forms['signup']
+		var user = {
+			username: form.username.value,
+			email: form.email.value,
+			password: form.password.value,
+		}
+
+		this.props.fetchSignup(user)
 	}
 }
 

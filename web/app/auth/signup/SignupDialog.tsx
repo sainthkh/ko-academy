@@ -5,8 +5,16 @@ import { SignupDialogContent, SignupDialogContentProps } from './SignupDialogCon
 const mapStateToProps = (state) => {
 	return {
 		waitingSignUp: state.signup.get('waitingSignUp'),
-		signupErrors: state.signup.get('signupDialog').get('error')
+		signupErrors: [/* dummy */] //state.signup.get('signupDialog').get('error')
 	} as SignupDialogContentProps
 }
 
-export default connect(mapStateToProps)(SignupDialogContent)
+const mapDispatchToProps = (dispatch) => {
+	return {
+		fetchSignup: user => {
+			dispatch(fetchSignupResult(user))
+		}
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupDialogContent)
