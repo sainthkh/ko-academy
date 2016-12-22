@@ -9,14 +9,7 @@ import {
 	DIALOG_WAITING, DIALOG_DONE, DIALOG_ERROR,
 } from '../../common/dialog'
 
-const initialState = Map<string, any>({
-	username: "guest",
-	token: null,
-	accessLevel: "guest",
-	dialog: false,
-})
-
-export function signup(state=initialState, action) {
+export function signup(state, action) {
 	switch(action.type) {
 		case REQUEST_SIGNUP:
 			return state.set('dialog', Map({
