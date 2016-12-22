@@ -41,7 +41,7 @@ export function receivedSignup(result) {
 export function fetchSignupResult(user) {
 	return (dispatch, getState) => {
 		dispatch(requestSignup(user))
-		return fetch('/create-user', "guest", {
+		return fetch('/signup', "guest", {
 			method: 'POST',
 			args: user,
 		})

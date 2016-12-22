@@ -118,7 +118,7 @@ const testCorrectAPICall = t => {
 	thunk(dispatch)
 	.then(() => {
 		// correct post call. 
-		t.equal(fetch.firstCall.args[0], '/create-user', "correct API path")
+		t.equal(fetch.firstCall.args[0], '/signup', "correct API path")
 		t.deepEqual(fetch.firstCall.args[1], "guest", "auth name should be guest when signing up")
 		t.deepEqual(fetch.firstCall.args[2].args, req, "user object should not be changed")
 		t.equal(fetch.callCount, 1, "fetch should be called only once")
