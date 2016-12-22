@@ -13,7 +13,8 @@ export const COMMON_PASSWORD = "COMMON_PASSWORD"
 
 interface signUpAction {
 	type: string
-	username: string
+	username?: string
+	accessLevel?: string
 	token?: string
 	error?: any
 }
@@ -30,6 +31,7 @@ export function receivedSignup(result) {
 		action.type = SUCCEEDED_SIGNUP
 		action.username = result.username
 		action.token = result.token
+		action.accessLevel = result.accessLevel
 	} else {
 		action.type = FAILED_SIGNUP
 		action.error = result.error
