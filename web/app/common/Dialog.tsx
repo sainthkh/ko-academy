@@ -3,6 +3,10 @@ import * as React from 'react'
 import * as CSSModules from 'react-css-modules';
 import styles from './Dialog.css'
 
+export const DIALOG_WAITING = "DIALOG_WAITING"
+export const DIALOG_ERROR = "DIALOG_ERROR"
+export const DIALOG_DONE = "DIALOG_DONE"
+
 export interface DialogContentProps {
 	readonly ID: string
 	readonly freeze?: boolean
