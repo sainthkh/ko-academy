@@ -83,27 +83,6 @@ test("fetchSignupResult with incorrect userdata", t => {
 	})
 })
 
-test("fetchSignupResult with short password", t => {
-	testRequestedSignup(t)
-	testCorrectAPICall(t)
-
-	var fetchSignupResult = mockFetchSignupResult()
-	var thunk = fetchSignupResult({
-		username: "normal-user",
-		email: "hello@world.net",
-		password: "short"
-	})
-	var dispatch = sinon.spy()
-	thunk(dispatch)
-	t.deepEqual(dispatch.firstCall.args[0], {
-		type: FAILED_SIGNUP,
-		error: [
-			SHORT_PASSWORD
-		]
-	})
-	t.end()
-})
-
 const testRequestedSignup = t => {
 	var req = {
 		username: "andrew",

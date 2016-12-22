@@ -40,15 +40,6 @@ export function receivedSignup(result) {
 
 export function fetchSignupResult(user) {
 	return (dispatch, getState) => {
-		if(user.password.length < 8) {
-			dispatch(receivedSignup({
-				success: false,
-				error: [
-					SHORT_PASSWORD
-				]
-			}))
-			return
-		}
 		dispatch(requestSignup(user))
 		return fetch('/create-user', "guest", {
 			method: 'POST',
