@@ -39,18 +39,6 @@ export function signup(state=initialState, action) {
 						error: List(action.error)
 					}))
 			})
-		case SERVER_DOWN:
-		case PAGE_NOT_FOUND:
-		case INTERNAL_SERVER_ERROR:
-		case OTHER_ERROR:
-		 	return state.withMutations(state => {
-				 state.set('waitingSignUp', false)
-				 	.set('signupDialog', false)
-					.set('error', Map({
-						type: action.type,
-						obj: action.error? Map(action.error) : null,
-					}))
-			 })
 	}
 	return state
 }
