@@ -14,10 +14,6 @@ import {
 } from '../action'
 
 import {
-	SERVER_DOWN, PAGE_NOT_FOUND, INTERNAL_SERVER_ERROR, OTHER_ERROR,
-} from '../../../data/fetch'
-
-import {
 	DIALOG_WAITING, DIALOG_DONE, DIALOG_ERROR,
 } from '../../../common/dialog'
 
