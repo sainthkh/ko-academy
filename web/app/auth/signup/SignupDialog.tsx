@@ -28,7 +28,6 @@ const mapStateToProps = (state) => {
 	} else {
 		props.error = false
 	}
-	console.log(props)
 	return props
 }
 
