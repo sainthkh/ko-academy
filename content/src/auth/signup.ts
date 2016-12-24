@@ -1,5 +1,6 @@
 import * as async from 'async'
 import * as _ from 'lodash'
+import { Auth } from '../data'
 import { isCommonPassword } from './password'
 
 export function init(server) {
@@ -25,7 +26,23 @@ export function signup(req, res, next) {
 		done => {
 			let emailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 			if(emailFormat.test(req.params.email)) {
-				done()
+				Auth().then(client => {
+					client.post('/check-duplicate', 
+						{ email: req.params.email }, 
+						(err, req, res, obj) => {
+							if(err) {
+								console.error(err)
+								done(null, "Unknown Error")
+							} else {
+								if(obj.duplicate) {
+									done(null, DUPLICATE_EMAIL)
+								} else {
+									done()
+								}
+							}
+						}
+					)
+				})
 			} else {
 				done(null, INVALID_EMAIL)
 			}
@@ -46,8 +63,23 @@ export function signup(req, res, next) {
 	(err, results) => {
 		_.pull(results, undefined)
 		if(results.length == 0) {
-			res.send({
-				success: true
+			Auth().then(client => {
+				client.post('/create-user', {
+					username: req.params.username,
+					email: req.params.email,
+					password: req.params.password,
+				},
+				(clientErr, clientReq, clientRes, obj) => {
+					if(clientErr || !obj.success) {
+						res.send(500, {
+							success: false
+						})
+					} else {
+						res.send(200, {
+							success: true
+						})
+					}
+				})
 			})
 		} else {
 			res.send({
