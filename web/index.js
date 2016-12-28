@@ -1,4 +1,4 @@
-const app = require('./app')
+const app = require('./server')
 const port = process.env.PORT || 3000
 
 app.default.listen(port, function (err) {

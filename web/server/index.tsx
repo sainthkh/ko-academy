@@ -9,8 +9,8 @@ import { Provider } from 'react-redux'
 import * as http from 'http'
 import * as path from 'path'
 
-import { routes } from './routes';
-import { createStore } from './store'
+import { routes } from '../app/routes'
+import { createStore } from '../app/store'
 
 const app = express();
 app.use(express.static(path.join(__dirname, '..', 'static')))
