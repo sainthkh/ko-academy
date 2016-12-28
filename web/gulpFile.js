@@ -15,16 +15,6 @@ const modules = require('postcss-modules')
 const uglify = require('gulp-uglify')
 const cleanCSS = require('gulp-clean-css')
 
-const rollup = require('rollup').rollup
-const commonjs = require('rollup-plugin-commonjs')
-const nodeResolve = require('rollup-plugin-node-resolve')
-const nodeGlobals = require('rollup-plugin-node-globals')
-const nodeBuiltins = require('rollup-plugin-node-builtins')
-const json = require('rollup-plugin-json')
-const rollupReplace = require('rollup-plugin-replace')
-
-const bs = require('browser-sync').create()
-
 const _ = require('lodash')
 const argv = require('yargs').argv
 
@@ -42,6 +32,7 @@ function options() {
 		return path.join(__dirname, o.dest, p)
 	}
 	o.app = o.path('app')
+	o.server = o.path('server')
 	o.client = o.path('.client')
 	o.static = o.path('static')
 
@@ -57,36 +48,61 @@ var opts = options()
 gulp.task('test', (done) => {
 	seq(
 		'compile-changed-pcss',
-		'compile-ts',
+		'app-compile-ts',
 		'run-unit-test',
 		done
 	)
 })
 
-gulp.task('run', done => {
+gulp.task('release', done => {
 	seq(
-		'compile', 
-		'bundle-client-js',
+		'compile',
 		'move-index-js',
-		'start-test-server',
-		'init-browser-sync',
+		'clean-ts',
 		done
 	)
 })
 
-gulp.task('compile', (done) => {
+gulp.task('compile', done => {
+	seq(
+		['app-compile', 'server-compile'],
+		done
+	)
+})
+
+gulp.task('app-compile', (done) => {
 	opts.compileOnlyChangedTs = false
 	opts.compileOnlyChangedPcss = false
 	seq(
-		'clean',
+		'app-clean',
 		'compile-postcss',
-		['compile-ts', 'compile-changed-ts-to-es6'],
+		['app-compile-ts', 'compile-changed-ts-to-es6'],
 		done
 	)
 })
 
-gulp.task('clean', () => {
-	return gulp.src(opts.path('/**/*.*'), {read: false})
+gulp.task('server-compile', done => {
+	opts.compileOnlyChangedTs = false
+	opts.compileOnlyChangedPcss = false
+	seq(
+		'server-clean',
+		'server-compile-ts',
+		done
+	)
+})
+
+function taskClean(path) {
+	gulp.task(`${path}-clean`, () => {
+		return gulp.src(opts.path(`/${path}/**/*.*`), {read: false})
+			.pipe(clean())
+	})	
+}
+taskClean('app')
+taskClean('server')
+
+gulp.task('clean-ts', () => {
+	if(!opts.production) return "done"
+	return gulp.src(opts.path('/**/*.{ts,tsx}'), {read: false})
 		.pipe(clean())
 })
 
@@ -175,20 +191,33 @@ gulp.task('create-style-css', () => {
 })
 
 // Compile TS
-gulp.task('compile-ts', () => {
-	return gulp.src('app/**/*.{ts,tsx}')
-		.pipe($if(opts.compileOnlyChangedTs, changed(opts.app)))
-		.pipe(gulp.dest(opts.app))
-		.pipe(ts({
-			jsx: "react",
-			module: "commonjs",
-			target: "es5",
-			sourceMap: true
-		}))
-		.pipe(gulp.dest(opts.app))
-})
+function taskCompileTs(path) {
+	gulp.task(`${path}-compile-ts`, () => {
+		return gulp.src(`${path}/**/*.{ts,tsx}`)
+			.pipe($if(opts.compileOnlyChangedTs, changed(opts[path])))
+			.pipe(gulp.dest(opts[path]))
+			.pipe(ts({
+				jsx: "react",
+				module: "commonjs",
+				target: "es5",
+				sourceMap: true
+			}))
+			.pipe(gulp.dest(opts[path]))
+	})	
+}
+
+taskCompileTs('app')
+taskCompileTs('server')
 
 gulp.task('compile-changed-ts-to-es6', () => {
+	let replacements = [
+		"CSSModules",
+		"isoFetch", 
+		"React",
+		"ReactDom",
+		"Immutable",
+		"Measure",
+	]
 	return gulp.src('app/**/*.{ts,tsx}')
 		.pipe($if(opts.compileOnlyChangedTs, changed(opts.client)))
 		.pipe(gulp.dest(opts.client))
@@ -198,142 +227,19 @@ gulp.task('compile-changed-ts-to-es6', () => {
 			target: "es5",
 			moduleResolution: "node",
 		}))
-		.pipe(gulp.dest(opts.client))
-})
-
-//
-// Run Server/Client
-//
-
-// Client Js bundle
-
-gulp.task('bundle-client-js', (done) => {
-	seq(
-		'replace-import',
-		'rollup',
-		'minify-js',
-		done
-	)
-})
-
-gulp.task('replace-import', () => {
-	let replacements = [
-		"CSSModules",
-		"isoFetch", 
-		"React",
-		"ReactDom",
-		"Immutable",
-		"Measure",
-	]
-	return gulp.src(opts.path('.client/**/*.js'))
 		.pipe(replace(new RegExp(`import \\* as (${replacements.join('|')})`, 'g'), "import $1"))
 		.pipe(gulp.dest(opts.client))
 })
 
-gulp.task('rollup', done => {
-	rollup({
-		entry: opts.path('.client/client.js'),
-		context: 'window',
-		plugins: [
-			rollupReplace({
-				'process.env.NODE_ENV': JSON.stringify( 'production' ),
-			}),
-			nodeResolve({ 
-				browser: true, 
-				preferBuiltins: true,
-			}),
-			json(),
-			commonjs({
-				namedExports: {
-					'node_modules/immutable/dist/immutable.js': [ 'Map', 'List'],
-				}
-			}),
-			nodeGlobals(),
-			nodeBuiltins(),
-		]
-	}).then(bundle => {
-		return bundle.write({
-			format: 'iife',
-			dest: opts.path('static/bundle.js')
-		});
-	}).then(bundle => {
-		done()
-	})
-})
+//
+// compile-changed
+//
 
-gulp.task('minify-js', () => {
-	if(opts.production) {
-		return gulp.src(opts.path('static/bundle.js'))
-			.pipe(rename('bundle.min.js'))
-			.pipe(uglify())
-			.pipe(gulp.dest(opts.static))
-	} else {
-		return "done"
-	}
-})
-
-// nodemon server
-
-var server;
-var restartTasks = [];
-
-gulp.task('start-test-server', (done) => {
-	var started = false
-	server = nodemon({
-		script: opts.path('index.js'),
-		watch: [
-			"app"
-		],
-		ignore: [
-			"*test.ts"
-		],
-		ext: 'ts tsx pcss',
-		verbose: true,
-		tasks: changedFiles => {
-			let exts = _.map(changedFiles, (p) => {
-				return path.extname(p)
-			})
-			exts = _.uniq(exts)
-
-			var tasks = []
-			if(_.includes(exts, '.pcss')) {
-				tasks.push('pcss-changed')
-			} else if(_.includes(exts, '.ts') || _.includes(exts, '.tsx')) {
-				tasks.push('ts-changed')
-			}
-
-			return tasks
-		}
-	})
-	.on('start', () => {
-		if(!started) {
-			started = true
-			done()
-		}
-	})
-})
-
-gulp.task('pcss-changed', done => {
-	seq(
-		'compile-changed-pcss',
-		'reload-client',
-		done
-	)
-})
-
-gulp.task('compile-changed-ts', done => {
+gulp.task('compile-changed', done => {
 	opts.compileOnlyChangedTs = true
 	seq(
-		'compile-ts',
-		done
-	)
-})
-
-gulp.task('ts-changed', done => {
-	seq(
-		['compile-changed-ts', 'compile-changed-ts-to-es6'],
-		'bundle-client-js',
-		'reload-client',
+		'compile-changed-pcss',
+		['app-compile-ts', 'server-compile-ts', 'compile-changed-ts-to-es6'],
 		done
 	)
 })
@@ -344,30 +250,6 @@ gulp.task('compile-changed-pcss', done => {
 		'compile-postcss',
 		done
 	)
-})
-
-gulp.task('restart-server', done => {
-	server.emit('restart')
-	done()
-})
-
-// Browser Sync
-
-gulp.task('init-browser-sync', done => {
-	bs.init({
-		proxy: {
-			target: "localhost:3000",
-			ws: true,
-		},
-		files: false, //nodemon watches
-		browser: (argv.a || argv.all) ? ["firefox", "chrome", "iexplore", path.join(__dirname, ".bin", "edge.exe")] : ["chrome"], /* edge launcher from https://github.com/MicrosoftEdge/edge-launcher */ 
-		port: 5101,
-	})
-	done()
-})
-
-gulp.task('reload-client', () => {
-	return bs.reload({stream: true})
 })
 
 //
