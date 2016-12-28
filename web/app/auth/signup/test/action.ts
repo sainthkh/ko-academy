@@ -3,8 +3,6 @@ const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 const sinonPromised = require('sinon-as-promised')
 
-import {config} from '../../../config'
-
 import { 
 	FAILED_SIGNUP, SUCCEEDED_SIGNUP, receivedSignup, 
 	REQUEST_SIGNUP, requestSignup,

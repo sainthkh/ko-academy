@@ -1,7 +1,6 @@
 import { 
 	fetch, FETCH_SUCCESS
 } from '../../data/fetch'
-import { config } from '../../config'
 
 export const REQUEST_SIGNUP = "REQUEST_SIGNUP"
 export const SUCCEEDED_SIGNUP = "SUCCESS_SIGNUP"
