@@ -42,6 +42,7 @@ process.stdin.on('data', chunk => {
 		case 'c':
 			console.log('compile started')
 			exec('gulp compile-changed', (err, stdout, stderr) => {
+				console.log(stderr)
 				console.log('compile ended')
 				bundler(false)
 				.then(bundle => {
