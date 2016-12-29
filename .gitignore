@@ -44,3 +44,4 @@ web/app/config.ts
 web/test/current.js
 .debug/
 .production/
+web/test/current.json
