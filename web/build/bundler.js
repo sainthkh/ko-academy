@@ -56,7 +56,7 @@ exports.js = (dir, production) => {
 		if(production) {
 			console.log('Javascript minify started')
 			let result = uglify.minify(destFileName)
-			ensureWrite(destFilePath, result.code)
+			ensureWrite(destFileName, result.code)
 			console.log('Javascript minify ended')
 		}
 		console.log('JavaScript bundling finished')
@@ -67,7 +67,7 @@ exports.js = (dir, production) => {
 exports.css = (dir, production) => {
 	console.log('CSS bundling started for ' + dir)
 	var destFileName = destFilePath(dir + '/style.css', production, 'static')
-	files(destDir(production, '.css'))
+	return files(destDir(production, '.css'))
 	.then(files => {
 		var css = files.map(fileName => {
 			return fs.readFileSync(fileName)
@@ -80,5 +80,3 @@ exports.css = (dir, production) => {
 		console.log('CSS bundling ended for ' + dir)
 	})
 }
-
-exports.css('app', true)

@@ -8,8 +8,6 @@ const exec = require('child_process').exec;
 
 const { BASE_DIR, destFilePath, ensureWrite, copy } = require('./util')
 
-const BASE_DIR = path.join(__dirname, '..')
-
 function compile(files, production) {
 	files.forEach(fileName => {
 		var ext = path.extname(fileName)
