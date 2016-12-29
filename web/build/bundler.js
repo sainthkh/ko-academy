@@ -7,19 +7,20 @@ const json = require('rollup-plugin-json')
 const rollupReplace = require('rollup-plugin-replace')
 
 const uglify = require('uglify-js')
+const CleanCss = require('clean-css')
 
 const fs = require('fs')
 const path = require('path')
+const { destDir, destFilePath, ensureWrite, files } = require('./util')
 
 var cache;
 
-module.exports = (production) => {
-	console.log('bundling started')
-	var dest = production ? '.production': '.debug'
-	var entryPath = path.join(__dirname, '..', dest, '.client/client.js')
-	var destFilePath = path.join(__dirname, '..', dest, 'static/bundle.js')
+exports.js = (dir, production) => {
+	console.log('JavaScript bundling started')
+	var entryName = destFilePath(dir + '/client.js', production, '.client')
+	var destFileName = destFilePath(dir + '/bundle.js', production, 'static')
 	return rollup({
-		entry: entryPath,
+		entry: entryName,
 		context: 'window',
 		plugins: [
 			rollupReplace({
@@ -48,17 +49,36 @@ module.exports = (production) => {
 		// Cache our bundle for later use (optional)
 		cache = bundle;
 
-		fs.writeFileSync(destFilePath, result.code );
+		ensureWrite(destFileName, result.code );
 		return bundle;
 	})
 	.then(bundle => {
 		if(production) {
 			console.log('Javascript minify started')
-			let result = uglify.minify(destFilePath)
-			fs.writeFileSync(destFilePath, result.code)
+			let result = uglify.minify(destFileName)
+			ensureWrite(destFilePath, result.code)
 			console.log('Javascript minify ended')
 		}
-		console.log('bundling finished')
+		console.log('JavaScript bundling finished')
 		return bundle
 	})
 }
+
+exports.css = (dir, production) => {
+	console.log('CSS bundling started for ' + dir)
+	var destFileName = destFilePath(dir + '/style.css', production, 'static')
+	files(destDir(production, '.css'))
+	.then(files => {
+		var css = files.map(fileName => {
+			return fs.readFileSync(fileName)
+		})
+		var finalCss = css.join('\n')
+		if(production) {
+			finalCss = new CleanCss().minify(finalCss).styles
+		}
+		ensureWrite(destFileName, finalCss)
+		console.log('CSS bundling ended for ' + dir)
+	})
+}
+
+exports.css('app', true)

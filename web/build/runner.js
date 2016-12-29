@@ -44,7 +44,7 @@ process.stdin.on('data', chunk => {
 			exec('gulp compile-changed', (err, stdout, stderr) => {
 				console.log(stderr)
 				console.log('compile ended')
-				bundler(false)
+				bundler.js(false)
 				.then(bundle => {
 					nodemon.emit('restart')
 				})
