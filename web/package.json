@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-dev-win": ".\\node_modules\\.bin\\webpack-dev-server --progress --inline --hot --config .\\build\\webpack.debug.config.js",
+    "run": "node .\\build\\runner.js",
+    "compile": "node .\\build\\cli.js",
+    "release":"node .\\build\\cli.js -p",
     "test": ".\\node_modules\\.bin\\babel-node --presets es2015 .\\test\\logic.js | .\\node_modules\\.bin\\tap-spec",
     "test-current": ".\\node_modules\\.bin\\babel-node --presets es2015 .\\test\\current.js | .\\node_modules\\.bin\\tap-spec",
     "test-all": ".\\node_modules\\.bin\\babel-node --presets es2015 .\\test\\all.js",
