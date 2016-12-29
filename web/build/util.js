@@ -49,6 +49,10 @@ var walk = function(dir, done) {
 	});
 };
 
+function getDirType(fileName) {
+	return fileName.substring(0, fileName.indexOf(path.sep))
+}
+
 function files(dir) {
 	return new Promise(function(resolve, reject) {
 		walk(dir, (err, results) => {
@@ -69,4 +73,5 @@ module.exports = {
 	destFilePath,
 	ensureWrite,
 	files,
+	getDirType
 }

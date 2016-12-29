@@ -1,11 +1,15 @@
 const nodemon = require('nodemon')
 const argv = require('yargs').argv
 const bs = require('browser-sync').create()
+const chokidar = require('chokidar')
+const async = require('async')
 
 const path = require('path')
 const exec = require('child_process').exec
 
 const bundler = require('./bundler')
+const compile = require('./compile')
+const { getDirType } = require('./util')
 
 console.log('Starting nodemon')
 
@@ -41,14 +45,49 @@ process.stdin.on('data', chunk => {
 	switch(command) {
 		case 'c':
 			console.log('compile started')
-			exec('gulp compile-changed', (err, stdout, stderr) => {
-				console.log(stderr)
-				console.log('compile ended')
-				bundler.js(false)
-				.then(bundle => {
-					nodemon.emit('restart')
+			compile(toBeCompiled)
+			async.each(toBeBundled, (dir, done) => {
+				Promise.all([bundler.js(dir), bundler.css(dir)])
+				.then(() => {
+					done()
 				})
+			}, 
+			err => {
+				if (err) {
+					console.log(err)
+				} else {
+					nodemon.emit('restart')
+				}
+				initFileList()
+				console.log('compile ended')
 			})
 			break
 	}
 })
+
+initFileList()
+chokidar.watch(['./admin', './app', './server'], {
+	ignoreInitial: true
+})
+.on('add', path => {
+	console.log(`${path} is added`)
+	addFile(path)
+})
+.on('change', path => {
+	console.log(`${path} is changed`)
+	addFile(path)
+})
+
+var toBeCompiled;
+var toBeBundled;
+function addFile(path) {
+	var type = getDirType(path)
+	if (type != 'server') {
+		toBeBundled.add(type)
+	}
+}
+
+function initFileList() {
+	toBeCompiled = new Set()
+	toBeBundled = new Set()
+}
