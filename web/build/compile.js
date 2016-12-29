@@ -92,6 +92,7 @@ function compileTsDestPath(filePath, production, client) {
 
 function compilePostCSS(fileName, production) {
 	var code = fs.readFileSync(fileName).toString()
+	var dest = cssFilePath(fileName, production)
 	postcss([
 		require('precss'),
 		require('postcss-modules')({
@@ -107,9 +108,9 @@ function compilePostCSS(fileName, production) {
 		require('postcss-short'),
 		require('postcss-cssnext'),
 	])
-	.process(code, { from: fileName, to: './temp/a.css'})
+	.process(code, { from: fileName, to: dest})
 	.then(result => {
-		ensureWrite(cssFilePath(fileName, production), result.css)
+		ensureWrite(dest, result.css)
 	})
 }
 
