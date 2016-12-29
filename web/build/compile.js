@@ -6,6 +6,8 @@ const postcss = require('postcss')
 const path = require('path')
 const exec = require('child_process').exec;
 
+const { BASE_DIR, destFilePath, ensureWrite, copy } = require('./util')
+
 const BASE_DIR = path.join(__dirname, '..')
 
 function compile(files, production) {
@@ -120,31 +122,4 @@ function cssjsFilePath(fileName, production, client) {
 
 function cssFilePath(fileName, production) {
 	return destFilePath(fileName.replace("pcss", "css"), production, '.css')
-}
-
-//
-// Utils
-//
-
-function remove(target, production) {
-	fs.removeSync(path.join(destDir(production), target))
-	console.log('removed ' + target)
-}
-
-function copy(target, production) {
-	fs.copySync(target, path.join(destDir(production), target))
-	console.log('copied ' + target)
-}
-
-function destDir(production) {
-	return path.join(BASE_DIR, production ? '.production':'.debug')
-}
-
-function destFilePath(filePath, production, special) {
-	return path.join(destDir(production), special ? special:'', path.relative(BASE_DIR, filePath))
-}
-
-function ensureWrite(fileName, data) {
-	fs.ensureFileSync(fileName)
-	fs.writeFileSync(fileName, data)
 }
