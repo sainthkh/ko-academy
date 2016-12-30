@@ -9,7 +9,7 @@ router.post('/subscribe', (req, res) => {
 		Subscriber.then(db => {
 			db.count({where: {email: req.body.email}})
 			.then(count => {
-				if(count != 0) {
+				if(count == 0) {
 					db.create({
 						email: req.body.email,
 						first_name: req.body.first_name,
