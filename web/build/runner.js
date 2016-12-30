@@ -22,7 +22,7 @@ nodemon({
 
 bs.init({
 	proxy: {
-		target: "localhost:3000",
+		target: "localhost:4000",
 		ws: true,
 	},
 	files: false, //nodemon never watches
