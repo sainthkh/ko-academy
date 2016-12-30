@@ -7,7 +7,7 @@ import {
 
 import {
 	DIALOG_WAITING, DIALOG_DONE, DIALOG_ERROR,
-} from '../../common/dialog'
+} from '../../common/Dialog'
 
 export function subscribe(state, action) {
 	switch(action.type) {
