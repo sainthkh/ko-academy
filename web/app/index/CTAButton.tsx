@@ -7,7 +7,7 @@ import styles from './CTAButton.css'
 class CTAButton extends React.Component<{}, {}> {
 	render() {
 		return (
-			<a styleName="cta-signup" href="#signup" onClick={ e => openDialog(e, 'signup')}>Start Now</a>
+			<a styleName="cta-signup" href="#signup" onClick={ e => openDialog(e, 'subscribe')}>Join the Waiting List</a>
 		);
 	}
 }
