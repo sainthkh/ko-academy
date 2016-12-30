@@ -47,24 +47,31 @@ process.stdin.on('data', chunk => {
 		case 'c':
 			console.log('compile started')
 			compile(toBeCompiled)
-			console.log('compile ended')
-			async.each(toBeBundled, (dir, done) => {
-				Promise.all([bundler.js(dir), bundler.css(dir)])
-				.then(() => {
-					done()
-				})
-			}, 
-			err => {
-				if (err) {
-					console.log(err)
-				} else {
-					nodemon.emit('restart')
-				}
-				initFileList()
+			.then(() => {
+				console.log('compile ended')
+				bundle()
 			})
+			
 			break
 	}
 })
+
+function bundle() {
+	async.each(toBeBundled, (dir, done) => {
+		Promise.all([bundler.js(dir), bundler.css(dir)])
+		.then(() => {
+			done()
+		})
+	}, 
+	err => {
+		if (err) {
+			console.log(err)
+		} else {
+			nodemon.emit('restart')
+		}
+		initFileList()
+	})
+}
 
 initFileList()
 chokidar.watch(['./admin', './app', './server'], {
