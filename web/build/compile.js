@@ -12,6 +12,11 @@ const { BASE_DIR, destFilePath, ensureWrite, copy } = require('./util')
 function compile(files, production) {
 	return new Promise(function(resolve, reject) {
 		async.each(files, (fileName, done) => {
+			// ignore tests in production
+			if(production && fileName.match(/.*(\/|\\)test(\/|\\).*/)) {
+				done()
+				return 
+			}
 			var ext = path.extname(fileName)
 			switch(ext) {
 				case '.ts':
