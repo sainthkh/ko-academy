@@ -12,7 +12,8 @@ function release(produnction) {
 
 			const compileDirs = ['app', 'server']
 			async.each(compileDirs, (dir, done2) => {
-				remove(dir)
+				remove(dir, production)
+				console.log(`compiling ${dir}...`)
 				files(dir)
 				.then(files => {
 					compile(files, production)
