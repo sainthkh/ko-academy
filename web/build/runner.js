@@ -47,6 +47,7 @@ process.stdin.on('data', chunk => {
 		case 'c':
 			console.log('compile started')
 			compile(toBeCompiled)
+			console.log('compile ended')
 			async.each(toBeBundled, (dir, done) => {
 				Promise.all([bundler.js(dir), bundler.css(dir)])
 				.then(() => {
@@ -60,7 +61,6 @@ process.stdin.on('data', chunk => {
 					nodemon.emit('restart')
 				}
 				initFileList()
-				console.log('compile ended')
 			})
 			break
 	}
