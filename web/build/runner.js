@@ -4,6 +4,7 @@ const bs = require('browser-sync').create()
 const chokidar = require('chokidar')
 const async = require('async')
 
+const fs = require('fs-extra')
 const path = require('path')
 const exec = require('child_process').exec
 
@@ -24,7 +25,7 @@ bs.init({
 		target: "localhost:3000",
 		ws: true,
 	},
-	files: false, //nodemon watches
+	files: false, //nodemon never watches
 	browser: (argv.a || argv.all) ? ["firefox", "chrome", "iexplore", path.join(__dirname, ".bin", "edge.exe")] : ["chrome"], /* edge launcher from https://github.com/MicrosoftEdge/edge-launcher */ 
 	port: 5101,
 })
@@ -70,20 +71,25 @@ chokidar.watch(['./admin', './app', './server'], {
 	ignoreInitial: true
 })
 .on('add', path => {
-	console.log(`${path} is added`)
 	addFile(path)
 })
 .on('change', path => {
-	console.log(`${path} is changed`)
 	addFile(path)
 })
 
 var toBeCompiled;
+var codes = {};
 var toBeBundled;
 function addFile(path) {
 	var type = getDirType(path)
 	if (type != 'server') {
 		toBeBundled.add(type)
+	}
+	var code = fs.readFileSync(path).toString()
+	if (!codes[path] || codes[path] != code) {
+		console.log(`${path} will be compiled`)
+		codes[path] = code
+		toBeCompiled.add(path)
 	}
 }
 
