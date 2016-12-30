@@ -13,12 +13,10 @@ class MenuBar extends React.Component<{}, {}> {
 					<div styleName="content">
 						<div styleName="logo">
 							<Link to="/">
-								<img src="/img/logo.png" />
 								<span styleName="title">WiseInit Academy</span>
 							</Link>
 						</div>
 						<div styleName="action">
-							<LoginButton />
 						</div>
 					</div>
 				</div>
