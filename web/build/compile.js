@@ -61,7 +61,7 @@ function compileTs(fileName, production) {
 		jsx: "react",
 		module: "commonjs",
 		target: "es5",
-		inlineSourceMap: true,
+		inlineSourceMap: !production,
 	})
 	ensureWrite(compileTsDestPath(fileName, production), result.outputText)
 }
