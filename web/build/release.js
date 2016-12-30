@@ -16,7 +16,9 @@ function release(produnction) {
 				files(dir)
 				.then(files => {
 					compile(files, production)
-					done2()
+					.then(() => {
+						done2()
+					})
 				})
 			}, 
 			err => {

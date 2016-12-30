@@ -1,5 +1,6 @@
 const fs = require('fs-extra')
 const ts = require('typescript')
+const async = require('async')
 
 const postcss = require('postcss')
 
@@ -9,24 +10,38 @@ const exec = require('child_process').exec;
 const { BASE_DIR, destFilePath, ensureWrite, copy } = require('./util')
 
 function compile(files, production) {
-	files.forEach(fileName => {
-		var ext = path.extname(fileName)
-		switch(ext) {
-			case '.ts':
-			case '.tsx':
-				compileTs(fileName, production)
-				let relPath = path.relative(BASE_DIR, fileName)
-				if(relPath.match(/^(\.\/)?(app|admin).*/)) {
-					compileTsToES6(fileName, production)
-				}
-				break;
-			case '.pcss':
-				compilePostCSS(fileName, production)
-				break;
-			default:
-				copy(fileName, production)
-				break;
-		}
+	return new Promise(function(resolve, reject) {
+		async.each(files, (fileName, done) => {
+			var ext = path.extname(fileName)
+			switch(ext) {
+				case '.ts':
+				case '.tsx':
+					compileTs(fileName, production)
+					let relPath = path.relative(BASE_DIR, fileName)
+					if(relPath.match(/^(\.\/)?(app|admin).*/)) {
+						compileTsToES6(fileName, production)
+					}
+					done()
+					break;
+				case '.pcss':
+					compilePostCSS(fileName, production)
+					.then(() => {
+						done()
+					})
+					break;
+				default:
+					copy(fileName, production)
+					done()
+					break;
+			}
+		},
+		err => {
+			if(err) {
+				reject(err)
+			} else {
+				resolve()
+			}
+		})	
 	})
 }
 
@@ -93,10 +108,10 @@ function compileTsDestPath(filePath, production, client) {
 function compilePostCSS(fileName, production) {
 	var code = fs.readFileSync(fileName).toString()
 	var dest = cssFilePath(fileName, production)
-	postcss([
+	return postcss([
 		require('precss'),
 		require('postcss-modules')({
-			generateScopedName: '[local]_[hash:base64:5]',
+			generateScopedName: production ? '[hash:base64:5]': '[local]_[hash:base64:5]',
 			getJSON: (fileName, obj) => {
 				let es5 = `var styles = ${JSON.stringify(obj)};\nexports.default=styles`
 				ensureWrite(cssjsFilePath(fileName, production), es5)
