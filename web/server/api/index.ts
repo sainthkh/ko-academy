@@ -5,7 +5,6 @@ import {default as auth} from './auth'
 
 var router = express.Router()
 
-router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json())
 router.use('/', auth)
 
