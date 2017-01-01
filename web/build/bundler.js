@@ -67,7 +67,7 @@ exports.js = (dir, production) => {
 exports.css = (dir, production) => {
 	console.log('CSS bundling started for ' + dir)
 	var destFileName = destFilePath(dir + '/style.css', production, 'static')
-	return files(destDir(production, '.css'))
+	return files(destDir(production, `.css/${dir}`))
 	.then(files => {
 		var css = files.map(fileName => {
 			return fs.readFileSync(fileName)
