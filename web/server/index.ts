@@ -2,7 +2,8 @@
 import * as express from 'express'
 import * as path from 'path'
 
-import { default as renderApp } from './render-app'
+import AppRenderer from './render/app'
+import AdminRenderer from './render/admin'
 import { default as api} from './api'
 
 const app = express();
@@ -11,6 +12,7 @@ if (app.get('env') === 'development') {
 }
 
 app.use('/api', api)
-app.use('/', renderApp)
+app.use('/admin', AdminRenderer)
+app.use('/', AppRenderer)
 
 export default app
