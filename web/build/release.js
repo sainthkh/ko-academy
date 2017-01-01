@@ -10,7 +10,7 @@ function release(produnction) {
 		done => {
 			console.log('> Compile Started')
 
-			const compileDirs = ['app', 'server']
+			const compileDirs = ['app', 'admin', 'server']
 			async.each(compileDirs, (dir, done2) => {
 				remove(dir, production)
 				console.log(`compiling ${dir}...`)
@@ -34,7 +34,7 @@ function release(produnction) {
 		done => {
 			console.log('> Bundling Started')
 
-			const bundleDirs = ['app']
+			const bundleDirs = ['app', 'admin']
 			async.each(bundleDirs, (dir, done2) => {
 				bundler.css(dir, production)
 				bundler.js(dir, production)
