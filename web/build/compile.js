@@ -18,11 +18,11 @@ function compile(files, production) {
 				return 
 			}
 			var ext = path.extname(fileName)
+			let relPath = path.relative(BASE_DIR, fileName)
 			switch(ext) {
 				case '.ts':
 				case '.tsx':
 					compileTs(fileName, production)
-					let relPath = path.relative(BASE_DIR, fileName)
 					if(relPath.match(/^(\.\/)?(app|admin).*/)) {
 						compileTsToES6(fileName, production)
 					}
@@ -35,13 +35,14 @@ function compile(files, production) {
 					})
 					break;
 				default:
-					copy(fileName, production)
+					copy(relPath, production)
 					done()
 					break;
 			}
 		},
 		err => {
 			if(err) {
+				console.log(err)
 				reject(err)
 			} else {
 				resolve()
