@@ -10,7 +10,7 @@ const exec = require('child_process').exec
 
 const bundler = require('./bundler')
 const compile = require('./compile')
-const { getDirType, removeFrontend } = require('./util')
+const { getDirType, destFilePath } = require('./util')
 
 console.log('Starting nodemon')
 
@@ -25,7 +25,7 @@ bs.init({
 		target: "localhost:4000",
 		ws: true,
 	},
-	files: false, //nodemon never watches
+	files: false, //chokidar watches
 	browser: (argv.a || argv.all) ? ["firefox", "chrome", "iexplore", path.join(__dirname, ".bin", "edge.exe")] : ["chrome"], /* edge launcher from https://github.com/MicrosoftEdge/edge-launcher */ 
 	port: 5101,
 })
@@ -51,7 +51,21 @@ process.stdin.on('data', chunk => {
 				console.log('compile ended')
 				bundle()
 			})
-			
+			break
+		case 't':
+			console.log('compile started')
+			compile(toBeCompiled)
+			.then(() => {
+				console.log('compile ended')
+				var testPaths = JSON.parse(fs.readFileSync('./build/test.json')).target
+				testPaths.forEach(p => {
+					exec(`node ${destFilePath(p)}|.\\node_modules\\.bin\\tap-spec`, (err, stdout, stderr) => {
+						console.log(stdout)
+						console.log(stderr)
+					})
+				})
+				initFileList(true)
+			})
 			break
 	}
 })
@@ -107,7 +121,9 @@ function addFile(path) {
 	}
 }
 
-function initFileList() {
+function initFileList(ignoreBundle = false) {
 	toBeCompiled = new Set()
-	toBeBundled = new Set()
+	if(!ignoreBundle) {
+		toBeBundled = new Set()
+	}
 }
