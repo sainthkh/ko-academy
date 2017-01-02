@@ -8,7 +8,12 @@ class IndexPage extends React.Component<{}, {}> {
 	render() {
 		return (
 			<div styleName="home">
-				Succeeded!
+				<div styleName="login-form">
+					<div styleName="title">WiseInit Academy Admin</div>
+					<input type="text" styleName="field" name="id" placeholder="ID" />
+					<input type="password" styleName="field" name="password" placeholder="Password" />
+					<button type="submit" styleName="submit">Log in</button>
+				</div>
 			</div>
 		);
 	}

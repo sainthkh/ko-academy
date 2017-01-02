@@ -1,3 +1,44 @@
+@import '../common/global.pcss';
+
 .home {
-	
+	@mixin flex-center;
+	min-height: 100%;
+}
+
+.login-form {
+	width: 280px;
+	height: 280px;
+
+	.title, .field, .submit {
+		width: 100%;
+		margin-bottom: 20px;
+	}
+
+	.title {
+		color: $main-color;
+		font-weight: bold;
+		text-align: center;
+		font-size: $font-size;
+	}	
+
+	.field, .submit {
+		border: 2px solid $main-color;
+		height: 36px;
+	}
+
+	.field {
+		box-sizing: border-box;
+
+		&::placeholder {
+			font-size: $font-size;
+			padding-left: 0.5rem;
+			font-weight: 300;
+		}
+	}
+
+	.submit {
+		background: $main-color;
+		font-size: $font-size;
+		color: white;
+	}
 }
