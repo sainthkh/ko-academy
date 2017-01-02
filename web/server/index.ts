@@ -4,7 +4,7 @@ import * as path from 'path'
 
 import AppRenderer from './render/app'
 import AdminRenderer from './render/admin'
-import { default as api} from './api'
+import { default as api } from './app'
 
 const app = express();
 if (app.get('env') === 'development') {
