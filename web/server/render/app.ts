@@ -1,6 +1,6 @@
 import { renderer } from './renderer'
-import { routes } from '../../app/routes'
-import { createStore } from '../../app/store'
+import { routes } from '../../frontend/app/routes'
+import { createStore } from '../../frontend/app/store'
 
 const AppRenderer = renderer('app', routes, createStore)
 

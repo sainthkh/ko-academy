@@ -10,7 +10,7 @@ const exec = require('child_process').exec
 
 const bundler = require('./bundler')
 const compile = require('./compile')
-const { getDirType } = require('./util')
+const { getDirType, removeFrontend } = require('./util')
 
 console.log('Starting nodemon')
 
@@ -74,7 +74,7 @@ function bundle() {
 }
 
 initFileList()
-chokidar.watch(['./admin', './app', './server'], {
+chokidar.watch(['./frontend', './server'], {
 	ignoreInitial: true
 })
 .on('add', path => {
@@ -89,8 +89,15 @@ var codes = {};
 var toBeBundled;
 function addFile(path) {
 	var type = getDirType(path)
-	if (type != 'server') {
-		toBeBundled.add(type)
+	if (type == 'frontend') {
+		if(path.match(/(\/|\\)app(\/|\\)/)) {
+			toBeBundled.add('frontend/app')
+		} else if(path.match(/(\/|\\)admin(\/|\\)/)){
+			toBeBundled.add('frontend/admin')
+		} else {
+			toBeBundled.add('frontend/app')
+			toBeBundled.add('frontend/admin')
+		}
 	}
 	var code = fs.readFileSync(path).toString()
 	if (!codes[path] || codes[path] != code) {

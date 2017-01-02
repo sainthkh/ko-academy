@@ -7,7 +7,7 @@ const postcss = require('postcss')
 const path = require('path')
 const exec = require('child_process').exec;
 
-const { BASE_DIR, destFilePath, ensureWrite, copy } = require('./util')
+const { PROJECT_ROOT, destFilePath, ensureWrite, copy } = require('./util')
 
 function compile(files, production) {
 	return new Promise(function(resolve, reject) {
@@ -18,12 +18,12 @@ function compile(files, production) {
 				return 
 			}
 			var ext = path.extname(fileName)
-			let relPath = path.relative(BASE_DIR, fileName)
+			let relPath = path.relative(PROJECT_ROOT, fileName)
 			switch(ext) {
 				case '.ts':
 				case '.tsx':
 					compileTs(fileName, production)
-					if(relPath.match(/^(\.\/)?(app|admin).*/)) {
+					if(relPath.match(/^(\.(\/|\\))?frontend(\/|\\)(app|admin).*/)) {
 						compileTsToES6(fileName, production)
 					}
 					done()
@@ -91,7 +91,7 @@ function compileTsFile(fileName, options) {
 	var code = fs.readFileSync(fileName).toString()
 	var result = ts.transpileModule(code, {
 		compilerOptions: ts.convertCompilerOptionsFromJson(options).options,
-		fileName: path.relative(BASE_DIR, fileName),
+		fileName: path.relative(PROJECT_ROOT, fileName),
 		reportDiagnostics: true
 	})
 

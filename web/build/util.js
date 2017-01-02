@@ -1,7 +1,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 
-const BASE_DIR = path.join(__dirname, '..')
+const PROJECT_ROOT = path.join(__dirname, '..')
 
 function remove(target, production) {
 	fs.removeSync(path.join(destDir(production), target))
@@ -14,11 +14,15 @@ function copy(target, production) {
 }
 
 function destDir(production, special) {
-	return path.join(BASE_DIR, production ? '.production':'.debug', special ? special:'')
+	return path.join(PROJECT_ROOT, production ? '.production':'.debug', special ? special:'')
 }
 
 function destFilePath(filePath, production, special) {
-	return path.join(destDir(production, special), path.relative(BASE_DIR, filePath))
+	return path.join(destDir(production, special), path.relative(PROJECT_ROOT, filePath))
+}
+
+function removeFrontend(filePath) {
+	return filePath.replace(/frontend(\/|\\)/, '')
 }
 
 function ensureWrite(fileName, data) {
@@ -66,12 +70,13 @@ function files(dir) {
 }
 
 module.exports = {
-	BASE_DIR,
+	PROJECT_ROOT,
 	remove,
 	copy,
 	destDir,
 	destFilePath,
 	ensureWrite,
 	files,
+	removeFrontend,
 	getDirType
 }

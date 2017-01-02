@@ -11,7 +11,7 @@ const CleanCss = require('clean-css')
 
 const fs = require('fs')
 const path = require('path')
-const { destDir, destFilePath, ensureWrite, files } = require('./util')
+const { destDir, destFilePath, ensureWrite, files, removeFrontend } = require('./util')
 
 var cache;
 
@@ -19,6 +19,7 @@ exports.js = (dir, production) => {
 	console.log('JavaScript bundling started')
 	var entryName = destFilePath(dir + '/client.js', production, '.client')
 	var destFileName = destFilePath(dir + '/bundle.js', production, 'static')
+	destFileName = removeFrontend(destFileName)
 	return rollup({
 		entry: entryName,
 		context: 'window',
@@ -67,6 +68,7 @@ exports.js = (dir, production) => {
 exports.css = (dir, production) => {
 	console.log('CSS bundling started for ' + dir)
 	var destFileName = destFilePath(dir + '/style.css', production, 'static')
+	destFileName = removeFrontend(destFileName)
 	return files(destDir(production, `.css/${dir}`))
 	.then(files => {
 		var css = files.map(fileName => {
