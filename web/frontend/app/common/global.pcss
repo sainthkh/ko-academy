@@ -1,3 +1,5 @@
+@import "../../common/pcss/global.pcss";
+
 /* media query definitions */
 @custom-media --medium (width >= 45rem);
 @custom-media --big (width >= 75rem);
@@ -15,14 +17,6 @@
 
 /* global variables */
 $main-bg: #192867;
-
-
-/* global mixins */
-@define-mixin flex-center {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
 
 @define-mixin limit-width $width {
 	width: $width;
