@@ -16,7 +16,7 @@ const { destDir, destFilePath, ensureWrite, files, removeFrontend } = require('.
 var cache;
 
 exports.js = (dir, production) => {
-	console.log('JavaScript bundling started')
+	console.log(`JavaScript bundling for ${dir} started`)
 	var entryName = destFilePath(dir + '/client.js', production, '.client')
 	var destFileName = destFilePath(dir + '/bundle.js', production, 'static')
 	destFileName = removeFrontend(destFileName)
@@ -55,12 +55,12 @@ exports.js = (dir, production) => {
 	})
 	.then(bundle => {
 		if(production) {
-			console.log('Javascript minify started')
+			console.log(`Javascript minify for ${dir} started`)
 			let result = uglify.minify(destFileName)
 			ensureWrite(destFileName, result.code)
-			console.log('Javascript minify ended')
+			console.log(`Javascript minify for ${dir} ended`)
 		}
-		console.log('JavaScript bundling finished')
+		console.log(`JavaScript bundling for ${dir} finished`)
 		return bundle
 	})
 }
