@@ -45,3 +45,4 @@ web/test/current.js
 .debug/
 .production/
 web/test/current.json
+web/server/admin/config.json
