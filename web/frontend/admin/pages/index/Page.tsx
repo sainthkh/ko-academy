@@ -25,6 +25,7 @@ const mapDispatchToProps = dispatch => {
 					let action = {} as any
 					if (result.success) {
 						action.token = result.token
+						localStorage.setItem("token", action.token)
 					} 
 					return action
 				}
