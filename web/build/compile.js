@@ -23,7 +23,7 @@ function compile(files, production) {
 				case '.ts':
 				case '.tsx':
 					compileTs(fileName, production)
-					if(relPath.match(/^(\.(\/|\\))?frontend(\/|\\)(app|admin).*/)) {
+					if(relPath.match(/^(\.(\/|\\))?frontend(\/|\\).*/)) {
 						compileTsToES6(fileName, production)
 					}
 					done()
