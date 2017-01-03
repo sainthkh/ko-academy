@@ -7,6 +7,9 @@ import {
 } from '../../common/lib/immutable'
 
 export function auth(state = { stage: null, token: null }, action) {
+	if(action.type.name != "login") {
+		return state
+	}
 	switch(action.type.stage) {
 		case REQUEST_FETCH:
 			return immutable(state, {

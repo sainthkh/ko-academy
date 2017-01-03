@@ -1,8 +1,9 @@
 import { fetch as serverFetch } from './fetch'
 
 export const REQUEST_FETCH = "REQUEST_FETCH"
-export const SUCCEEDED_FETCH = "SUCCESS_FETCH"
+export const SUCCEEDED_FETCH = "SUCCEEDED_FETCH"
 export const FAILED_FETCH = "FAILED_FETCH"
+export const ERRORED_FETCH = "ERRORED_FETCH"
 
 interface fetchActionArgs {
 	name: string
@@ -12,39 +13,41 @@ interface fetchActionArgs {
 }
 
 export function fetchAction(options:fetchActionArgs) {
-	return {
-		REQUEST_FETCH,
-		SUCCEEDED_FETCH,
-		FAILED_FETCH,
-		request: () => ({
-			type: {
-				name: options.name,
-				stage: REQUEST_FETCH
-			}
-		}),
-		received: result => {
-			let action = options.processResult(result)
-			action.type.name = options.name
-			action.type.stage = result.success ? SUCCEEDED_FETCH : FAILED_FETCH
-			return action
-		},
-		fetch: (args, username="guest") => {
-			return dispatch => {
-				dispatch(this.request())
-				return this._fetch(options.resource, username, {
-					method: 'POST',
-					args: args,
+	let request = () => ({
+		type: {
+			name: options.name,
+			stage: REQUEST_FETCH
+		}
+	})
+
+	let received = result => {
+		let action = options.processResult(result)
+		action.type = {
+			name: options.name,
+			stage: result.success ? SUCCEEDED_FETCH : FAILED_FETCH,
+		}
+		return action
+	}
+
+	let _fetch = (resource, username, args) => {
+		return serverFetch(options.admin? '/admin/api': '/api', resource, username, args)
+	}
+	return (args, username="guest") => {
+		return dispatch => {
+			dispatch(request())
+			return _fetch(options.resource, username, {
+				method: 'POST',
+				args: args,
+			})
+			.then(json => {
+				dispatch(received(json))
+			})
+			.catch(err => {
+				dispatch({
+					type: ERRORED_FETCH,
+					error: err
 				})
-				.then(json => {
-					dispatch(this.received(json))
-				})
-				.catch(err => {
-					dispatch(err)
-				})
-			}
-		},
-		_fetch: (resource, username, args) => {
-			return serverFetch(options.admin? '/admin/api': '/api', resource, username, args)
+			})
 		}
 	}
 }
