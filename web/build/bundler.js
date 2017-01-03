@@ -35,6 +35,7 @@ exports.js = (dir, production) => {
 			commonjs({
 				namedExports: {
 					'node_modules/immutable/dist/immutable.js': [ 'Map', 'List'],
+					'node_modules/react/react.js': [ 'Children', 'Component', 'PropTypes', 'createElement' ],
 				}
 			}),
 			nodeGlobals(),
