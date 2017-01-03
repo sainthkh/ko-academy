@@ -6,6 +6,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 import { default as auth } from './auth'
+import { default as email } from './email'
 
 var router = express.Router()
 
@@ -31,5 +32,6 @@ router.use((req, res, next) => {
 		})
 	}
 })
+router.use('/email', email)
 
 export default router
