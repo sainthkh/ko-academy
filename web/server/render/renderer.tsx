@@ -6,7 +6,7 @@ import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
 import { Provider } from 'react-redux'
 
-export function renderer(name, routes, createStore) {
+export function renderer(name, routes, createStore, publicUrl) {
 	const router = express.Router();
 
 	router.use('*', (req, res) => {
@@ -50,10 +50,14 @@ export function renderer(name, routes, createStore) {
 				if (renderProps) {
 					// if the current route matched we have renderProps
 					res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"})
-					markup = renderToString(
-						<Provider store={store}>
-							<RouterContext  {...renderProps}/>
-						</Provider>);
+					if(publicUrl(req.originalUrl)) {
+						markup = renderToString(
+							<Provider store={store}>
+								<RouterContext  {...renderProps}/>
+							</Provider>);
+					} else {
+						markup = "<!--none public url-->"
+					}
 				} else {
 					// otherwise we can render a 404 page
 					//markup = renderToString(<NotFoundPage/>);
