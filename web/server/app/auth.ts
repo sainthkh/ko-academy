@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Subscriber } from '../data'
+import { Subscriber } from '../common/data'
 
 const router = express.Router()
 

@@ -12,6 +12,23 @@ var Subscriber = seq.define('Subscriber', {
 	first_name: Sequelize.TEXT,
 }).sync()
 
+export interface BroadcastRecord {
+	ID: number
+	to: string
+	time: any
+	title: string
+	content: string
+}
+
+var Broadcast = seq.define('Broadcast', {
+	ID: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true}, 
+	to: Sequelize.TEXT,
+	time: Sequelize.DATE,
+	title: Sequelize.TEXT,
+	content: Sequelize.TEXT,
+}).sync()
+
 export {
 	Subscriber,
+	Broadcast,
 }
