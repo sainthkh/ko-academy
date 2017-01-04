@@ -28,7 +28,24 @@ var Broadcast = seq.define('Broadcast', {
 	content: Sequelize.TEXT,
 }).sync()
 
+export interface AutoresponderRecord {
+	slug: string
+	listName: string
+	address: string
+	title: string
+	content: string
+}
+
+var Autoresponder = seq.define('Autoresponder', {
+	slug: { type: Sequelize.TEXT, primaryKey: true }, 
+	listName: Sequelize.TEXT,
+	address: Sequelize.TEXT,
+	title: Sequelize.TEXT,
+	content: Sequelize.TEXT,
+}).sync()
+
 export {
 	Subscriber,
 	Broadcast,
+	Autoresponder
 }

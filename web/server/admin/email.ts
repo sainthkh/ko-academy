@@ -1,5 +1,8 @@
 import * as express from 'express'
-import { Broadcast, BroadcastRecord } from '../common/data'
+import { 
+	Broadcast, BroadcastRecord,
+	Autoresponder, AutoresponderRecord,
+} from '../common/data'
 import { sendmail } from '../common/email'
 
 const router = express.Router()
@@ -18,6 +21,29 @@ router.post('/broadcast', (req, res) => {
 			res.json({
 				success: true,
 				ID: result.ID,
+			})
+		})
+	})
+})
+
+router.post('/autoresponder', (req, res) => {
+	Autoresponder.then(db => {
+		return db.create({
+			slug: req.body.slug,
+			listName: req.body.listName,
+			address: req.body.address,
+			title: req.body.title,
+			content: req.body.content
+		})
+		.then((result: AutoresponderRecord) => {
+			res.json({
+				success: true,
+				slug: result.slug
+			})
+		})
+		.catch(err => {
+			res.json({
+				success: false,
 			})
 		})
 	})
