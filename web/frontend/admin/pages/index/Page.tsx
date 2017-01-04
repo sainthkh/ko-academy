@@ -26,6 +26,8 @@ const mapDispatchToProps = dispatch => {
 					if (result.success) {
 						action.token = result.token
 						localStorage.setItem("token", action.token)
+						let expiration = new Date(new Date().getTime() + 30 * 60000/* 30 minutes*/)
+						localStorage.setItem("expiration", expiration.toISOString())
 					} 
 					return action
 				}

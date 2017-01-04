@@ -2,9 +2,10 @@
 
 import * as React from 'react';
 import * as CSSModules from 'react-css-modules'
+import Authorized from '../common/Authorized'
 import styles from './Layout.css'
 
-class NewBroadCast extends React.Component<{}, {}> {
+class NewBroadCast extends Authorized<{}, {}> {
 	render() {
 		return (
 			<div styleName="wrap">

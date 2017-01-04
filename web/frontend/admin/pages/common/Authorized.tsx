@@ -3,12 +3,19 @@
 import * as React from 'react';
 
 class Authorized<P, S> extends React.Component<P, S> {
-	componentWillMount() {
-		const { router } = this.context
+	constructor(props) {
+		super(props)
+	}
 
-		const user = JSON.parse(localStorage.getItem('user'))
-		if (!user) {
-			router.push('/admin')
+	static contextTypes = {
+		router: React.PropTypes.func.isRequired
+    }
+
+	componentWillMount() {
+		const token = localStorage.getItem('token')
+		const time = localStorage.getItem('expiration')
+		if (!token || new Date() > new Date(time)) {
+			this.context.router.push('/admin')
 		}
 	}
 }
