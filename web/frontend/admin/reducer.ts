@@ -13,6 +13,11 @@ const reducer = combineReducers({
 			fail: () => ({}),
 			success: () => ({})
 		}),
+		autoresponder: fetchReducer({
+			name: "autoresponder",
+			fail: () => ({}),
+			success: () => ({})
+		})
 	})
 })
 
