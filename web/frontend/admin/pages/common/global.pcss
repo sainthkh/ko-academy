@@ -2,3 +2,48 @@
 
 $main-color: #2e3092;
 $font-size: 18px;
+
+:global {
+	.wrap {
+		@mixin flex-middle;
+		min-height: 100%;
+		padding: 20px;
+
+		font-size: 18px;
+	}
+
+	.wide-form {
+		width: 1200px;
+	}
+
+	.form-group {
+		width: 100%;
+		margin-bottom: 15px;
+
+		label {
+			display: block;
+			font-weight: bold;
+		}
+
+		.form-field {
+			width: 100%;
+		}
+	}
+
+	.button-wrap {
+		display: flex;
+		justify-content: center;
+	}
+
+	.submit-button {
+		background: $main-color;
+		font-size: $font-size;
+		color: white;
+		border: 2px solid $main-color;
+		width: 120px;
+
+		&:hover {
+			background: color($main-color lightness(20%))
+		}
+	}
+}

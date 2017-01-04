@@ -18,26 +18,26 @@ class PageLayout extends Authorized<LayoutProps, {}> {
 
 	render() {
 		return (
-			<div styleName="wrap">
-				<form styleName="broadcast" name="broadcast-form" action="POST" onSubmit={this.submit}>
-					<div styleName="form-group">
+			<div className="wrap">
+				<form className="wide-form" name="broadcast-form" action="POST" onSubmit={this.submit}>
+					<div className="form-group">
 						<label htmlFor="title">Title</label>
-						<input type="text" styleName="field" name="title" placeholder="title" />
+						<input type="text" className="form-field" name="title" placeholder="title" />
 					</div>
-					<div styleName="form-group">
+					<div className="form-group">
 						<label htmlFor="list">List</label>
-						<select name="list" styleName="field">
+						<select name="list" className="form-field">
 							<option value="beginning-hangeul@mg.wiseinit.com">Hangeul</option>
 						</select>
 					</div>
-					<div styleName="form-group">
+					<div className="form-group">
 						<label htmlFor="content">Content</label>
-						<textarea name="content" styleName="field" rows={30}></textarea>
+						<textarea name="content" className="form-field" rows={30}></textarea>
 					</div>
-					<div styleName="button-wrap">
+					<div className="button-wrap">
 						{this.props.waiting && (<div>Now sending mails ...</div>)}
 						{this.props.succeeded && (<div>Broadcast Success</div>)}
-						<button type="submit" styleName="submit">Send</button>
+						<button type="submit" className="submit-button">Send</button>
 					</div>
 				</form>
 			</div>
