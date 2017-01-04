@@ -34,9 +34,9 @@ class PageLayout extends Authorized<LayoutProps, {}> {
 						<label htmlFor="content">Content</label>
 						<textarea name="content" className="form-field" rows={30}></textarea>
 					</div>
+					{this.props.waiting && (<div>Now sending mails ...</div>)}
+					{this.props.succeeded && (<div>Broadcast Success</div>)}
 					<div className="button-wrap">
-						{this.props.waiting && (<div>Now sending mails ...</div>)}
-						{this.props.succeeded && (<div>Broadcast Success</div>)}
 						<button type="submit" className="submit-button">Send</button>
 					</div>
 				</form>
