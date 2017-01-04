@@ -7,6 +7,13 @@ const reducer = combineReducers({
 		fail: () => ({}),
 		success: action => ({ token: action.token})
 	}),
+	email: combineReducers({
+		broadcast: fetchReducer({
+			name: "broadcast",
+			fail: () => ({}),
+			success: () => ({})
+		}),
+	})
 })
 
 export default reducer

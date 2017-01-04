@@ -35,6 +35,7 @@ export function fetchAction(options:fetchActionArgs) {
 	return (args, username="guest") => {
 		return dispatch => {
 			dispatch(request())
+			args.token = localStorage.getItem("token")
 			return _fetch(options.resource, username, {
 				method: 'POST',
 				args: args,

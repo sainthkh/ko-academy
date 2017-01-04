@@ -1,22 +1,16 @@
 import { connect } from 'react-redux'
 
-import {
-	REQUEST_FETCH, FAILED_FETCH, SUCCEEDED_FETCH, fetchAction
-} from '../../../common/lib/fetch-action'
-
+import { fetchAction, fetchProps } from '../../../common/lib/fetch'
 import { Layout, LayoutProps } from './Layout'
 
 const mapStateToProps = (state) => {
-	return {
-		waiting: state.auth.stage == REQUEST_FETCH,
-		failed: state.auth.stage == FAILED_FETCH,
-		succeeded: state.auth.stage == SUCCEEDED_FETCH,
-	} as LayoutProps
+	let props:LayoutProps = fetchProps(state.email.broadcast)
+	return props
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
-		fetch: user => {
+		fetch: broadcast => {
 			dispatch(fetchAction({
 				admin: true,
 				name: "broadcast",
@@ -24,16 +18,13 @@ const mapDispatchToProps = dispatch => {
 				processResult: result => {
 					let action = {} as any
 					if (result.success) {
-						action.token = result.token
-						localStorage.setItem("token", action.token)
-						let expiration = new Date(new Date().getTime() + 30 * 60000/* 30 minutes*/)
-						localStorage.setItem("expiration", expiration.toISOString())
+						// Set ID
 					} 
 					return action
 				}
-			})(user))
+			})(broadcast))
 		}
 	}
 }
 
-export const IndexPage = connect(mapStateToProps, mapDispatchToProps)(Layout)
+export const BroadcastPage = connect(mapStateToProps, mapDispatchToProps)(Layout)
