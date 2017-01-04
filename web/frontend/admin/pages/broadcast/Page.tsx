@@ -1,10 +1,17 @@
 import { connect } from 'react-redux'
 
-import { fetchAction, fetchProps } from '../../../common/lib/fetch'
-import { Layout } from './Layout'
+import {
+	REQUEST_FETCH, FAILED_FETCH, SUCCEEDED_FETCH, fetchAction
+} from '../../../common/lib/fetch-action'
+
+import { Layout, LayoutProps } from './Layout'
 
 const mapStateToProps = (state) => {
-	return fetchProps(state.auth)
+	return {
+		waiting: state.auth.stage == REQUEST_FETCH,
+		failed: state.auth.stage == FAILED_FETCH,
+		succeeded: state.auth.stage == SUCCEEDED_FETCH,
+	} as LayoutProps
 }
 
 const mapDispatchToProps = dispatch => {
@@ -12,8 +19,8 @@ const mapDispatchToProps = dispatch => {
 		fetch: user => {
 			dispatch(fetchAction({
 				admin: true,
-				name: "login",
-				resource: "/auth/login",
+				name: "broadcast",
+				resource: "/email/broadcast",
 				processResult: result => {
 					let action = {} as any
 					if (result.success) {

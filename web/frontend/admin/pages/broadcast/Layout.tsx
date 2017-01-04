@@ -5,7 +5,11 @@ import * as CSSModules from 'react-css-modules'
 import Authorized from '../common/Authorized'
 import styles from './Layout.css'
 
-class NewBroadCast extends Authorized<{}, {}> {
+export interface LayoutProps {
+
+}
+
+class PageLayout extends Authorized<LayoutProps, {}> {
 	render() {
 		return (
 			<div styleName="wrap">
@@ -17,7 +21,7 @@ class NewBroadCast extends Authorized<{}, {}> {
 					<div styleName="form-group">
 						<label htmlFor="list">List</label>
 						<select id="list" name="list" styleName="field">
-							<option value="hangeul">Hangeul</option>
+							<option value="beginning-hangeul@mg.wiseinit.com">Hangeul</option>
 						</select>
 					</div>
 					<div styleName="form-group">
@@ -25,7 +29,7 @@ class NewBroadCast extends Authorized<{}, {}> {
 						<textarea id="content" name="content" styleName="field" rows={30}></textarea>
 					</div>
 					<div styleName="button-wrap">
-						<button type="submit" styleName="submit">Save</button>
+						<button type="submit" styleName="submit">Send</button>
 					</div>
 				</form>
 			</div>
@@ -33,4 +37,4 @@ class NewBroadCast extends Authorized<{}, {}> {
 	}
 }
 
-export default CSSModules(NewBroadCast, styles)
+export const Layout = CSSModules(PageLayout, styles)

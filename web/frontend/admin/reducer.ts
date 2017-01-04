@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux'
-import { auth } from './auth/reducer'
+import { fetchReducer } from '../common/lib/fetch'
 
 const reducer = combineReducers({
-	auth,
+	auth: fetchReducer({
+		name: "login",
+		fail: () => ({}),
+		success: action => ({ token: action.token})
+	}),
 })
 
 export default reducer

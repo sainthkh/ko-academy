@@ -2,9 +2,10 @@
 
 import * as React from 'react';
 import * as CSSModules from 'react-css-modules'
+import { FetchProps } from '../../../common/lib/fetch/props'
 import styles from './Layout.css'
 
-export interface LayoutProps {
+export interface LayoutProps extends FetchProps {
 	waiting: boolean
 	failed: boolean
 	succeeded: boolean
