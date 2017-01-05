@@ -22,7 +22,10 @@ export function auth(state:any={
 		case "signup":
 			let newState = fetchReducer({
 				name: "signup",
-				fail: action => ({ error: action.error }),
+				fail: action => ({ 
+					error: action.error,
+					feedback: action.feedback,
+				}),
 				success: action => ({
 					username: action.username,
 					accessLevel: action.accessLevel

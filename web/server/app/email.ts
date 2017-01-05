@@ -21,3 +21,8 @@ export function addMember(slug, address, firstName) {
 		console.log(data)
 	})
 }
+
+export function validEmailFormat(email) {
+	let emailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+	return emailFormat.test(email)
+}

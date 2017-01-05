@@ -8,10 +8,13 @@ import styles from './Layout.css'
 
 export interface LayoutProps extends FetchProps {
 	error: any
+	feedback: any
 }
 
 class DialogLayout extends React.Component<LayoutProps, {}> {
 	private ID: string
+	private lastInput: any
+
 	constructor(props) {
 		super(props)
 		this.submit = this.submit.bind(this)
@@ -19,6 +22,7 @@ class DialogLayout extends React.Component<LayoutProps, {}> {
 		this.loading = this.loading.bind(this)
 		this.done = this.done.bind(this)
 		this.ID = "signup"
+		this.lastInput = {}
 	}
 
 	render() {
@@ -37,15 +41,23 @@ class DialogLayout extends React.Component<LayoutProps, {}> {
 		var title = "Sign up and wait for your Korean journey!"
 		var main = (
 			<div>
-				<form method="POST" name="signup" role="form" onSubmit={this.submit}>
-					<input type="text" styleName="field" name="username" id="username" placeholder="user name" />
+				<form action="" method="POST" name="signup" role="form" onSubmit={this.submit}>
+					<input type="text" styleName="field" name="username" value={this.lastInput.username} id="username" placeholder="user name" />
 					{this.props.error.longName && (<div styleName="invalid">Your name is too long. User name should be shorter than 50 characters.</div>)}
-					<input type="email" styleName="field" name="email" id="email" placeholder="email" />
+					<input type="email" styleName="field" name="email" value={this.lastInput.email} id="email" placeholder="email" />
 					{this.props.error.invalidEmail && (<div styleName="invalid">Your email format is invalid. Please check it out.</div>)}
 					{this.props.error.duplicateEmail && (<div styleName="invalid">You have already signed up.</div>)}
 					<input type="password" styleName="field" name="password" id="password" placeholder="password" />
-					{this.props.error.shortPassword && (<div styleName="invalid">Your password is too short. Password should be at least 8 characters.</div>)}
-					{this.props.error.commonPassword && (<div styleName="invalid">Your password is too common. Please use another password.</div>)}
+					{this.props.error.weakPassword && (
+						<div styleName="invalid">
+							Your password is weak. How about trying these? <br /> 
+							<ul>
+							{this.props.feedback.suggestions.map(text => {
+								return (<li>{text}</li>)
+							})} 
+							</ul>
+						</div>
+					)}
 					<button type="submit" styleName="submit">Sign up</button>
 				</form>
 			</div>
@@ -66,6 +78,10 @@ class DialogLayout extends React.Component<LayoutProps, {}> {
 			username: form.username.value,
 			email: form.email.value,
 			password: form.password.value,
+		}
+		this.lastInput = {
+			username: form.username.value,
+			email: form.email.value,
 		}
 
 		this.props.fetch(user)

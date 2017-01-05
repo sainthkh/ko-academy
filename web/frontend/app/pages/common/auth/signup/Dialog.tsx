@@ -5,8 +5,7 @@ import { Layout, LayoutProps } from './Layout'
 export const LONG_USERNAME = "LONG_USERNAME"
 export const INVALID_EMAIL = "INVALID_EMAIL"
 export const DUPLICATE_EMAIL = "DUPLICATE_EMAIL"
-export const SHORT_PASSWORD = "SHORT_PASSWORD"
-export const COMMON_PASSWORD = "COMMON_PASSWORD"
+export const WEAK_PASSWORD = "WEAK_PASSWORD"
 
 const mapStateToProps = (state) => {
 	let props:LayoutProps = fetchProps(state.auth.signup) as LayoutProps
@@ -16,11 +15,12 @@ const mapStateToProps = (state) => {
 			longName: error.indexOf(LONG_USERNAME) >= 0,
 			duplicateEmail: error.indexOf(DUPLICATE_EMAIL) >=0,
 			invalidEmail: error.indexOf(INVALID_EMAIL) >= 0,
-			shortPassword: error.indexOf(SHORT_PASSWORD) >= 0,
-			commonPassword: error.indexOf(COMMON_PASSWORD) >= 0,
+			weakPassword: error.indexOf(WEAK_PASSWORD) >= 0,
 		}
+		props.feedback = state.auth.signup.feedback
 	} else {
 		props.error = {}
+		props.feedback = {}
 	}
 	return props
 }
@@ -39,6 +39,7 @@ const mapDispatchToProps = (dispatch) => {
 						action.accessLevel = result.accessLevel
 					} else {
 						action.error = result.error
+						action.feedback = result.feedback
 					}
 					return action 
 				}

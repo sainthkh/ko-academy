@@ -44,8 +44,25 @@ var Autoresponder = seq.define('Autoresponder', {
 	content: Sequelize.TEXT,
 }).sync()
 
+var User = seq.define('User', {
+	ID: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+	username: Sequelize.STRING(50),
+	email: { type: Sequelize.STRING(255), unique: true },
+	password: Sequelize.BLOB,
+	accessLevel: Sequelize.STRING,
+	signupDate: Sequelize.DATE,
+	lastLogin: Sequelize.DATE,
+}).sync()
+
+var LoginLog = seq.define('LoginLog', {
+	userID: Sequelize.STRING,
+	loginTime: Sequelize.DATE,
+}).sync()
+
 export {
 	Subscriber,
 	Broadcast,
-	Autoresponder
+	Autoresponder,
+	User,
+	LoginLog,
 }
