@@ -40,7 +40,7 @@ export function mailgun() {
 function buildEmail(content) {
 	return [
 		`<div style="color:#222222;font-family:'Helvetica','Arial',sans-serif;font-size:14px;line-height:1.4;padding:25px;width:550px">`,
-		marked(content),
+		marked(content, {renderer: renderer}),
 		`</div>`,
 		`<div style="border-top-color:#ddd;border-top-style:solid;border-top-width:1px;color:#888;font-family:'Helvetica','Arial',sans-serif;font-size:12px;line-height:1.4;padding:25px;width:550px">`,
 		`To make sure you keep getting these emails, please add academy@wiseinit.com to your address book or whitelist us.<br>`,
@@ -48,4 +48,9 @@ function buildEmail(content) {
 		`Postal Address: ${config.postalAddress}`,
 		`</div>`
 	].join(``)
+}
+
+var renderer = new marked.Renderer()
+renderer.paragraph = text => {
+	return `<p style="margin-bottom:15px;">${text}</p>`
 }
