@@ -10,7 +10,6 @@ class IndexPage extends React.Component<{}, {}> {
 	render() {
 		return (
 			<div>
-				<MainBar />
 				<Hero />
 			</div>
 		);

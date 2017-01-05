@@ -1,24 +1,41 @@
 @import '../common/global.pcss';
 
-.cta-signup {
-	$cta-bg: #ce4e15;
+$cta-bg: #ce4e15;
+$cta-color: white;
+
+.cta, 
+.cta-inverse {
+	display: block;
 	font-size: 1rem;
 	margin-top: 1.5rem;
-	background: $cta-bg;
-	color: white;
 	border: none;
 	padding: 5px 15px;
 	font-weight: bold;
 	text-transform: uppercase;
 	text-decoration: none;
+	width: 180px;
+	text-align: center;
+
+	@media(--medium){
+		font-size: 2rem;
+		padding: 15px 35px;
+	}
+}
+
+.cta {
+	background: $cta-bg;
+	color: $cta-color;
 
 	&:hover {
 		background: color($cta-bg lightness(40%))
 	}
+}
 
-	@media(--medium){
-		font-size: 2rem;
-		margin-top: 2.5rem;
-		padding: 15px 35px;
+.cta-inverse {
+	background: $cta-color;
+	color: $cta-bg;
+
+	&:hover {
+		background: color($cta-color lightness(90%))
 	}
 }

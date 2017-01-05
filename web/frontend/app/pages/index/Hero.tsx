@@ -10,8 +10,12 @@ class Hero extends React.Component<{}, {}> {
 			<div styleName="hero">
 				<div className="wrap">
 					<div styleName="content">
+						<h2>WiseInit Korean Academy</h2>
 						<h1>Step by Step to Korean Master</h1>
-						<CTAButton />
+						<div styleName="cta-box">
+							<CTAButton dialogID="signup" text="Start Now" />
+							<CTAButton dialogID="login" text="Resume" inverse={true}/>
+						</div>
 					</div>
 				</div>
 			</div>
