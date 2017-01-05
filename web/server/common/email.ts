@@ -27,7 +27,7 @@ export function sendmail(to, subject, content) {
 }
 
 var _mailgun;
-function mailgun() {
+export function mailgun() {
 	if(!_mailgun) {
 		_mailgun = require('mailgun-js')({
 			apiKey: config.apiKey,
