@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Link } from 'react-router';
-import AuthUI from './auth/UIPackage'
+import AuthUI from './pages/common/auth/UIPackage'
 import * as CSSModules from 'react-css-modules';
 import styles from './Layout.css'
 

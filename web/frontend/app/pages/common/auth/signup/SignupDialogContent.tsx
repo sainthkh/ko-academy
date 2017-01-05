@@ -1,7 +1,7 @@
 'use strict'
 import * as React from 'react'
-import { default as Dialog, openDialog, closeDialog } from '../../common/Dialog'
-import { default as Spinner } from '../../common/Spinner'
+import { default as Dialog, openDialog, closeDialog } from '../../Dialog'
+import { default as Spinner } from '../../Spinner'
 import * as CSSModules from 'react-css-modules';
 import styles from './SignupDialogContent.css'
 

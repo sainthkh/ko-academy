@@ -3,7 +3,7 @@ import { fetchSubscribeResult } from './action'
 import { SubscribeDialogContent, SubscribeDialogContentProps } from './SubscribeDialogContent'
 import {
 	DIALOG_WAITING, DIALOG_DONE, DIALOG_ERROR
-} from '../../common/Dialog'
+} from '../../Dialog'
 
 import {
 	INVALID_EMAIL,

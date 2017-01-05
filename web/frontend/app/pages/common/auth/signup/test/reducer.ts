@@ -15,7 +15,7 @@ import {
 
 import {
 	DIALOG_WAITING, DIALOG_DONE, DIALOG_ERROR,
-} from '../../../common/Dialog'
+} from '../../../Dialog'
 
 test("signup with initialState and the empty action", t => {
 	var resultState = signup(undefined, {})

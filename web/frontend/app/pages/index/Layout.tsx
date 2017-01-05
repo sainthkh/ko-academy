@@ -1,16 +1,16 @@
 'use strict';
 
 import * as React from 'react';
-import MenuBar from '../common/MenuBar'
+import MainBar from '../common/menu/MainBar'
 import Hero from './Hero'
 import * as CSSModules from 'react-css-modules'
-import styles from "./PageLayout.css"
+import styles from "./Layout.css"
 
 class IndexPage extends React.Component<{}, {}> {
 	render() {
 		return (
-			<div styleName="home">
-				<MenuBar />
+			<div>
+				<MainBar />
 				<Hero />
 			</div>
 		);

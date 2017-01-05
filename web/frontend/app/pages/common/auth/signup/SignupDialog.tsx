@@ -3,7 +3,7 @@ import { fetchSignupResult } from './action'
 import { SignupDialogContent, SignupDialogContentProps } from './SignupDialogContent'
 import {
 	DIALOG_WAITING, DIALOG_DONE, DIALOG_ERROR
-} from '../../common/Dialog'
+} from '../../Dialog'
 
 import {
 	LONG_USERNAME, DUPLICATE_EMAIL, INVALID_EMAIL, SHORT_PASSWORD, COMMON_PASSWORD

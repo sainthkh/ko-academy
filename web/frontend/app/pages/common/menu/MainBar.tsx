@@ -3,12 +3,12 @@ import * as React from 'react'
 import { Link } from 'react-router';
 import LoginButton from './LoginButton'
 import * as CSSModules from 'react-css-modules';
-import styles from './MenuBar.css'
+import styles from './MainBar.css'
 
-class MenuBar extends React.Component<{}, {}> {
+class MainBar extends React.Component<{}, {}> {
 	render() {
 		return (
-			<header styleName="menubar">
+			<header styleName="main-menu">
 				<div className="wrap">
 					<div styleName="content">
 						<div styleName="logo">
@@ -25,4 +25,4 @@ class MenuBar extends React.Component<{}, {}> {
 	}
 }
 
-export default CSSModules(MenuBar, styles)
+export default CSSModules(MainBar, styles)

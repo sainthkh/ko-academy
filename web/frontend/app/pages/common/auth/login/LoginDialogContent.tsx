@@ -1,6 +1,6 @@
 'use strict'
 import * as React from 'react'
-import { default as Dialog, openDialog } from '../../common/Dialog'
+import { default as Dialog, openDialog } from '../../Dialog'
 import * as CSSModules from 'react-css-modules';
 import styles from './LoginDialogContent.css'
 
