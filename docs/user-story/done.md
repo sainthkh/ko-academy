@@ -4,3 +4,6 @@
 # development tools
 * As a developer, I want to generate production code with a single command input because it's tedious job.
 * As a developer, I want to compile only changed code. 
+
+# Admin Page
+* As an admin, I want to login to admin site with an ID and a password. 
