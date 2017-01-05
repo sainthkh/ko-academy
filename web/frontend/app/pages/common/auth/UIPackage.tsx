@@ -1,6 +1,6 @@
 'use strict'
 import * as React from 'react'
-import {default as SignupDialog} from './signup/SignupDialog'
+import { SignupDialog } from './signup/Dialog'
 import {default as LoginDialog} from './login/LoginDialog'
 import { SubscribeDialog } from './subscribe/Dialog'
 

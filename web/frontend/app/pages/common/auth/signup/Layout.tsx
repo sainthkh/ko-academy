@@ -2,17 +2,15 @@
 import * as React from 'react'
 import { default as Dialog, openDialog, closeDialog } from '../../Dialog'
 import { default as Spinner } from '../../Spinner'
+import { FetchProps } from '../../../../../common/lib/fetch/props'
 import * as CSSModules from 'react-css-modules';
-import styles from './SignupDialogContent.css'
+import styles from './Layout.css'
 
-export interface SignupDialogContentProps {
-	waiting: boolean
-	done: boolean
+export interface LayoutProps extends FetchProps {
 	error: any
-	fetchSignup: any
 }
 
-class SignupDialogContentReact extends React.Component<SignupDialogContentProps, {}> {
+class DialogLayout extends React.Component<LayoutProps, {}> {
 	private ID: string
 	constructor(props) {
 		super(props)
@@ -25,7 +23,7 @@ class SignupDialogContentReact extends React.Component<SignupDialogContentProps,
 
 	render() {
 		if(!this.props.waiting) {
-			if(!this.props.done) {
+			if(!this.props.succeeded) {
 				return this.form()
 			} else {
 				return this.done()
@@ -70,7 +68,7 @@ class SignupDialogContentReact extends React.Component<SignupDialogContentProps,
 			password: form.password.value,
 		}
 
-		this.props.fetchSignup(user)
+		this.props.fetch(user)
 	}
 
 	private loading() {
@@ -98,4 +96,4 @@ class SignupDialogContentReact extends React.Component<SignupDialogContentProps,
 	}
 }
 
-export const SignupDialogContent = CSSModules(SignupDialogContentReact, styles) 
+export const Layout = CSSModules(DialogLayout, styles) 
