@@ -2,17 +2,15 @@
 import * as React from 'react'
 import { default as Dialog, openDialog, closeDialog } from '../../Dialog'
 import { default as Spinner } from '../../Spinner'
+import { FetchProps } from '../../../../../common/lib/fetch/props'
 import * as CSSModules from 'react-css-modules';
-import styles from './SubscribeDialogContent.css'
+import styles from './Layout.css'
 
-export interface SubscribeDialogContentProps {
-	waiting: boolean
-	done: boolean
+export interface LayoutProps extends FetchProps {
 	error: any
-	fetchSubscribe: any
 }
 
-class SubscribeDialogContentReact extends React.Component<SubscribeDialogContentProps, {}> {
+class DialogLayout extends React.Component<LayoutProps, {}> {
 	private ID: string
 	constructor(props) {
 		super(props)
@@ -25,7 +23,7 @@ class SubscribeDialogContentReact extends React.Component<SubscribeDialogContent
 
 	render() {
 		if(!this.props.waiting) {
-			if(!this.props.done) {
+			if(!this.props.succeeded) {
 				return this.form()
 			} else {
 				return this.done()
@@ -59,7 +57,7 @@ class SubscribeDialogContentReact extends React.Component<SubscribeDialogContent
 			email: form.email.value,
 		}
 
-		this.props.fetchSubscribe(user)
+		this.props.fetch(user)
 	}
 
 	private loading() {
@@ -87,4 +85,4 @@ class SubscribeDialogContentReact extends React.Component<SubscribeDialogContent
 	}
 }
 
-export const SubscribeDialogContent = CSSModules(SubscribeDialogContentReact, styles) 
+export const Layout = CSSModules(DialogLayout, styles) 
