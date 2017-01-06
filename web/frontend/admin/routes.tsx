@@ -4,6 +4,7 @@ import Layout from './Layout'
 import { IndexPage } from './pages/index/Page'
 import { BroadcastPage } from './pages/broadcast/Page'
 import { AutoresponderPage } from './pages/autoresponder/Page'
+import { CoursePage } from './pages/course/Page'
 
 export const routes = (
 	<Route path="/admin" component={Layout}>
@@ -16,5 +17,6 @@ export const routes = (
 				<Route path="add" component={AutoresponderPage} />
 			</Route>
 		</Route>
+		<Route path="course(/:slug)" component={CoursePage} />
 	</Route>
 )
