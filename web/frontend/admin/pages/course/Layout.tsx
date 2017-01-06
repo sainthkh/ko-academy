@@ -38,6 +38,7 @@ class PageLayout extends Authorized<LayoutProps, {}> {
 					</div>
 					{this.props.waiting && (<div>Now saving course...</div>)}
 					{this.props.succeeded && (<div>Course saved</div>)}
+					{this.props.failed && (<div>Save failed. Maybe slug problem.</div>)}
 					<div className="button-wrap">
 						<button type="submit" className="submit-button">Save</button>
 					</div>
