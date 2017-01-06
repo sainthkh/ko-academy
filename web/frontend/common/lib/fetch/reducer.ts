@@ -8,11 +8,14 @@ import {
 
 interface FetchReducerArgs {
 	name: string
-	success: (action:any) => any
-	fail: (action:any) => any
+	success?: (action:any) => any
+	fail?: (action:any) => any
 }
 
 export function fetchReducer(options:FetchReducerArgs) {
+	options.success = options.success ? options.success : () => ({})
+	options.fail = options.fail ? options.fail : () => ({})
+	
 	return (state={}, action) => {
 		if(action.type.name != options.name) {
 			return state

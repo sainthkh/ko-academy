@@ -16,7 +16,6 @@ export function auth(state:any={
 				subscribe: fetchReducer({
 					name: "subscribe",
 					fail: action => ({ error: action.error }), 
-					success: () => ({}),
 				})(state.subscribe, action)
 			})
 		case "signup":
