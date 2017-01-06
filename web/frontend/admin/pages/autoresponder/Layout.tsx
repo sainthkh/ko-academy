@@ -29,10 +29,6 @@ class PageLayout extends Authorized<LayoutProps, {}> {
 						<input type="text" className="form-field" name="slug" placeholder="slug" />
 					</div>
 					<div className="form-group">
-						<label>Address</label>
-						<input type="email" className="form-field" name="address" placeholder="email address" />
-					</div>
-					<div className="form-group">
 						<label>Title</label>
 						<input type="text" className="form-field" name="title" placeholder="title" />
 					</div>
@@ -57,7 +53,6 @@ class PageLayout extends Authorized<LayoutProps, {}> {
 		let autoresponder = {
 			listName: form.list_name.value,
 			slug: form.slug.value,
-			address: form.address.value,
 			title: form.title.value,
 			content: form.content.value,
 		}

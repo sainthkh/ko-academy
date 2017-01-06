@@ -31,7 +31,6 @@ router.post('/autoresponder', (req, res) => {
 		return db.create({
 			slug: req.body.slug,
 			listName: req.body.listName,
-			address: req.body.address,
 			title: req.body.title,
 			content: req.body.content
 		})

@@ -39,7 +39,6 @@ export interface AutoresponderRecord {
 var Autoresponder = seq.define('Autoresponder', {
 	slug: { type: Sequelize.TEXT, primaryKey: true }, 
 	listName: Sequelize.TEXT,
-	address: Sequelize.TEXT,
 	title: Sequelize.TEXT,
 	content: Sequelize.TEXT,
 }).sync()
