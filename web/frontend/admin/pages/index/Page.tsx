@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		fetch: user => {
+		submit: user => {
 			dispatch(fetchAction({
 				admin: true,
 				name: "login",

@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		fetch: course => {
+		submit: course => {
 			dispatch(fetchAction({
 				admin: true,
 				name: "save-course",

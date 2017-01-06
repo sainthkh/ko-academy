@@ -84,7 +84,7 @@ class DialogLayout extends React.Component<LayoutProps, {}> {
 			email: form.email.value,
 		}
 
-		this.props.fetch(user)
+		this.props.submit(user)
 	}
 
 	private loading() {

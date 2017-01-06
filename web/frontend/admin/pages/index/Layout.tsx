@@ -6,10 +6,7 @@ import { FetchProps } from '../../../common/lib/fetch/props'
 import styles from './Layout.css'
 
 export interface LayoutProps extends FetchProps {
-	waiting: boolean
-	failed: boolean
-	succeeded: boolean
-	fetch: (any) => void
+
 }
 
 class PageLayout extends React.Component<LayoutProps, {}> {
@@ -42,7 +39,7 @@ class PageLayout extends React.Component<LayoutProps, {}> {
 			password: form.password.value
 		}
 
-		this.props.fetch(user)
+		this.props.submit(user)
 	}
 }
 

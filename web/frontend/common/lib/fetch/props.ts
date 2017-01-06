@@ -6,7 +6,7 @@ export interface FetchProps {
 	waiting: boolean
 	failed: boolean
 	succeeded: boolean
-	fetch: (any) => void
+	submit: (any) => void
 	error?: any
 }
 

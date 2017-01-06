@@ -4,13 +4,13 @@ import { fetchAction, fetchProps } from '../../../common/lib/fetch'
 import { Layout, LayoutProps } from './Layout'
 
 const mapStateToProps = (state) => {
-	let props:LayoutProps = fetchProps(state.email.broadcast)
+	let props:LayoutProps = fetchProps(state.email.broadcast) as LayoutProps
 	return props
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
-		fetch: broadcast => {
+		submit: broadcast => {
 			dispatch(fetchAction({
 				admin: true,
 				name: "broadcast",

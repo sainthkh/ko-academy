@@ -62,7 +62,7 @@ class PageLayout extends Authorized<LayoutProps, {}> {
 			content: form.content.value,
 		}
 
-		this.props.fetch(autoresponder)
+		this.props.submit(autoresponder)
 	}
 }
 

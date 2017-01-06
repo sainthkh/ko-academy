@@ -27,7 +27,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		fetch: user => {
+		submit: user => {
 			dispatch(fetchAction({
 				name: "signup",
 				resource: "/signup",
