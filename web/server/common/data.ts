@@ -59,10 +59,25 @@ var LoginLog = seq.define('LoginLog', {
 	loginTime: Sequelize.DATE,
 }).sync()
 
+export interface CourseRecord {
+	slug: string
+	title: string
+	description: string
+	content: string
+}
+
+var Course = seq.define('Course', {
+	slug: { type: Sequelize.TEXT, primaryKey: true }, 
+	title: Sequelize.TEXT,
+	description: Sequelize.TEXT,
+	content: Sequelize.TEXT,
+}).sync()
+
 export {
 	Subscriber,
 	Broadcast,
 	Autoresponder,
 	User,
 	LoginLog,
+	Course,
 }

@@ -18,7 +18,12 @@ const reducer = combineReducers({
 			fail: () => ({}),
 			success: () => ({})
 		})
-	})
+	}),
+	course: fetchReducer({
+		name: "save-course",
+		fail: () => ({}),
+		success: () => ({})
+	}),
 })
 
 export default reducer
