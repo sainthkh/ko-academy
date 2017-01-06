@@ -15,13 +15,6 @@ const mapDispatchToProps = dispatch => {
 				admin: true,
 				name: "broadcast",
 				resource: "/email/broadcast",
-				processResult: result => {
-					let action = {} as any
-					if (result.success) {
-						// Set ID
-					} 
-					return action
-				}
 			})(broadcast))
 		}
 	}

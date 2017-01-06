@@ -15,13 +15,6 @@ const mapDispatchToProps = dispatch => {
 				admin: true,
 				name: "autoresponder",
 				resource: "/email/autoresponder",
-				processResult: result => {
-					let action = {} as any
-					if (result.success) {
-						// Set slug
-					} 
-					return action
-				}
 			})(autoresponder))
 		}
 	}

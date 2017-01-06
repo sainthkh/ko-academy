@@ -15,10 +15,6 @@ const mapDispatchToProps = dispatch => {
 				admin: true,
 				name: "save-course",
 				resource: "/course",
-				processResult: result => {
-					let action = {} as any
-					return action
-				}
 			})(course))
 		}
 	}

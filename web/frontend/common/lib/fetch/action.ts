@@ -7,12 +7,13 @@ export const ERRORED_FETCH = "ERRORED_FETCH"
 
 interface fetchActionArgs {
 	name: string
-	processResult: (any) => any
 	resource: string
+	processResult?: (any) => any
 	admin?: boolean
 }
 
 export function fetchAction(options:fetchActionArgs) {
+	options.processResult = options.processResult ? options.processResult : () => ({})
 	let request = () => ({
 		type: {
 			name: options.name,
