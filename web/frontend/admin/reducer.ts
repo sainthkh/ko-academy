@@ -1,7 +1,20 @@
 import { combineReducers } from 'redux'
-import { fetchReducer } from '../common/lib/fetch'
+import { fetchReducer, fetchReducer2 } from '../common/lib/fetch'
 
-const reducer = combineReducers({
+const reducer = (state = {
+	fetch: {}
+}, action) => {
+	switch(action.type) {
+		case "FETCH":
+			return fetchReducer2(state, action)
+		case "@@redux/INIT":
+			return state
+		default:
+			return legacy(state, action)
+	}
+}
+
+var legacy = combineReducers({
 	auth: fetchReducer({
 		name: "login",
 		success: action => ({ token: action.token})
@@ -13,9 +26,6 @@ const reducer = combineReducers({
 		autoresponder: fetchReducer({
 			name: "autoresponder",
 		})
-	}),
-	course: fetchReducer({
-		name: "save-course",
 	}),
 })
 

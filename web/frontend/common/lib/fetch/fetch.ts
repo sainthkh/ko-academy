@@ -47,6 +47,10 @@ export function fetch (resourceRoot: string, resource: string, username: string,
 		})
 }
 
+export function fetch2 (resourceRoot: string, resource: string, opts:fetchOptions): Promise<any> {
+	return fetch(resourceRoot, resource, "guest", opts)
+}
+
 
 export function serverDown() {
 	return {
