@@ -12,6 +12,7 @@ export interface LayoutProps extends FetchProps {
 
 class DialogLayout extends React.Component<LayoutProps, {}> {
 	private ID: string
+	private email: string
 	constructor(props) {
 		super(props)
 		this.submit = this.submit.bind(this)
@@ -56,6 +57,7 @@ class DialogLayout extends React.Component<LayoutProps, {}> {
 			first_name: form.first_name.value,
 			email: form.email.value,
 		}
+		this.email = form.email.value
 
 		this.props.fetch(user)
 	}
@@ -78,7 +80,8 @@ class DialogLayout extends React.Component<LayoutProps, {}> {
 		var main = (
 			<div styleName="message">
 				<p>I'll contact you soon when I open the site. </p>
-				<p><a href="/uploads/hangeul-practice.pdf">Here is your gift.</a></p>
+				<p>I've also sent your gift, <i>Hangeul Practice Sheet</i>, to your email address, {this.email}. </p>
+				<p>Please check it out.</p>
 			</div>
 		)
 		return <Dialog ID={this.ID} title={title} main={main} />
