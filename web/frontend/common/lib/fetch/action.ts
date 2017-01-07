@@ -1,5 +1,6 @@
 import { fetch as serverFetch } from './fetch'
 import { fetch2 as serverFetch2 } from './fetch'
+import { fetch3 as serverFetch3 } from './fetch'
 
 export const REQUEST_FETCH = "REQUEST_FETCH"
 export const SUCCEEDED_FETCH = "SUCCEEDED_FETCH"
@@ -83,7 +84,7 @@ interface FetchReduxGeneratorArgs {
 	onErrored?: (any) => any
 }
 
-enum FetchPurpose {
+export enum FetchPurpose {
 	LOAD,
 	SUBMIT,
 }
@@ -137,10 +138,12 @@ function fetchReduxGenerator(options:FetchReduxGeneratorArgs) {
 	return (args) => {
 		return dispatch => {
 			dispatch(request())
-			args.token = localStorage.getItem("token")
-			return serverFetch2(admin ? '/admin/api': '/api', resource, {
-				method,
+			return serverFetch3({
+				admin,
 				args,
+				token: localStorage.getItem("token"),
+				method, 
+				resource,
 			})
 			.then(json => {
 				dispatch(received(json))

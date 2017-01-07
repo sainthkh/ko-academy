@@ -38,9 +38,9 @@ export function fetch (resourceRoot: string, resource: string, username: string,
 					if(err.response.status == 404){
 						throw pageNotFound()
 					} else if (err.response.status == 500) {
-						throw internalServerError(err, username)
+						throw internalServerError(err)
 					} else {
-						throw otherError(err, username)
+						throw otherError(err)
 					}
 				}
 			} 
@@ -51,6 +51,57 @@ export function fetch2 (resourceRoot: string, resource: string, opts:fetchOption
 	return fetch(resourceRoot, resource, "guest", opts)
 }
 
+export interface FetchSetting {
+	token: string
+	method: string
+	args: any
+	resource: string
+	admin: boolean
+}
+
+export function fetch3(setting:FetchSetting) {
+	let { token, method, args, resource, admin } = setting
+	let options:RequestInit = {
+		headers: {
+			'Authorization': `Bearer ${btoa(token)}`,
+			'Content-Type': 'application/json',
+		}, 
+		method,
+	}
+	if (method == "POST") {
+		options.body = JSON.stringify(args)
+	} else {
+		let query = Object.keys(args).map((k) => 
+			`${encodeURIComponent(k)}=${encodeURIComponent(args[k])}`).join('&')
+		resource = `${resource}?${query}`
+	}
+	return isoFetch(`${admin ? "/admin":""}/api${resource}`, options)
+		.then(response => {
+			if (response.status >= 200 && response.status < 300) {
+				return Promise.resolve(response.json())
+			} else {
+				var error = <any> new Error(`${response.status}`)
+				error.response = response
+				return Promise.reject(error)
+			}
+		})
+		.catch(err => {
+			if(err) {
+				if(err.code && err.code == "ECONNREFUSED") {
+					throw serverDown()
+				} else {
+					if(err.response.status == 404){
+						throw pageNotFound()
+					} else if (err.response.status == 500) {
+						throw internalServerError(err)
+					} else {
+						throw otherError(err)
+					}
+				}
+			} 
+		})
+}
+
 
 export function serverDown() {
 	return {
@@ -58,12 +109,11 @@ export function serverDown() {
 	}
 }
 
-export function otherError(err, username) {
+export function otherError(err) {
 	return {
 		type: OTHER_ERROR,
 		error: {
 			obj: err,
-			username,
 			time: new Date(),
 		} 
 	}
@@ -75,12 +125,11 @@ export function pageNotFound() {
 	}
 }
 
-export function internalServerError(err, username) {
+export function internalServerError(err) {
 	return {
 		type: INTERNAL_SERVER_ERROR,
 		error: {
 			obj: err,
-			username: username,
 			time: new Date(),
 		},
 	}

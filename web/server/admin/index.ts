@@ -14,10 +14,12 @@ var router = express.Router()
 router.use(bodyParser.json())
 router.use('/auth', auth)
 router.use((req, res, next) => {
-	if(req.body.token) {
+	var auth = req.get("authorization");
+	if (auth) {
+		var token = new Buffer(auth.split(" ").pop(), "base64").toString("ascii")
 		var config = JSON.parse(fs.readFileSync(path.join(__dirname, './config.json')).toString())
 
-		jwt.verify(req.body.token, config.secret, (err, decoded) => {  
+		jwt.verify(token, config.secret, (err, decoded) => {  
 			if (err) {
 				return res.json({
 					access: false,
