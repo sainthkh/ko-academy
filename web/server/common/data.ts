@@ -59,6 +59,7 @@ var LoginLog = seq.define('LoginLog', {
 }).sync()
 
 export interface CourseRecord {
+	ID: number
 	slug: string
 	title: string
 	description: string
@@ -66,7 +67,8 @@ export interface CourseRecord {
 }
 
 var Course = seq.define('Course', {
-	slug: { type: Sequelize.TEXT, primaryKey: true }, 
+	ID: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+	slug: { type: Sequelize.TEXT, unique: true }, 
 	title: Sequelize.TEXT,
 	description: Sequelize.TEXT,
 	content: Sequelize.TEXT,
@@ -79,4 +81,8 @@ export {
 	User,
 	LoginLog,
 	Course,
+}
+
+export function upsert(db, model) {
+	return model.ID ? db.update(model, { where: {ID: model.ID}}) : db.create(model)
 }

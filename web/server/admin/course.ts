@@ -1,23 +1,36 @@
 import * as express from 'express'
 import {
-	Course, CourseRecord,
+	Course, CourseRecord, upsert
 } from '../common/data'
 
 const router = express.Router()
 
 router.post('/', (req, res) => {
-	const { slug, title, description, content } = req.body
 	Course.then(db => {
-		return db.create({
-			slug, 
-			title, 
-			description,
-			content,
-		})
+		return upsert(db, req.body)
 	}).then((result:CourseRecord) => {
 		res.json({
 			success: true,
-			slug: result.slug,
+		})
+	})
+})
+
+router.get('/', (req, res) => {
+	const slug = req.query.slug
+	Course.then(db => {
+		return db.find({ where: { slug }})
+	})
+	.then((result:CourseRecord) => {
+		const { ID, slug, title, description, content} = result
+		res.json({
+			success: true,
+			content: {
+				ID,
+				slug,
+				title, 
+				description,
+				content,
+			},
 		})
 	})
 })

@@ -1,5 +1,5 @@
 export { fetchProps, fetchProps2 } from './props'
-export { fetchAction, submit, load } from './action'
+export { fetchAction, submit, load, fetchPackage } from './action'
 export { fetchReducer, fetchReducer2 } from './reducer'
 // ToDo: deleted when the fetch refactoring is done. 
 export { fetch } from './fetch'

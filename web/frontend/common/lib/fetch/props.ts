@@ -6,8 +6,10 @@ export interface FetchProps {
 	waiting: boolean
 	failed: boolean
 	succeeded: boolean
+	loading: boolean
 	content: any
 	submit: (any) => void
+	load: (any) => void
 	error?: any
 }
 
@@ -19,20 +21,21 @@ export function fetchProps(state) {
 	} 
 }
 
-import { FetchStage } from './action'
+import { FetchStage, FetchPurpose } from './action'
 
 export function fetchProps2(fetch) {
 	let error = {}
-	if (fetch.error) {
+	if (Array.isArray(fetch.error)) {
 		fetch.error.forEach(e => {
 			error[e] = true
 		})
 	}
 	return {
-		waiting: fetch.stage == FetchStage.REQUEST,
+		waiting: fetch.purpose == FetchPurpose.SUBMIT && fetch.stage == FetchStage.REQUEST,
 		failed: fetch.stage == FetchStage.FAILED,
 		succeeded: fetch.stage == FetchStage.SUCCEEDED,
-		content: fetch.content,
+		content: fetch.content ? fetch.content: {},
+		loading: fetch.purpose == FetchPurpose.LOAD && fetch.stage == FetchStage.REQUEST,
 		error,
 	} 
 }

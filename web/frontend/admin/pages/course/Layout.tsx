@@ -2,39 +2,47 @@
 
 import * as React from 'react';
 import * as CSSModules from 'react-css-modules'
-import { FetchProps } from '../../../common/lib/fetch/props'
+import { Editor, EditorLayoutProps } from '../common/EditorLayout'
 import Authorized from '../common/Authorized'
 import styles from './Layout.css'
 
-export interface LayoutProps extends FetchProps {
+export interface LayoutProps extends EditorLayoutProps {
 
 }
 
-class PageLayout extends Authorized<LayoutProps, {}> {
+class PageLayout extends Editor<LayoutProps, {}> {
 	constructor(props) {
 		super(props)
-		this.submit = this.submit.bind(this)
+		let funcs = ["submit", "waitLoading", "form"]
+		let self = this
+		funcs.forEach(f => {
+			self[f] = self[f].bind(self)
+		})
+		this.formName = 'course-form'
 	}
 
-	render() {
+	form() {
+		const { ID, title, slug, description, content } = this.props.content
 		return (
 			<div className="wrap">
-				<form className="wide-form" name="course-form" action="POST" onSubmit={this.submit}>
+				<form className="wide-form" name={this.formName} action="POST" onSubmit={this.submit}>
+					{this.title(this.update, 'Course', title)}
+					<input type="hidden" name="ID" value={ID} />
 					<div className="form-group">
 						<label>Title</label>
-						<input type="text" className="form-field" name="title" placeholder="title" />
+						<input type="text" className="form-field" name="title" defaultValue={title} placeholder="title" />
 					</div>
 					<div className="form-group">
 						<label>Slug</label>
-						<input type="text" className="form-field" name="slug" placeholder="slug" />
+						<input type="text" className="form-field" name="slug" defaultValue={slug} placeholder="slug" />
 					</div>	
 					<div className="form-group">
 						<label htmlFor="content">Description</label>
-						<textarea name="description" className="form-field" rows={8}></textarea>
+						<textarea name="description" className="form-field" rows={8}>{description}</textarea>
 					</div>				
 					<div className="form-group">
 						<label htmlFor="content">Content</label>
-						<textarea name="content" className="form-field" rows={20}></textarea>
+						<textarea name="content" className="form-field" rows={20}>{content}</textarea>
 					</div>
 					{this.props.waiting && (<div>Now saving course...</div>)}
 					{this.props.succeeded && (<div>Course saved</div>)}
@@ -45,20 +53,6 @@ class PageLayout extends Authorized<LayoutProps, {}> {
 				</form>
 			</div>
 		);
-	}
-
-	submit(e) {
-		e.preventDefault()
-
-		var form = document.forms['course-form']
-		let course = {
-			slug: form.slug.value,
-			title: form.title.value,
-			description: form.description.value,
-			content: form.content.value,
-		}
-
-		this.props.submit(course)
 	}
 }
 

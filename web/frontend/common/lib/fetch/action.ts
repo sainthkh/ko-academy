@@ -58,6 +58,13 @@ export function fetchAction(options:fetchActionArgs) {
 
 import { addProcessor } from './reducer'
 
+export function fetchPackage(options:FetchReduxGeneratorArgs) {
+	return {
+		load: load(options),
+		submit: submit(options),
+	}
+}
+
 export function load(options:FetchReduxGeneratorArgs) {
 	options.purpose = FetchPurpose.LOAD
 	options.method = 'GET'
