@@ -2,6 +2,11 @@ import { combineReducers } from 'redux'
 import { fetchReducer, fetchReducer2 } from '../common/lib/fetch'
 
 const reducer = (state = {
+	auth: {},
+	email: {
+		broadcast: {},
+		autoresponder: {},
+	},
 	fetch: {}
 }, action) => {
 	switch(action.type) {
