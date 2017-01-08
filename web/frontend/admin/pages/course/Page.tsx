@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { fetchProps2, fetchPackage } from '../../../common/lib/fetch'
 import { Layout, LayoutProps } from './Layout'
 
-const mapStateToProps = state => fetchProps2(state.fetch)
+const mapStateToProps = state => fetchProps2(state.fetch) as LayoutProps
 
 const { load, submit } = fetchPackage({
 	admin: true,

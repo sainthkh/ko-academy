@@ -9,7 +9,7 @@ export interface FetchProps {
 	loading: boolean
 	content: any
 	submit: (any) => void
-	load: (any) => void
+	load?: (any) => void
 	error?: any
 }
 
@@ -37,5 +37,5 @@ export function fetchProps2(fetch) {
 		content: fetch.content ? fetch.content: {},
 		loading: fetch.purpose == FetchPurpose.LOAD && fetch.stage == FetchStage.REQUEST,
 		error,
-	} 
+	} as FetchProps
 }

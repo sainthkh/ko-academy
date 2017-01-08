@@ -4,7 +4,7 @@ import { FetchProps } from '../../../common/lib/fetch/props'
 
 export interface EditorLayoutProps extends FetchProps {
 	params: any
-	error: any
+	load: (any) => void
 }
 
 export abstract class Editor<P extends EditorLayoutProps, S> extends Authorized<P, S> {
