@@ -14,7 +14,7 @@ const { load, submit } = fetchPackage({
 const mapDispatchToProps = dispatch => {
 	return {
 		submit: course => dispatch(submit(course)),
-		load: slug => dispatch(load(slug)),
+		load: id => dispatch(load(id)),
 	}
 }
 

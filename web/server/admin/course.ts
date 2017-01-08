@@ -16,9 +16,9 @@ router.post('/', (req, res) => {
 })
 
 router.get('/', (req, res) => {
-	const slug = req.query.slug
+	const ID = req.query.id
 	Course.then(db => {
-		return db.find({ where: { slug }})
+		return db.find({ where: { ID }})
 	})
 	.then((result:CourseRecord) => {
 		const { ID, slug, title, description, content} = result

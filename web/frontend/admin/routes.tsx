@@ -10,13 +10,11 @@ export const routes = (
 	<Route path="/admin" component={Layout}>
 		<IndexRoute component={IndexPage}/>
 		<Route path="email">
-			<Route path="notice">
-				<Route path="add" component={BroadcastPage} />
-			</Route>
+			<Route path="notice(/:id)" component={BroadcastPage} />
 			<Route path="autoresponder">
 				<Route path="add" component={AutoresponderPage} />
 			</Route>
 		</Route>
-		<Route path="course(/:slug)" component={CoursePage} />
+		<Route path="course(/:id)" component={CoursePage} />
 	</Route>
 )
