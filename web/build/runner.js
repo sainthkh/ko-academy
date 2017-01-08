@@ -46,6 +46,7 @@ process.stdin.on('data', chunk => {
 	switch(command) {
 		case 'c':
 			console.log('compile started')
+			removeNonexistentFiles()
 			compile(toBeCompiled)
 			.then(() => {
 				console.log('compile ended')
@@ -54,6 +55,7 @@ process.stdin.on('data', chunk => {
 			break
 		case 't':
 			console.log('compile started')
+			removeNonexistentFiles()
 			compile(toBeCompiled)
 			.then(() => {
 				console.log('compile ended')
@@ -129,4 +131,13 @@ function initFileList(ignoreBundle = false) {
 	if(!ignoreBundle) {
 		toBeBundled = new Set()
 	}
+}
+
+function removeNonexistentFiles() {
+	toBeCompiled.forEach(v => {
+		if(!fs.existsSync(v)) {
+			toBeCompiled.delete(v)
+			console.log(`removed ${v}`)
+		}
+	})
 }
