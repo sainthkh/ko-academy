@@ -3,7 +3,6 @@
 import * as React from 'react';
 import * as CSSModules from 'react-css-modules'
 import { Editor, EditorLayoutProps } from '../common/EditorLayout'
-import Authorized from '../common/Authorized'
 import styles from './Layout.css'
 
 export interface LayoutProps extends EditorLayoutProps {
@@ -13,11 +12,6 @@ export interface LayoutProps extends EditorLayoutProps {
 class PageLayout extends Editor<LayoutProps, {}> {
 	constructor(props) {
 		super(props)
-		let funcs = ["submit", "waitLoading", "form"]
-		let self = this
-		funcs.forEach(f => {
-			self[f] = self[f].bind(self)
-		})
 		this.formName = 'course-form'
 	}
 

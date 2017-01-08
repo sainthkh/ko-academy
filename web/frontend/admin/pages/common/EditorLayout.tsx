@@ -10,7 +10,11 @@ export interface EditorLayoutProps extends FetchProps {
 export abstract class Editor<P extends EditorLayoutProps, S> extends Authorized<P, S> {
 	constructor(props) {
 		super(props)
-		this.title = this.title.bind(this)
+		let funcs = ["submit", "waitLoading", "form", "title"]
+		let self = this
+		funcs.forEach(f => {
+			self[f] = self[f].bind(self)
+		})
 	}
 
 	title(update, type, title) {
