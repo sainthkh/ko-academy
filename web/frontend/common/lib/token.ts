@@ -5,7 +5,7 @@ export function isTokenValid() {
 }
 
 export function getToken() {
-	return isTokenValid() ? localStorage.getItem('token') : null
+	return isTokenValid() ? localStorage.getItem('token') : ''
 }
 
 export function setToken(token) {
