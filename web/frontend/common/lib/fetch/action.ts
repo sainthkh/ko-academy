@@ -1,6 +1,6 @@
 import { fetch as serverFetch } from './fetch'
-import { fetch2 as serverFetch2 } from './fetch'
 import { fetch3 as serverFetch3 } from './fetch'
+import { getToken } from '../token'
 
 export const REQUEST_FETCH = "REQUEST_FETCH"
 export const SUCCEEDED_FETCH = "SUCCEEDED_FETCH"
@@ -148,7 +148,7 @@ function fetchReduxGenerator(options:FetchReduxGeneratorArgs) {
 			return serverFetch3({
 				admin,
 				args,
-				token: localStorage.getItem("token"),
+				token: getToken(),
 				method, 
 				resource,
 			})

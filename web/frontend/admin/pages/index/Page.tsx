@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 
 import { fetchAction, fetchProps } from '../../../common/lib/fetch'
+import { setToken } from '../../../common/lib/token'
 import { Layout } from './Layout'
 
 const mapStateToProps = (state) => {
@@ -17,10 +18,7 @@ const mapDispatchToProps = dispatch => {
 				processResult: result => {
 					let action = {} as any
 					if (result.success) {
-						action.token = result.token
-						localStorage.setItem("token", action.token)
-						let expiration = new Date(new Date().getTime() + 30 * 60000/* 30 minutes*/)
-						localStorage.setItem("expiration", expiration.toISOString())
+						setToken(result.token)
 					} 
 					return action
 				}

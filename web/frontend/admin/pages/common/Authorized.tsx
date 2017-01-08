@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 
+import { isTokenValid } from '../../../common/lib/token'
+
 class Authorized<P, S> extends React.Component<P, S> {
 	constructor(props) {
 		super(props)
@@ -12,9 +14,7 @@ class Authorized<P, S> extends React.Component<P, S> {
     }
 
 	componentWillMount() {
-		const token = localStorage.getItem('token')
-		const time = localStorage.getItem('expiration')
-		if (!token || new Date() > new Date(time)) {
+		if (!isTokenValid()) {
 			this.context.router.push('/admin')
 		}
 	}
