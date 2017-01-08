@@ -15,15 +15,13 @@ var Subscriber = seq.define('Subscriber', {
 export interface BroadcastRecord {
 	ID: number
 	to: string
-	time: any
 	title: string
 	content: string
 }
 
 var Broadcast = seq.define('Broadcast', {
 	ID: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true}, 
-	to: Sequelize.TEXT,
-	time: Sequelize.DATE,
+	list: Sequelize.TEXT,
 	title: Sequelize.TEXT,
 	content: Sequelize.TEXT,
 }).sync()
