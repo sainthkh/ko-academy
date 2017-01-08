@@ -2,37 +2,39 @@
 
 import * as React from 'react';
 import * as CSSModules from 'react-css-modules'
-import { FetchProps } from '../../../common/lib/fetch/props'
-import Authorized from '../common/Authorized'
+import { Editor, EditorLayoutProps } from '../common/EditorLayout'
 import styles from './Layout.css'
 
-export interface LayoutProps extends FetchProps {
+export interface LayoutProps extends EditorLayoutProps {
 
 }
 
-class PageLayout extends Authorized<LayoutProps, {}> {
+class PageLayout extends Editor<EditorLayoutProps, {}> {
 	constructor(props) {
 		super(props)
-		this.submit = this.submit.bind(this)
+		this.formName = "broadcast-form"
 	}
 
-	render() {
+	form() {
+		const { ID, title, to, content} = this.props.content
 		return (
 			<div className="wrap">
-				<form className="wide-form" name="broadcast-form" action="POST" onSubmit={this.submit}>
+				<form className="wide-form" name={this.formName} action="POST" onSubmit={this.submit}>
+					{this.title(this.update, 'Broadcast', title)}
+					<input type="hidden" name="ID" value={ID} />
 					<div className="form-group">
 						<label htmlFor="title">Title</label>
-						<input type="text" className="form-field" name="title" placeholder="title" />
+						<input type="text" className="form-field" name="title" defaultValue={title} placeholder="title" />
 					</div>
 					<div className="form-group">
 						<label htmlFor="list">List</label>
-						<select name="list" className="form-field">
+						<select name="list" className="form-field" defaultValue={to}>
 							<option value="beginning-hangeul@mg.wiseinit.com">Hangeul</option>
 						</select>
 					</div>
 					<div className="form-group">
 						<label htmlFor="content">Content</label>
-						<textarea name="content" className="form-field" rows={30}></textarea>
+						<textarea name="content" className="form-field" rows={30}>{content}</textarea>
 					</div>
 					{this.props.waiting && (<div>Now sending mails ...</div>)}
 					{this.props.succeeded && (<div>Broadcast Success</div>)}
@@ -43,19 +45,6 @@ class PageLayout extends Authorized<LayoutProps, {}> {
 				</form>
 			</div>
 		);
-	}
-
-	submit(e) {
-		e.preventDefault()
-
-		var form = document.forms['broadcast-form']
-		let broadcast = {
-			title: form.title.value,
-			list: form.list.value,
-			content: form.content.value,
-		}
-
-		this.props.submit(broadcast)
 	}
 }
 

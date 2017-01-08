@@ -26,6 +26,25 @@ router.post('/broadcast', (req, res) => {
 	})
 })
 
+router.get('/broadcast', (req, res) => {
+	const ID = req.query.id
+	Broadcast.then(db => {
+		return db.find({ where: { ID }})
+	})
+	.then((result:BroadcastRecord) => {
+		const { ID, to, title, content} = result
+		res.json({
+			success: true,
+			content: {
+				ID,
+				to,
+				title, 
+				content,
+			},
+		})
+	})
+})
+
 router.post('/autoresponder', (req, res) => {
 	Autoresponder.then(db => {
 		return db.create({
