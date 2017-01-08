@@ -1,13 +1,12 @@
 'use strict'
 import * as React from 'react'
-import { default as Dialog, openDialog, closeDialog } from '../../Dialog'
-import { default as Spinner } from '../../Spinner'
-import { FetchProps } from '../../../../../common/lib/fetch/props'
-import * as CSSModules from 'react-css-modules';
-import styles from './Layout.css'
+import { default as Dialog, openDialog, closeDialog } from '../Dialog'
+import { default as Spinner } from '../Spinner'
+import { FetchProps } from '../../../../common/lib/fetch/props'
+import { setToken } from '../../../../common/lib/token'
+import { ReduxDialog } from './Dialog'
 
 export interface LayoutProps extends FetchProps {
-	error: any
 	feedback: any
 }
 
@@ -42,13 +41,13 @@ class DialogLayout extends React.Component<LayoutProps, {}> {
 		var main = (
 			<div>
 				<form action="" method="POST" name="signup" role="form" onSubmit={this.submit}>
-					<input type="text" styleName="field" name="username" value={this.lastInput.username} id="username" placeholder="user name" />
-					{this.props.error.longName && (<div styleName="invalid">Your name is too long. User name should be shorter than 50 characters.</div>)}
-					<input type="email" styleName="field" name="email" value={this.lastInput.email} id="email" placeholder="email" />
-					{this.props.error.invalidEmail && (<div styleName="invalid">Your email format is invalid. Please check it out.</div>)}
-					{this.props.error.duplicateEmail && (<div styleName="invalid">You have already signed up.</div>)}
+					<input type="text" styleName="field" name="username" defaultValue={this.lastInput.username} id="username" placeholder="user name" />
+					{this.props.error.LONG_USERNAME && (<div styleName="invalid">Your name is too long. User name should be shorter than 50 characters.</div>)}
+					<input type="email" styleName="field" name="email" defaultValue={this.lastInput.email} id="email" placeholder="email" />
+					{this.props.error.INVALID_EMAIL && (<div styleName="invalid">Your email format is invalid. Please check it out.</div>)}
+					{this.props.error.DUPLICATE_EMAIL && (<div styleName="invalid">You have already signed up.</div>)}
 					<input type="password" styleName="field" name="password" id="password" placeholder="password" />
-					{this.props.error.weakPassword && (
+					{this.props.error.WEAK_PASSWORD && (
 						<div styleName="invalid">
 							Your password is weak. How about trying these? <br /> 
 							<ul>
@@ -112,4 +111,27 @@ class DialogLayout extends React.Component<LayoutProps, {}> {
 	}
 }
 
-export const Layout = CSSModules(DialogLayout, styles) 
+export const SignupDialog = ReduxDialog({
+	id: "signup",
+	resource: "/signup",
+	processResult: result => {
+		let action = {} as any
+		if (result.success) {
+			action.username = result.username
+			action.accessLevel = result.accessLevel
+			setToken(result.token)
+		} else {
+			action.feedback = result.feedback
+		}
+		return action 
+	},
+	onSucceeded: action => ({
+		auth: {
+			username: action.username,
+			accessLevel: action.accessLevel,
+		}
+	}),
+	toFetch: action => ({
+		feedback: action.feedback
+	}),
+})(DialogLayout)

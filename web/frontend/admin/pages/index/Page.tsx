@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
 
-import { fetchProps2, submit } from '../../../common/lib/fetch'
+import { fetchProps, submit } from '../../../common/lib/fetch'
 import { setToken } from '../../../common/lib/token'
 import { Layout } from './Layout'
 
-const mapStateToProps = state => fetchProps2(state.fetch)
+const mapStateToProps = state => fetchProps(state.fetch)
 
 const mapDispatchToProps = dispatch => {
 	return {

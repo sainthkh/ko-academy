@@ -1,8 +1,8 @@
 'use strict'
 import * as React from 'react'
-import { SignupDialog } from './signup/Dialog'
-import {default as LoginDialog} from './login/LoginDialog'
-import { SubscribeDialog } from './subscribe/Dialog'
+import { SignupDialog } from './SignupDialog'
+import { LoginDialog } from './LoginDialog'
+import { SubscribeDialog } from './SubscribeDialog'
 
 export default class AuthUI extends React.Component<{}, {}> {
 	render() {

@@ -1,15 +1,15 @@
 'use strict'
 import * as React from 'react'
-import { default as Dialog, openDialog } from '../../Dialog'
-import * as CSSModules from 'react-css-modules';
-import styles from './LoginDialogContent.css'
+import { default as Dialog, openDialog, closeDialog } from '../Dialog'
+import { default as Spinner } from '../Spinner'
+import { FetchProps } from '../../../../common/lib/fetch/props'
+import { ReduxDialog } from './Dialog'
 
-export interface LoginDialogContentProps {
-	waitingLogin: boolean
-	loginErrors: any
+export interface LayoutProps extends FetchProps {
 }
 
-class LoginDialogContentReact extends React.Component<LoginDialogContentProps, {}> {
+
+class Layout extends React.Component<LayoutProps, {}> {
 	render() {
 		var title = "Resume your Korean journey!"
 		var main = (
@@ -30,4 +30,7 @@ class LoginDialogContentReact extends React.Component<LoginDialogContentProps, {
 	}
 }
 
-export const LoginDialogContent = CSSModules(LoginDialogContentReact, styles) 
+export const LoginDialog = ReduxDialog({
+	id: "login",
+	resouce: "/login"
+})(Layout)

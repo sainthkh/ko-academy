@@ -1,8 +1,15 @@
 import { combineReducers } from 'redux'
-import { auth } from './pages/common/auth/reducer'
+import { fetchReducer } from '../common/lib/fetch'
 
-const reducer = combineReducers({
-	auth,
-})
+const reducer = (state = {
+	fetch: {}
+}, action) => {
+	switch(action.type) {
+		case "FETCH":
+			return fetchReducer(state, action)
+		case "@@redux/INIT":
+			return state
+	}
+}
 
 export default reducer

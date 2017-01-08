@@ -15,6 +15,7 @@ class Hero extends React.Component<{}, {}> {
 						<div styleName="cta-box">
 							<CTAButton dialogID="signup" text="Start Now" />
 							<CTAButton dialogID="login" text="Resume" inverse={true}/>
+							<CTAButton dialogID="subscribe" text="Subscribe" inverse={true}/>
 						</div>
 					</div>
 				</div>
