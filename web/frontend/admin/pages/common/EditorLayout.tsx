@@ -22,6 +22,7 @@ export abstract class Editor<P extends EditorLayoutProps, S> extends Authorized<
 	}
 	
 	componentWillMount() {
+		super.componentWillMount()
 		if(this.props.params.slug) {
 			this.props.load({ slug: this.props.params.slug })
 			this.props.loading = true
