@@ -8,9 +8,11 @@ function remove(target, production) {
 	console.log('removed ' + target)
 }
 
-function copy(target, production) {
+function copy(target, production, showMessage) {
 	fs.copySync(target, path.join(destDir(production), target))
-	console.log('copied ' + target)
+	if (showMessage) {
+		console.log('copied ' + target)
+	}
 }
 
 function destDir(production, special) {
