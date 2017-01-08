@@ -1,15 +1,13 @@
 'use strict';
 
 import * as React from 'react';
-import * as CSSModules from 'react-css-modules'
-import { Editor, EditorLayoutProps } from '../common/EditorLayout'
-import styles from './Layout.css'
+import { Editor, EditorLayout, EditorLayoutProps } from './common/Editor'
 
 export interface LayoutProps extends EditorLayoutProps {
 
 }
 
-class PageLayout extends Editor<LayoutProps, {}> {
+class PageLayout extends EditorLayout<LayoutProps, {}> {
 	constructor(props) {
 		super(props)
 		this.formName = 'course-form'
@@ -50,4 +48,8 @@ class PageLayout extends Editor<LayoutProps, {}> {
 	}
 }
 
-export const Layout = CSSModules(PageLayout, styles)
+export const CoursePage = Editor({
+	admin: true,
+	id: "course",
+	resource: "/course",
+})(PageLayout)

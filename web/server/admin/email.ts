@@ -67,4 +67,24 @@ router.post('/autoresponder', (req, res) => {
 	})
 })
 
+router.get('/autoresponder', (req, res) => {
+	const ID = req.query.id
+	Autoresponder.then(db => {
+		return db.find({ where: { ID }})
+	})
+	.then((result:AutoresponderRecord) => {
+		const { ID, slug, listName, title, content} = result
+		res.json({
+			success: true,
+			content: {
+				ID,
+				slug,
+				listName,
+				title, 
+				content,
+			},
+		})
+	})
+})
+
 export default router

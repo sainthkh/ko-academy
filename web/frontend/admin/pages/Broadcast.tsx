@@ -1,15 +1,13 @@
 'use strict';
 
 import * as React from 'react';
-import * as CSSModules from 'react-css-modules'
-import { Editor, EditorLayoutProps } from '../common/EditorLayout'
-import styles from './Layout.css'
+import { Editor, EditorLayout, EditorLayoutProps } from './common/Editor'
 
 export interface LayoutProps extends EditorLayoutProps {
 
 }
 
-class PageLayout extends Editor<EditorLayoutProps, {}> {
+class PageLayout extends EditorLayout<EditorLayoutProps, {}> {
 	constructor(props) {
 		super(props)
 		this.formName = "broadcast-form"
@@ -48,4 +46,8 @@ class PageLayout extends Editor<EditorLayoutProps, {}> {
 	}
 }
 
-export const Layout = CSSModules(PageLayout, styles)
+export const BroadcastPage = Editor({
+	admin: true,
+	id: "broadcast",
+	resource: "/email/broadcast",
+})(PageLayout)

@@ -1,25 +1,25 @@
 'use strict';
 
 import * as React from 'react';
-import * as CSSModules from 'react-css-modules'
-import { FetchProps } from '../../../common/lib/fetch/props'
-import Authorized from '../common/Authorized'
-import styles from './Layout.css'
+import { Editor, EditorLayout, EditorLayoutProps } from './common/Editor'
 
-export interface LayoutProps extends FetchProps {
+export interface LayoutProps extends EditorLayoutProps {
 
 }
 
-class PageLayout extends Authorized<LayoutProps, {}> {
+class PageLayout extends EditorLayout<EditorLayoutProps, {}> {
 	constructor(props) {
 		super(props)
-		this.submit = this.submit.bind(this)
+		this.formName = "autoresponder-form"
 	}
 
-	render() {
+	form() {
+		const { ID, slug, title, listName, content } = this.props.content
 		return (
 			<div className="wrap">
-				<form className="wide-form" name="autoresponder-form" action="POST" onSubmit={this.submit}>
+				<form className="wide-form" name={this.formName} action="POST" onSubmit={this.submit}>
+					{this.title(this.update, 'Autoresponder', title)}
+					<input type="hidden" name="ID" value={ID} />
 					<div className="form-group">
 						<label>List name</label>
 						<input type="text" className="form-field" name="list_name" placeholder="list name" />
@@ -46,20 +46,10 @@ class PageLayout extends Authorized<LayoutProps, {}> {
 			</div>
 		);
 	}
-
-	submit(e) {
-		e.preventDefault()
-
-		var form = document.forms['autoresponder-form']
-		let autoresponder = {
-			listName: form.list_name.value,
-			slug: form.slug.value,
-			title: form.title.value,
-			content: form.content.value,
-		}
-
-		this.props.submit(autoresponder)
-	}
 }
 
-export const Layout = CSSModules(PageLayout, styles)
+export const AutoresponderPage = Editor({
+	admin: true,
+	name: "autoresponder",
+	resource: "/email/autoresponder",
+})(PageLayout)

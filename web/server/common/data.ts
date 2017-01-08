@@ -29,15 +29,16 @@ var Broadcast = seq.define('Broadcast', {
 }).sync()
 
 export interface AutoresponderRecord {
+	ID: number
 	slug: string
 	listName: string
-	address: string
 	title: string
 	content: string
 }
 
 var Autoresponder = seq.define('Autoresponder', {
-	slug: { type: Sequelize.TEXT, primaryKey: true }, 
+	ID: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+	slug: { type: Sequelize.TEXT, unique: true }, 
 	listName: Sequelize.TEXT,
 	title: Sequelize.TEXT,
 	content: Sequelize.TEXT,
