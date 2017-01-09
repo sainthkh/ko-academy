@@ -5,7 +5,7 @@ import styles from './Overview.css'
 
 export interface OverviewProps {
 	title: string
-	details: string
+	description: string
 }
 
 class Overview extends React.Component<OverviewProps, {}> {
@@ -14,7 +14,7 @@ class Overview extends React.Component<OverviewProps, {}> {
 			<div styleName="overview">
 				<div className="wrap">
 					<h1>{this.props.title}</h1>
-					<p>{this.props.details}</p>
+					<p>{this.props.description}</p>
 				</div>
 			</div>
 		);

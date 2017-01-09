@@ -6,18 +6,20 @@ import styles from './Lecture.css'
 
 export interface LectureProps {
 	slug: string
-	number: string | number
+	courseSlug: string
 	title: string
+	accessLevel: string
 	time: string
 }
 
 class Lecture extends React.Component<LectureProps, {}> {
 	render() {
+		const { courseSlug, slug, title, time } = this.props
 		return (
 			<div styleName="lecture">
-				<Link to="{this.props.slug}">
+				<Link to={`/lecture/${courseSlug}/${slug}`}>
 					<div styleName="lecture-wrap">
-						<span styleName="number">{this.props.number}</span><span styleName="title">{this.props.title}</span><span styleName="time">{this.props.time}</span>
+						<span styleName="title">{title}</span><span styleName="time">{time}</span>
 					</div>
 				</Link>
 			</div>
