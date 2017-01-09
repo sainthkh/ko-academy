@@ -41,7 +41,7 @@ export function defaultFetchProps() {
 		failed: false,
 		succeeded: false,
 		content: {},
-		loading: false,
+		loading: true,
 		error: {},
 	}
 }
