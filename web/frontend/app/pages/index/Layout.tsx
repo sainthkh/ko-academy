@@ -3,6 +3,7 @@
 import * as React from 'react';
 import MainBar from '../common/menu/MainBar'
 import Hero from './Hero'
+import { commonStyle } from '../common/style'
 
 class IndexPage extends React.Component<{}, {}> {
 	render() {
@@ -15,7 +16,7 @@ class IndexPage extends React.Component<{}, {}> {
 }
 
 var wrap = {
-	background: '#192867',
+	background: commonStyle.background,
 	height: '100%',
 }
 
