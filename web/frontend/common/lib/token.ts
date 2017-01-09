@@ -1,4 +1,7 @@
 export function isTokenValid() {
+	if(typeof localStorage === "undefined") {
+		return false
+	}
 	const token = localStorage.getItem('token')
 	const time = localStorage.getItem('expiration')
 	return token && new Date() < new Date(time)

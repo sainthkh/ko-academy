@@ -19,7 +19,7 @@ export function fetch(setting:FetchSetting) {
 	let { token, method, args, resource, admin } = setting
 	let options:RequestInit = {
 		headers: {
-			'Authorization': `Bearer ${btoa(token)}`,
+			'Authorization': `Bearer ${_btoa(token)}`,
 			'Content-Type': 'application/json',
 		}, 
 		method,
@@ -89,4 +89,8 @@ export function internalServerError(err) {
 			time: new Date(),
 		},
 	}
+}
+
+function _btoa(str) {
+	return typeof btoa !== 'undefined'? btoa(str) : ''
 }
