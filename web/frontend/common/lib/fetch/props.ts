@@ -34,3 +34,14 @@ export function fetchProps(fetch) {
 		error,
 	}, rest) as FetchProps
 }
+
+export function defaultFetchProps() {
+	return {
+		waiting: false,
+		failed: false,
+		succeeded: false,
+		content: {},
+		loading: false,
+		error: {},
+	}
+}

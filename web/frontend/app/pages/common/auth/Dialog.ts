@@ -1,9 +1,11 @@
 import { connect } from 'react-redux'
 
-import { fetchProps, submit } from '../../../../common/lib/fetch'
+import { fetchProps, defaultFetchProps, submit } from '../../../../common/lib/fetch'
 
 export function ReduxDialog(options) {
-	const mapStateToProps = state => fetchProps(state.fetch)
+	const mapStateToProps = state => 
+		(options.id == state.fetch.id) ?
+			fetchProps(state.fetch) : defaultFetchProps()
 
 	const mapDispatchToProps = dispatch => {
 		return {
