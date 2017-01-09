@@ -30,7 +30,7 @@ export abstract class EditorLayout<P extends EditorLayoutProps, S> extends Autho
 	componentWillMount() {
 		super.componentWillMount()
 		if(this.props.params.id) {
-			this.props.load({ id: this.props.params.id })
+			this.props.load({ ID: this.props.params.id })
 			this.props.loading = true
 			this.update = true
 		} else {

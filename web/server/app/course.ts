@@ -8,7 +8,6 @@ handleGetRequest({
 	router, 
 	Model: Course, 
 	path: '/',
-	arg: "slug",
 })
 
 export default router

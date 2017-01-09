@@ -4,7 +4,6 @@ interface RequestSetting {
 	router: any
 	Model: any
 	path: string
-	arg?: string
 	onPostSuccess?: (any) => any
 	onGetSuccess?: (any) => any
 }
@@ -15,7 +14,7 @@ export function handleRequest(setting:RequestSetting) {
 }
 
 export function handlePostRequest(setting:RequestSetting) {
-	let { router, Model, path, arg, onPostSuccess } = setting
+	let { router, Model, path, onPostSuccess } = setting
 	onPostSuccess = onPostSuccess ? onPostSuccess : () => ({})
 
 	router.post(path, (req, res) => {
@@ -30,15 +29,12 @@ export function handlePostRequest(setting:RequestSetting) {
 }
 
 export function handleGetRequest(setting:RequestSetting) {
-	let { router, Model, path, arg, onGetSuccess } = setting
-	arg = arg ? arg : "ID"
+	let { router, Model, path, onGetSuccess, modifyContent } = setting
 	onGetSuccess = onGetSuccess ? onGetSuccess : () => ({})
 	
 	router.get(path, (req, res) => {
-		let where = {}
-		where[arg] = req.query[arg.toLowerCase()]
 		Model.then(db => {
-			return db.find({ where })
+			return db.find({ where: req.query })
 		})
 		.then((result:any) => {
 			var data = result.dataValues
