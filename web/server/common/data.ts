@@ -52,11 +52,6 @@ var User = seq.define('User', {
 	lastLogin: Sequelize.DATE,
 }).sync()
 
-var LoginLog = seq.define('LoginLog', {
-	userID: Sequelize.STRING,
-	loginTime: Sequelize.DATE,
-}).sync()
-
 export interface CourseRecord {
 	ID: number
 	slug: string
@@ -78,7 +73,6 @@ export {
 	Broadcast,
 	Autoresponder,
 	User,
-	LoginLog,
 	Course,
 }
 
