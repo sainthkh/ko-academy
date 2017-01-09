@@ -9,7 +9,7 @@ import styles from "./Layout.css"
 class IndexPage extends React.Component<{}, {}> {
 	render() {
 		return (
-			<div>
+			<div styleName="wrap">
 				<Hero />
 			</div>
 		);
