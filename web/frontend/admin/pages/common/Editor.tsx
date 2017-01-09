@@ -2,7 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux'
 
 import Authorized from './Authorized'
-import { fetchProps, fetchPackage } from '../../../common/lib/fetch'
 import { FetchProps } from '../../../common/lib/fetch/props'
 
 export interface EditorLayoutProps extends FetchProps {
@@ -70,18 +69,4 @@ export abstract class EditorLayout<P extends EditorLayoutProps, S> extends Autho
 
 	protected update: boolean
 	protected formName: string
-}
-
-export function Editor(options) {
-	const mapStateToProps = state => fetchProps(state.fetch) as EditorLayoutProps
-	const { load, submit } = fetchPackage(options)
-
-	const mapDispatchToProps = dispatch => {
-		return {
-			submit: course => dispatch(submit(course)),
-			load: id => dispatch(load(id)),
-		}
-	}
-
-	return connect(mapStateToProps, mapDispatchToProps)
 }

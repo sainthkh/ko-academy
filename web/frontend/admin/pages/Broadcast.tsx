@@ -1,7 +1,8 @@
 'use strict';
 
 import * as React from 'react';
-import { Editor, EditorLayout, EditorLayoutProps } from './common/Editor'
+import { EditorLayout, EditorLayoutProps } from './common/Editor'
+import { FetchableComponent } from '../../common/lib/fetch'
 
 export interface LayoutProps extends EditorLayoutProps {
 
@@ -46,7 +47,7 @@ class PageLayout extends EditorLayout<EditorLayoutProps, {}> {
 	}
 }
 
-export const BroadcastPage = Editor({
+export const BroadcastPage = FetchableComponent({
 	admin: true,
 	id: "broadcast",
 	resource: "/email/broadcast",

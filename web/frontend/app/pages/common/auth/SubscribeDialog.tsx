@@ -3,12 +3,12 @@ import * as React from 'react'
 import { default as Dialog, openDialog, closeDialog } from '../Dialog'
 import { default as Spinner } from '../Spinner'
 import { FetchProps } from '../../../../common/lib/fetch/props'
-import { ReduxDialog } from './Dialog'
+import { FetchableComponent } from '../../../../common/lib/fetch'
 
 export interface LayoutProps extends FetchProps {
 }
 
-class DialogLayout extends React.Component<LayoutProps, {}> {
+class Layout extends React.Component<LayoutProps, {}> {
 	private ID: string
 	private email: string
 	constructor(props) {
@@ -86,7 +86,7 @@ class DialogLayout extends React.Component<LayoutProps, {}> {
 	}
 }
 
-export const SubscribeDialog = ReduxDialog({
+export const SubscribeDialog = FetchableComponent({
 	id: "subscribe",
 	resource: "/subscribe"
-})(DialogLayout)
+})(Layout)

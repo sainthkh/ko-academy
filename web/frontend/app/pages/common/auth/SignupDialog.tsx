@@ -4,13 +4,13 @@ import { default as Dialog, openDialog, closeDialog } from '../Dialog'
 import { default as Spinner } from '../Spinner'
 import { FetchProps } from '../../../../common/lib/fetch/props'
 import { setToken } from '../../../../common/lib/token'
-import { ReduxDialog } from './Dialog'
+import { FetchableComponent } from '../../../../common/lib/fetch'
 
 export interface LayoutProps extends FetchProps {
 	feedback: any
 }
 
-class DialogLayout extends React.Component<LayoutProps, {}> {
+class Layout extends React.Component<LayoutProps, {}> {
 	private ID: string
 	private lastInput: any
 
@@ -111,7 +111,7 @@ class DialogLayout extends React.Component<LayoutProps, {}> {
 	}
 }
 
-export const SignupDialog = ReduxDialog({
+export const SignupDialog = FetchableComponent({
 	id: "signup",
 	resource: "/signup",
 	processResult: result => {
@@ -134,4 +134,4 @@ export const SignupDialog = ReduxDialog({
 	toFetch: action => ({
 		feedback: action.feedback
 	}),
-})(DialogLayout)
+})(Layout)

@@ -1,7 +1,8 @@
 'use strict';
 
 import * as React from 'react';
-import { Editor, EditorLayout, EditorLayoutProps } from './common/Editor'
+import { EditorLayout, EditorLayoutProps } from './common/Editor'
+import { FetchableComponent } from '../../common/lib/fetch'
 
 export interface LayoutProps extends EditorLayoutProps {
 
@@ -48,7 +49,7 @@ class PageLayout extends EditorLayout<EditorLayoutProps, {}> {
 	}
 }
 
-export const AutoresponderPage = Editor({
+export const AutoresponderPage = FetchableComponent({
 	admin: true,
 	name: "autoresponder",
 	resource: "/email/autoresponder",

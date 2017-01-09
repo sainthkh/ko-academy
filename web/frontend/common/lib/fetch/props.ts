@@ -7,8 +7,8 @@ export interface FetchProps {
 	loading: boolean
 	content: any
 	submit: (any) => void
-	load?: (any) => void
-	error?: any
+	load: (any) => void
+	error: any
 }
 
 export function fetchProps(fetch) {
