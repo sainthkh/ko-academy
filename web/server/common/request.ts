@@ -6,6 +6,7 @@ interface RequestSetting {
 	path: string
 	onPostSuccess?: (any) => any
 	onGetSuccess?: (any) => any
+	modifyContent?: (any) => any
 }
 
 export function handleRequest(setting:RequestSetting) {
@@ -31,6 +32,7 @@ export function handlePostRequest(setting:RequestSetting) {
 export function handleGetRequest(setting:RequestSetting) {
 	let { router, Model, path, onGetSuccess, modifyContent } = setting
 	onGetSuccess = onGetSuccess ? onGetSuccess : () => ({})
+	modifyContent = modifyContent ? modifyContent : c => c
 	
 	router.get(path, (req, res) => {
 		Model.then(db => {
@@ -38,6 +40,7 @@ export function handleGetRequest(setting:RequestSetting) {
 		})
 		.then((result:any) => {
 			var data = result.dataValues
+			data = modifyContent(data)
 			delete data.createdAt
 			delete data.updatedAt
 			res.json(Object.assign({
