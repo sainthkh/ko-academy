@@ -11,17 +11,17 @@ export function fetchPackage(options:FetchReduxGeneratorArgs) {
 }
 
 export function load(options:FetchReduxGeneratorArgs) {
-	options.purpose = FetchPurpose.LOAD
-	options.method = 'GET'
-	options.id = `load-${options.id}`
-	return fetchReduxGenerator(options)
+	return fetchReduxGenerator(Object.assign({}, options, {
+		purpose: FetchPurpose.LOAD,
+		method: 'GET',
+	}))
 }
 
 export function submit(options:FetchReduxGeneratorArgs) {
-	options.purpose = FetchPurpose.SUBMIT
-	options.method = 'POST'
-	options.id = `submit-${options.id}`
-	return fetchReduxGenerator(options)
+	return fetchReduxGenerator(Object.assign({}, options, {
+		purpose: FetchPurpose.SUBMIT,
+		method: 'POST',
+	}))
 }
 
 interface FetchReduxGeneratorArgs {
