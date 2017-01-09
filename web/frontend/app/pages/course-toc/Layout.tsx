@@ -2,53 +2,24 @@
 
 import * as React from 'react';
 import { FetchableComponent } from '../../../common/lib/fetch'
-import { FetchProps } from '../../../common/lib/fetch/props'
+import { PageLayout, PageLayoutProps } from '../common/Page'
 import MainBar from '../common/menu/MainBar'
 import Section from './Section'
 import Lecture from './Lecture'
 import Overview from './Overview'
 
-interface LayoutProps extends FetchProps {
-	params: any
+interface LayoutProps extends PageLayoutProps {
 }
 
-class Layout extends React.Component<LayoutProps, {
-	loading: boolean
-	content: any
-}> {
+class Layout extends PageLayout<PageLayoutProps, {}> {
 	constructor(props) {
 		super(props);
 
-		this.loading = this.loading.bind(this)
-		this.content = this.content.bind(this)
 		this.parseToc = this.parseToc.bind(this)
 	}
 
-	componentWillMount() {
-		this.props.load({slug: this.props.params.slug})
-		this.setState({
-			loading: true,
-			content: {},
-		})
-	}
-
-	componentWillReceiveProps(nextProps) {
-		this.setState({
-			loading: nextProps.loading,
-			content: nextProps.content,
-		})
-	}
-
-	render() {
-		if(this.state.loading) {
-			return this.loading()
-		} else {
-			return this.content()
-		}
-	}
-
 	content() {
-		let { title, description, slug, content } = this.state.content
+		let { title, description, slug, content } = this.props.content
 		return (
 			<div>
 				<MainBar />
@@ -58,15 +29,6 @@ class Layout extends React.Component<LayoutProps, {
 						{this.parseToc(content, slug)}
 					</div>
 				</div>
-			</div>
-		)
-	}
-
-	loading() {
-		return (
-			<div>
-				<h1>Loading...</h1>
-				<p>Please waiting</p>
 			</div>
 		)
 	}
