@@ -1,20 +1,21 @@
 'use strict'
 import * as React from 'react'
 import * as CSSModules from 'react-css-modules';
-import styles from './Content.css'
+import styles from './lecture.css'
 
 export interface ContentProps {
 	content: string
 }
 
-class Content extends React.Component<ContentProps, {}> {
+class Downloads extends React.Component<ContentProps, {}> {
 	render() {
 		return (
-			<div className="wrap">
+			<div>
+				<h1>Downloads</h1>
 				<div styleName="content" dangerouslySetInnerHTML={{__html: this.props.content}} />
 			</div>
 		);
 	}
 }
 
-export default CSSModules(Content, styles)
+export default CSSModules(Downloads, styles)

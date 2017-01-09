@@ -1,24 +1,37 @@
 'use strict';
 
 import * as React from 'react';
+import { FetchableComponent } from '../../../common/lib/fetch'
+import { PageLayout, PageLayoutProps } from '../common/Page'
 import MainBar from '../common/menu/MainBar'
-import * as CSSModules from 'react-css-modules'
 import Video from './Video'
-import Content from './Content'
+import Script from './Script'
 import Next from './Next'
-import styles from "./Layout.css"
 
-class LecturePage extends React.Component<{}, {}> {
-	render() {
+class Layout extends PageLayout<PageLayoutProps, {}> {
+	componentWillMount() {
+		this.props.load({
+			courseSlug: this.props.params.courseSlug,
+			slug: this.props.params.slug,
+		})
+	}
+
+	content() {
+		let { title, video, downloads, script } = this.props.content
 		return (
 			<div>
 				<MainBar />
-				<Video url="https://www.youtube.com/embed/Y97GwEOs11w" />
-				<Content content={`<h1>Downloads</h1><a href="#">Practice</a><p>Test Paragraph</p>`} />
-				<Next url="/lecture/next" title="ㄱ, ㄴ, ㄷ, and ㅏ" />
+				<div className="wrap">
+					<h1>{title}</h1>
+					<Video url={video} />
+					<Script content={script} />
+				</div>
 			</div>
 		);
 	}
 }
 
-export default CSSModules(LecturePage, styles)
+export const LecturePage = FetchableComponent({
+	id: "lecture",
+	resource: "/lecture",
+})(Layout)
