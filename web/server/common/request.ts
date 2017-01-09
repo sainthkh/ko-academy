@@ -4,15 +4,20 @@ interface RequestSetting {
 	router: any
 	Model: any
 	path: string
+	arg?: string
 	onPostSuccess?: (any) => any
 	onGetSuccess?: (any) => any
 }
 
-export function handleRequest(setting) {
-	let { router, Model, path, onPostSuccess, onGetSuccess } = setting
+export function handleRequest(setting:RequestSetting) {
+	handlePostRequest(setting)
+	handleGetRequest(setting)
+}
+
+export function handlePostRequest(setting:RequestSetting) {
+	let { router, Model, path, arg, onPostSuccess } = setting
 	onPostSuccess = onPostSuccess ? onPostSuccess : () => ({})
-	onGetSuccess = onGetSuccess ? onGetSuccess : () => ({})
-	
+
 	router.post(path, (req, res) => {
 		Model.then(db => {
 			return upsert(db, req.body)
@@ -22,11 +27,18 @@ export function handleRequest(setting) {
 			}, onPostSuccess(result)))
 		})
 	})
+}
 
+export function handleGetRequest(setting:RequestSetting) {
+	let { router, Model, path, arg, onGetSuccess } = setting
+	arg = arg ? arg : "ID"
+	onGetSuccess = onGetSuccess ? onGetSuccess : () => ({})
+	
 	router.get(path, (req, res) => {
-		const ID = req.query.id
+		let where = {}
+		where[arg] = req.query[arg.toLowerCase()]
 		Model.then(db => {
-			return db.find({ where: { ID }})
+			return db.find({ where })
 		})
 		.then((result:any) => {
 			var data = result.dataValues
