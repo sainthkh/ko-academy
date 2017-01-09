@@ -8,6 +8,7 @@ import * as path from 'path'
 import { default as auth } from './auth'
 import { default as email } from './email'
 import { default as course } from './course'
+import { default as lecture } from './lecture'
 
 var router = express.Router()
 
@@ -37,5 +38,6 @@ router.use((req, res, next) => {
 })
 router.use('/email', email)
 router.use('/course', course)
+router.use('/lecture', lecture)
 
 export default router

@@ -33,6 +33,8 @@ export abstract class EditorLayout<P extends EditorLayoutProps, S> extends Autho
 			this.props.load({ id: this.props.params.id })
 			this.props.loading = true
 			this.update = true
+		} else {
+			this.props.loading = false
 		}
 	}
 

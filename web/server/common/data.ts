@@ -68,12 +68,24 @@ var Course = seq.define('Course', {
 	content: Sequelize.TEXT,
 }).sync()
 
+var Lecture = seq.define('Lecture', {
+	ID: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+	slug: Sequelize.TEXT,
+	courseSlug: Sequelize.TEXT,
+	title: Sequelize.TEXT,
+	video: Sequelize.TEXT,
+	accessLevel: Sequelize.TEXT,
+	downloads: Sequelize.TEXT,
+	script: Sequelize.TEXT,
+}).sync()
+
 export {
 	Subscriber,
 	Broadcast,
 	Autoresponder,
 	User,
 	Course,
+	Lecture,
 }
 
 export function upsert(db, model) {
