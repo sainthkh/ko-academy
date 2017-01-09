@@ -1,13 +1,15 @@
 'use strict';
 
 import * as React from 'react';
+import { FetchableComponent } from '../../../common/lib/fetch'
+import { FetchProps } from '../../../common/lib/fetch/props'
 import MainBar from '../common/menu/MainBar'
 import Overview from './Overview'
 import TOC from './TOC'
 import * as CSSModules from 'react-css-modules'
 import styles from "./Layout.css"
 
-class CourseTocPage extends React.Component<{}, {}> {
+class Layout extends React.Component<FetchProps, {}> {
 	render() {
 		return (
 			<div>
@@ -19,4 +21,7 @@ class CourseTocPage extends React.Component<{}, {}> {
 	}
 }
 
-export default CSSModules(CourseTocPage, styles)
+export const CourseTocPage = FetchableComponent({
+	name: "course-toc",
+	resource: "course",
+})(CSSModules(Layout, styles))
