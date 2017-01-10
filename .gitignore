@@ -44,3 +44,4 @@ temp/
 web/server/admin/config.json
 web/build/test.json
 web/server/common/config.json
+web/server/app/config.json

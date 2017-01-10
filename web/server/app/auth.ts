@@ -2,7 +2,11 @@ import * as express from 'express'
 import * as async from 'async'
 import * as _ from 'lodash'
 import * as zxcvbn from 'zxcvbn'
+import * as jwt from 'jsonwebtoken'
 var sodium = require('sodium').api
+
+import * as fs from 'fs'
+import * as path from 'path'
 
 import { Subscriber, User } from '../common/data'
 import { sendAutoresponder, addMember, validEmailFormat } from './email'
@@ -98,9 +102,9 @@ router.post('/signup', (req, res) => {
 				})
 			})
 			.then(result => {
-				res.json({
+				res.json(Object.assign({
 					success: true
-				})
+				}, loginData(result)))
 			})
 		} else {
 			res.json({
@@ -111,5 +115,18 @@ router.post('/signup', (req, res) => {
 		}
 	})
 })
+
+function loginData(result) {
+	var config = JSON.parse(fs.readFileSync(path.join(__dirname, './config.json')).toString())
+	const { username, accessLevel } = result
+	let token = jwt.sign({ email: result.email }, config.secret, {
+		expiresIn: "3d"
+	})
+	return {
+		username,
+		accessLevel,
+		token,
+	}
+}
 
 export default router
