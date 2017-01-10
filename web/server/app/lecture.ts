@@ -13,7 +13,6 @@ handleGetRequest({
 	router, 
 	Model: Lecture, 
 	path: '/',
-	arg: "slug",
 	modifyContent: data => {
 		data.script = marked(data.script)
 		return data
