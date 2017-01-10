@@ -155,4 +155,32 @@ function loginData(result) {
 	}
 }
 
+router.post('/renew-token', (req, res) => {
+	var config = JSON.parse(fs.readFileSync(path.join(__dirname, './config.json')).toString())
+
+	jwt.verify(req.body.token, config.secret, (err, decoded) => {
+		if (err) {
+			res.json({
+				success: false,
+			})
+		} else {
+			let email = decoded.email
+			User.then(db => {
+				return db.find({ where: { email }})
+			})
+			.then((result:any) => {
+				let token = jwt.sign({ email }, config.secret, {
+					expiresIn: "3d"
+				})
+				res.json({
+					success: true,
+					token,
+					username: result.username,
+					accessLevel: result.accessLevel
+				})
+			})
+		}
+	})
+})
+
 export default router

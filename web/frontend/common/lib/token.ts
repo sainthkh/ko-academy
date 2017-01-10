@@ -16,3 +16,8 @@ export function setToken(token) {
 	let expiration = new Date(new Date().getTime() + 3 * 24 * 60 * 60000/* 3 days*/)
 	localStorage.setItem("expiration", expiration.toISOString())
 }
+
+export function removeToken() {
+	localStorage.removeItem("token")
+	localStorage.removeItem("expiration")
+}

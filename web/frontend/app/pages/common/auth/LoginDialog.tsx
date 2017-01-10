@@ -4,6 +4,7 @@ import { default as Dialog, openDialog, closeDialog } from '../Dialog'
 import { default as Spinner } from '../Spinner'
 import { FetchProps } from '../../../../common/lib/fetch/props'
 import { FetchableComponent } from '../../../../common/lib/fetch'
+import { setToken } from '../../../../common/lib/token'
 import { DialogLayout } from './AuthDialog'
 
 export interface LayoutProps extends FetchProps {
@@ -60,5 +61,20 @@ class Layout extends DialogLayout<LayoutProps, {}> {
 
 export const LoginDialog = FetchableComponent({
 	id: "login",
-	resource: "/login"
+	resource: "/login",
+	processResult: result => {
+		let action = {} as any
+		if (result.success) {
+			action.username = result.username
+			action.accessLevel = result.accessLevel
+			setToken(result.token)
+		}
+		return action
+	},
+	onSucceeded: action => ({
+		auth: {
+			username: action.username,
+			accessLevel: action.accessLevel,
+		}
+	}),
 })(Layout)
