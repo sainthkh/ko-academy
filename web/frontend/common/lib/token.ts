@@ -13,6 +13,6 @@ export function getToken() {
 
 export function setToken(token) {
 	localStorage.setItem("token", token)
-	let expiration = new Date(new Date().getTime() + 30 * 60000/* 30 minutes*/)
+	let expiration = new Date(new Date().getTime() + 3 * 24 * 60 * 60000/* 3 days*/)
 	localStorage.setItem("expiration", expiration.toISOString())
 }
