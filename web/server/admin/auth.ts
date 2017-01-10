@@ -14,7 +14,7 @@ router.post('/login', (req, res) => {
 	if (req.body.id == config.id && 
 		sodium.crypto_pwhash_str_verify(config.password, Buffer.from(req.body.password, 'utf8'))) {
 		var token = jwt.sign({ id: config.id}, config.secret, {
-			expiresIn: "30m" // expires in 24 hours
+			expiresIn: "30m"
         });
 		res.json({
 			success: true,
