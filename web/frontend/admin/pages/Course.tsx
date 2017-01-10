@@ -14,7 +14,7 @@ class PageLayout extends EditorLayout<LayoutProps, {}> {
 		this.formName = 'course-form'
 	}
 
-	form() {
+	main() {
 		const { ID, title, slug, description, content } = this.props.content
 		return (
 			<div className="wrap">

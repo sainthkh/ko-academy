@@ -14,7 +14,7 @@ class PageLayout extends EditorLayout<EditorLayoutProps, {}> {
 		this.formName = "autoresponder-form"
 	}
 
-	form() {
+	main() {
 		const { ID, slug, title, listName, content } = this.props.content
 		return (
 			<div className="wrap">

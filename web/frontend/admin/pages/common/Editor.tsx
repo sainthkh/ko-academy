@@ -1,22 +1,18 @@
 import * as React from 'react';
 import { connect } from 'react-redux'
 
-import Authorized from './Authorized'
+import { isTokenValid } from '../../../common/lib/token'
 import { FetchProps } from '../../../common/lib/fetch/props'
+import { FetchableLayout } from '../../../common/lib/fetch'
 
 export interface EditorLayoutProps extends FetchProps {
 	params: any
 	load: (any) => void
 }
 
-export abstract class EditorLayout<P extends EditorLayoutProps, S> extends Authorized<P, S> {
+export abstract class EditorLayout<P extends EditorLayoutProps, S> extends FetchableLayout<P, S> {
 	constructor(props) {
-		super(props)
-		let funcs = ["submit", "waitLoading", "form", "title"]
-		let self = this
-		funcs.forEach(f => {
-			self[f] = self[f].bind(self)
-		})
+		super(props, ["title", "loading"])
 	}
 
 	title(update, type, title) {
@@ -28,7 +24,9 @@ export abstract class EditorLayout<P extends EditorLayoutProps, S> extends Autho
 	}
 	
 	componentWillMount() {
-		super.componentWillMount()
+		if (!isTokenValid()) {
+			this.context.router.push('/admin')
+		}
 		if(this.props.params.id) {
 			this.props.load({ ID: this.props.params.id })
 			this.props.loading = true
@@ -40,15 +38,13 @@ export abstract class EditorLayout<P extends EditorLayoutProps, S> extends Autho
 
 	render() {
 		if(this.props.loading) {
-			return this.waitLoading()
+			return this.loading()
 		} else {
-			return this.form()
+			return this.main()
 		}
 	}
 
-	abstract form() : JSX.Element
-
-	waitLoading() {
+	loading() {
 		return (
 			<div className="wrap">
 				<h1> Now loading... </h1>
@@ -56,19 +52,9 @@ export abstract class EditorLayout<P extends EditorLayoutProps, S> extends Autho
 		)
 	}
 
-	submit(e) {
-		e.preventDefault()
-
-		var inputs = document.forms[this.formName].querySelectorAll("input, textarea, select")
-		inputs = Array.prototype.slice.call(inputs)
-		let data = {}
-		inputs.forEach(v => {
-			data[v.name] = v.value
-		})
-
-		this.props.submit(data)
-	}
+	static contextTypes = {
+		router: React.PropTypes.func.isRequired
+    }
 
 	protected update: boolean
-	protected formName: string
 }
