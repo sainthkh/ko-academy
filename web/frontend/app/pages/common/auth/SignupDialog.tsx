@@ -5,42 +5,23 @@ import { default as Spinner } from '../Spinner'
 import { FetchProps } from '../../../../common/lib/fetch/props'
 import { setToken } from '../../../../common/lib/token'
 import { FetchableComponent } from '../../../../common/lib/fetch'
+import { DialogLayout } from './AuthDialog'
 
 export interface LayoutProps extends FetchProps {
 	feedback: any
 }
 
-class Layout extends React.Component<LayoutProps, {}> {
-	private ID: string
-	private lastInput: any
-
+class Layout extends DialogLayout<LayoutProps, {}> {
 	constructor(props) {
 		super(props)
-		this.submit = this.submit.bind(this)
-		this.form = this.form.bind(this)
-		this.loading = this.loading.bind(this)
-		this.done = this.done.bind(this)
-		this.ID = "signup"
-		this.lastInput = {}
+		this.formName = "signup"
 	}
 
-	render() {
-		if(!this.props.waiting) {
-			if(!this.props.succeeded) {
-				return this.form()
-			} else {
-				return this.done()
-			}
-		} else {
-			return this.loading()
-		}
-	}
-
-	private form() {
+	protected main() {
 		var title = "Sign up and wait for your Korean journey!"
 		var main = (
 			<div>
-				<form action="" method="POST" name="signup" role="form" onSubmit={this.submit}>
+				<form action="" method="POST" name={this.formName} role="form" onSubmit={this.submit}>
 					<input type="text" styleName="field" name="username" defaultValue={this.lastInput.username} id="username" placeholder="user name" />
 					{this.props.error.LONG_USERNAME && (<div styleName="invalid">Your name is too long. User name should be shorter than 50 characters.</div>)}
 					<input type="email" styleName="field" name="email" defaultValue={this.lastInput.email} id="email" placeholder="email" />
@@ -66,27 +47,10 @@ class Layout extends React.Component<LayoutProps, {}> {
 				Did you mean to <a href="#login" onClick={ e => openDialog(e, 'login')}>login</a>?
 			</div>
 		)
-		return <Dialog ID={this.ID} title={title} main={main} footer={footer}/>;
+		return <Dialog ID={this.formName} title={title} main={main} footer={footer}/>;
 	}
 
-	private submit(e) {
-		e.preventDefault()
-
-		var form = document.forms['signup']
-		var user = {
-			username: form.username.value,
-			email: form.email.value,
-			password: form.password.value,
-		}
-		this.lastInput = {
-			username: form.username.value,
-			email: form.email.value,
-		}
-
-		this.props.submit(user)
-	}
-
-	private loading() {
+	protected loading() {
 		var main = (
 			<div styleName="message">
 				<Spinner />
@@ -96,10 +60,10 @@ class Layout extends React.Component<LayoutProps, {}> {
 				</div>
 			</div>
 		)
-		return <Dialog ID={this.ID} freeze={true} main={main} />
+		return <Dialog ID={this.formName} freeze={true} main={main} />
 	}
 
-	private done() {
+	protected done() {
 		var title = "Thank you for signing up."
 		var main = (
 			<div styleName="message">
@@ -107,7 +71,7 @@ class Layout extends React.Component<LayoutProps, {}> {
 				<p><a href="/uploads/hangeul-practice">Here is your gift.</a></p>
 			</div>
 		)
-		return <Dialog ID={this.ID} title={title} main={main} />
+		return <Dialog ID={this.formName} title={title} main={main} />
 	}
 }
 
