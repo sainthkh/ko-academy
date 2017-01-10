@@ -116,6 +116,32 @@ router.post('/signup', (req, res) => {
 	})
 })
 
+router.post('/login', (req, res) => {
+	var config = JSON.parse(fs.readFileSync(path.join(__dirname, './config.json')).toString())
+	let { email, password } = req.body
+
+	User.then(db => {
+		return db.find({ where: { email }})
+	})
+	.then((user:any) => {
+		if(user.email == email && 
+			sodium.crypto_pwhash_str_verify(user.password, Buffer.from(password, 'utf8'))) {
+			res.json(Object.assign({
+				success: true,
+			}, loginData(user)))
+		} else {
+			res.json({
+				success: false,
+			})
+		}
+	})
+	.catch(err => {
+		res.json({
+			success: false,
+		})
+	})
+})
+
 function loginData(result) {
 	var config = JSON.parse(fs.readFileSync(path.join(__dirname, './config.json')).toString())
 	const { username, accessLevel } = result
