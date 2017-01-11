@@ -1,8 +1,7 @@
 'use strict';
 
 import * as React from 'react';
-import { FetchableComponent } from '../../../common/lib/fetch'
-import { PageLayout, PageLayoutProps } from '../common/Page'
+import { PageLayout, PageLayoutProps, FetchablePageComponent } from '../common/Page'
 import MainBar from '../common/menu/MainBar'
 import Section from './Section'
 import Lecture from './Lecture'
@@ -52,7 +51,7 @@ class Layout extends PageLayout<PageLayoutProps, {}> {
 	}
 }
 
-export const CourseTocPage = FetchableComponent({
+export const CourseTocPage = FetchablePageComponent({
 	id: "course-toc",
 	resource: "/course",
 })(Layout)

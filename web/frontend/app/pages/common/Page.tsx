@@ -6,6 +6,8 @@ import { FetchProps } from '../../../common/lib/fetch/props'
 
 export interface PageLayoutProps extends FetchProps {
 	params: any
+	username: string
+	accessLevel: string
 }
 
 export abstract class PageLayout<P extends PageLayoutProps, S> extends React.Component<P, S> {
@@ -42,4 +44,13 @@ export abstract class PageLayout<P extends PageLayoutProps, S> extends React.Com
 			</div>
 		)
 	}
+}
+
+export function FetchablePageComponent(options) {
+	options.moreProps = (props, state) => {
+		props.username = state.auth.username
+		props.accessLevel = state.auth.accessLevel
+		return props
+	}
+	return FetchableComponent(options)
 }
