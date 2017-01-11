@@ -29,7 +29,8 @@ export default class App extends React.Component<{}, {}> {
 						setToken(result.token)
 						dispatch({
 							type: "INIT_AUTH",
-							token: result.token
+							username: result.username,
+							accessLevel: result.accessLevel,
 						})
 					} else {
 						removeToken()
