@@ -6,6 +6,8 @@ import { BroadcastPage } from './pages/Broadcast'
 import { AutoresponderPage } from './pages/Autoresponder'
 import { CoursePage } from './pages/Course'
 import { LecturePage } from './pages/Lecture'
+import { QuizPage } from './pages/Quiz'
+import { QuestionPage } from './pages/Question'
 
 export const routes = (
 	<Route path="/admin" component={Layout}>
@@ -16,5 +18,7 @@ export const routes = (
 		</Route>
 		<Route path="course(/:id)" component={CoursePage} />
 		<Route path="lecture(/:id)" component={LecturePage} />
+		<Route path="quiz(/:id)" component={QuizPage} />
+		<Route path="question(/:id)" component={QuestionPage} />
 	</Route>
 )

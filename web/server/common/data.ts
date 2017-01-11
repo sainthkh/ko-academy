@@ -79,6 +79,23 @@ var Lecture = seq.define('Lecture', {
 	script: Sequelize.TEXT,
 }).sync()
 
+var Quiz = seq.define('Quiz', {
+	ID: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+	slug: Sequelize.TEXT,
+	courseSlug: Sequelize.TEXT,
+	title: Sequelize.TEXT,
+	quizIDs: Sequelize.TEXT,
+	accessLevel: Sequelize.TEXT,
+}).sync()
+
+var Question = seq.define('Question', {
+	ID: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+	question: Sequelize.TEXT,
+	answerChoices: Sequelize.TEXT,
+	correctMessages: Sequelize.TEXT,
+	wrongMessages: Sequelize.TEXT,
+}).sync()
+
 export {
 	Subscriber,
 	Broadcast,
@@ -86,6 +103,8 @@ export {
 	User,
 	Course,
 	Lecture,
+	Quiz,
+	Question,
 }
 
 export function upsert(db, model) {
