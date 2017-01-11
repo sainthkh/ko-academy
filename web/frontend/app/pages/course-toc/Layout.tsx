@@ -45,7 +45,7 @@ class Layout extends PageLayout<PageLayoutProps, {}> {
 					let parts = line.split('|').map(v => {
 						return v.trim()
 					})
-					return <Lecture title={parts[0]} courseSlug={courseSlug} slug={parts[1]} accessLevel={parts[2]} time={parts[3]} />
+					return <Lecture title={parts[0]} courseSlug={courseSlug} slug={parts[1]} userAccessLevel={this.props.accessLevel} contentAccessLevel={parts[2]} time={parts[3]} />
 			}
 		})
 	}
