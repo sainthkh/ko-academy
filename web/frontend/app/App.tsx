@@ -34,7 +34,18 @@ export default class App extends React.Component<{}, {}> {
 						})
 					} else {
 						removeToken()
+						dispatch({
+							type: "INIT_AUTH",
+							username: "guest",
+							accessLevel: "guest",
+						})
 					}
+				})
+			} else {
+				dispatch({
+					type: "INIT_AUTH",
+					username: "guest",
+					accessLevel: "guest",
 				})
 			}
 		})
