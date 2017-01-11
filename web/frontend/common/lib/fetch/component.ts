@@ -4,11 +4,15 @@ import { fetchProps, defaultFetchProps, FetchProps } from './props'
 import { submit, load, fetchPackage } from './action'
 
 export function FetchableComponent(options) {
-	const mapStateToProps = state => 
-		(options.id == state.fetch.id) ?
+	let moreProps = options.moreProps ? options.moreProps : (p, s) => p
+	const mapStateToProps = state => {
+		let props = (options.id == state.fetch.id) ?
 			fetchProps(state.fetch) : defaultFetchProps() 
+		return moreProps(props, state)
+	}
+		
+	
 	const { load, submit } = fetchPackage(options)
-
 	const mapDispatchToProps = dispatch => {
 		return {
 			submit: course => dispatch(submit(course)),
