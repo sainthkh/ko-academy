@@ -28,7 +28,7 @@ export default class App extends React.Component<{}, {}> {
 					if (result.success) {
 						setToken(result.token)
 						dispatch({
-							type: "RENEW_TOKEN",
+							type: "INIT_AUTH",
 							token: result.token
 						})
 					} else {

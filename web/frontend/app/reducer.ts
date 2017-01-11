@@ -8,7 +8,7 @@ const reducer = (state = {
 	switch(action.type) {
 		case "FETCH":
 			return fetchReducer(state, action)
-		case "RENEW_TOKEN":
+		case "INIT_AUTH":
 			return Object.assign({}, state, {
 				auth: {
 					username: action.username,
