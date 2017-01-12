@@ -4,12 +4,12 @@ import * as CSSModules from 'react-css-modules';
 import { openDialog } from '../common/Dialog'
 import styles from './style.css'
 
-export interface ContentProps {
+export interface DownloadsProps {
 	content: string
 	userLevel: string
 }
 
-class Downloads extends React.Component<ContentProps, {}> {
+class Downloads extends React.Component<DownloadsProps, {}> {
 	render() {
 		let { content, userLevel } = this.props
 		return (
