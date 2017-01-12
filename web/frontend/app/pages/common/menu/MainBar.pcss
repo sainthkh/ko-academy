@@ -3,7 +3,10 @@
 .main-menu {
 	background: $main-bg;
 	font-size: 1rem;
-	min-height: 4rem;
+	min-height: 2rem;
+	@media (--medium) {
+		min-height: 4rem;
+	}
 	display: flex;
 	align-items: center;
 	border-bottom: 1px solid #9eaff6;
@@ -21,7 +24,7 @@
 		.title {
 			color: white;
 			margin-left: 0.5rem;
-			font-size: 1.2rem;
+			font-size: 0.8rem;
 			@media(--medium) {
 				font-size: 1.5rem;
 			}
