@@ -1,6 +1,7 @@
 'use strict'
 import * as React from 'react'
 import { openDialog } from '../common/Dialog'
+import { RenderGrid } from '../common/RenderGrid'
 import * as CSSModules from 'react-css-modules';
 import {Link} from 'react-router'
 import styles from './Lecture.css'
@@ -17,33 +18,13 @@ export interface LectureProps {
 class Lecture extends React.Component<LectureProps, {}> {
 	render() {
 		let { userAccessLevel, contentAccessLevel } = this.props
-		let user = accessLevelCode(userAccessLevel)
-		let content = accessLevelCode(contentAccessLevel)
-		return this.renderGrid(user, content, [
+		let grid = new RenderGrid(userAccessLevel, contentAccessLevel, [
 			[this.preview, this.signup],
 			[this.normal, this.gold],
 			[this.normal, this.normal],
 		])
-	}
-
-	renderGrid(user, content, funcs) {
-		let f = funcs[user]
-		let approved = f[0]
-		let denied = f[1]
-		return (content <= user)? approved() : denied()
-	}
-
-	link(preview) {
-		const { courseSlug, slug, title, time } = this.props
-		return (
-			<div styleName="lecture">
-				<Link to={`/lecture/${courseSlug}/${slug}`}>
-					<div styleName="lecture-wrap">
-						<span styleName="title">{title}</span><span styleName="time">{time}</span>
-					</div>
-				</Link>
-			</div>
-		);
+		
+		return grid.render()
 	}
 
 	preview() {
@@ -100,11 +81,9 @@ class Lecture extends React.Component<LectureProps, {}> {
 
 	constructor(props) {
 		super(props)
-
-		this.link = this.link.bind(this)
+		
 		this.signup = this.signup.bind(this)
 		this.gold = this.gold.bind(this)
-		this.renderGrid = this.renderGrid.bind(this)
 		this.preview = this.preview.bind(this)
 		this.normal = this.normal.bind(this)
 	}
