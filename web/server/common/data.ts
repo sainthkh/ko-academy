@@ -77,6 +77,7 @@ var Lecture = seq.define('Lecture', {
 	accessLevel: Sequelize.TEXT,
 	downloads: Sequelize.TEXT,
 	script: Sequelize.TEXT,
+	quizSlug: Sequelize.TEXT,
 }).sync()
 
 var Quiz = seq.define('Quiz', {

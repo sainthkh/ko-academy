@@ -15,8 +15,12 @@
 	@mixin preview;
 	padding: 0 10px;
 	margin-left: 10px;
-	font-size: 0.6em;
+	font-size: 0.8em;
 	font-weight: normal;
+
+	@media(--medium) {
+		font-size: 0.6em;
+	}
 }
 
 .signup-message {
@@ -63,14 +67,53 @@
 	}
 }
 
+@define-mixin lecture-margin {
+	margin: 10px;
+	
+	@media(--medium) {
+		margin: 15px;
+	}
+}
+
+.downloads {
+	@mixin lecture-margin;
+
+	a {
+		display: block;
+		margin-bottom: 8px;
+	}
+}
+
 .script {
 	font-size: 0.8rem;
 	border-bottom: 1px solid #eee;
 	margin-bottom: 15px;
-	margin: 10px;
+	@mixin lecture-margin;
 
 	@media(--medium) {
 		font-size: 1rem;
-		margin: 15px;
+	}
+}
+
+.quiz {
+	@mixin lecture-margin;
+	
+	a {
+		font-size: 1.2rem;
+		text-decoration: none;
+		color: black;
+
+		@media(--medium) {
+			font-size: 1.8rem;
+		}
+	}
+
+	.gold {
+		@mixin gold;
+		padding: 0 10px;
+		margin-left: 10px;
+		@media(--medium) {
+			font-size: 0.6em;
+		}
 	}
 }
