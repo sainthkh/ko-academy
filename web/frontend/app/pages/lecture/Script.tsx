@@ -12,7 +12,7 @@ class Script extends React.Component<ContentProps, {}> {
 		return (
 			<div>
 				<h1>Script</h1>
-				<div styleName="content" dangerouslySetInnerHTML={{__html: this.props.content}} />
+				<div styleName="script" dangerouslySetInnerHTML={{__html: this.props.content}} />
 			</div>
 		);
 	}

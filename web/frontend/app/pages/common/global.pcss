@@ -22,3 +22,18 @@ $main-bg: #192867;
 	width: $width;
 	max-width: $width;
 }
+
+$gold-bg: #f9da4c;
+@define-mixin gold {
+	background: $gold-bg;
+	color: #78301d;
+}
+
+@define-mixin gold-hover {
+	background: color($gold-bg lightness(80%))
+}
+
+@define-mixin preview {
+	background: #532789;
+	color: white;
+}

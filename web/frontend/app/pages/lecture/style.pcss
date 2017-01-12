@@ -1,24 +1,76 @@
-.content {
-	font-size: 1.2em;
-	a {
-		font-size: 1.4em;
+@import "../common/global.pcss";
+
+.lecture {
+	h1 {
+		font-size: 1.2rem;
+		margin: 4px 10px;
+		@media(--medium) {
+			font-size: 1.8rem;
+			margin: 12px 15px;
+		}
 	}
-	border-bottom: 1px solid #eee;
-	margin-bottom: 15px;
+}
+
+.preview {
+	@mixin preview;
+	padding: 0 10px;
+	margin-left: 10px;
+	font-size: 0.6em;
+	font-weight: normal;
 }
 
 .signup-message {
+	margin: 10px;
+	padding: 10px;
 	background: #431ba9;
 	
 	.message {
+		display: block;
 		color: white;
-		font-size: 1.2rem;
+		font-size: 0.8rem;
+		width: 100%;
+
+		@media(--medium) {
+			display: inline-block;
+			font-size: 1.2rem;
+			width: 70%;
+		}
 	}
 
 	.button-wrap {
+		display: block;
+		margin-top: 10px;
 
 		.button {
-			padding: 10px;
+			display: block;
+			max-width: 100%;
+			@mixin gold;
+			padding: 5px;
+			font-size: 1rem;
+			font-weight: bold;
+			text-align: center;
+			cursor: pointer;
+			&:hover {
+				@mixin gold-hover;
+			}
 		}
+
+		@media(--medium) {
+			display: inline-block;
+			width: 30%;
+			margin-top: 0;
+		}
+	}
+}
+
+.script {
+	font-size: 0.8rem;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 15px;
+	margin: 10px;
+
+	@media(--medium) {
+		font-size: 1rem;
+		margin: 15px;
 	}
 }
