@@ -18,7 +18,7 @@ class Layout extends DialogLayout<LayoutProps, {}> {
 	}
 
 	protected main() {
-		var title = "Sign up and wait for your Korean journey!"
+		var title = "Sign up and start your Korean journey!"
 		var main = (
 			<div>
 				<form action="" method="POST" name={this.formName} role="form" onSubmit={this.submit}>
