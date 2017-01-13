@@ -1,0 +1,118 @@
+@import "../common/global.pcss";
+
+.quiz {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 1.2rem;
+	padding: 15px;
+
+	@media(--medium) {
+		font-size: 1.4rem;
+	}
+}
+
+.question {
+	:global {
+		.center {
+			display: flex;
+			justify-content: center;
+		}
+
+		.big {
+			font-size: 3em;
+		}
+	}
+
+	margin-bottom: 10px;
+}
+
+.choices {
+	width: 100%;
+	margin-bottom: 10px;
+
+	@media(--medium) {
+		display: flex;
+		flex-wrap: wrap;
+	}
+}
+
+.choice {
+	width: 100%;
+	margin-bottom: 10px;
+	cursor: pointer;
+
+	&:hover {
+		background: color(#045e1c lightness(90%))
+	}
+
+	@media(--medium) {
+		width: 48%;
+		margin: 1%;
+		box-sizing: border-box;
+	}
+
+	@media(--medium) {
+		width: 23%;
+	}
+
+	.normal, .correct, .wrong {
+		display: table;
+		padding: 4px;
+		box-sizing: border-box;
+		width: 100%;
+
+		.number, .content {
+			display: table-cell;
+			vertical-align: middle;
+		}
+
+		.number {
+			size: 1.5em;
+			text-align: center;
+		}
+
+		.content {
+			height: 1.5em;
+			padding-left: 1em;
+		}
+	}	
+
+	.normal {
+		border: 2px solid #192867;
+
+		.number {		
+			background: #045e1c;
+			color: white;
+		}
+	}
+
+	.correct {
+		.number {
+
+		}
+
+		.content {
+
+		}
+	}
+
+	.wrong {
+		.number {
+
+		}
+
+		.content {
+
+		}
+	}
+}
+
+.button-wrap {
+	.check {
+		background: #39b54a;
+		color: white;
+		padding: 10px 20px;
+		border: none;
+	}
+}
