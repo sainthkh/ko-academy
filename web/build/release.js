@@ -57,6 +57,11 @@ function release(produnction) {
 			done()
 		},
 		done => {
+			console.log('Copied static')
+			copy('./static', production)
+			done()
+		},
+		done => {
 			if(production) {
 				console.log('> Finishing production release')
 				remove('.css', production)
