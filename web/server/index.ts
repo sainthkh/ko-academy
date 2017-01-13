@@ -9,6 +9,15 @@ import { default as admin } from './admin'
 
 const app = express();
 if (app.get('env') === 'development') {
+	app.get('/static/:name', function (req, res, next) {
+		if(req.params.name == "symbols.svg") {
+			res.setHeader('Content-Type', 'image/svg+xml');
+			res.sendFile(path.join(__dirname, '..', '/static/symbols.svg'));
+		} else {
+			next()
+		}
+	});
+
 	app.use(express.static(path.join(__dirname, '..', 'static')))
 }
 
