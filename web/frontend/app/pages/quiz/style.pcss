@@ -37,14 +37,12 @@
 	}
 }
 
+$wrong: #ed1c24;
+$correct: #045e1c;
+
 .choice {
 	width: 100%;
 	margin-bottom: 10px;
-	cursor: pointer;
-
-	&:hover {
-		background: color(#045e1c lightness(90%))
-	}
 
 	@media(--medium) {
 		width: 48%;
@@ -52,15 +50,20 @@
 		box-sizing: border-box;
 	}
 
-	@media(--medium) {
+	@media(--big) {
 		width: 23%;
 	}
 
-	.normal, .correct, .wrong {
+	.normal, .correct, .answer, .wrong {
 		display: table;
 		padding: 4px;
 		box-sizing: border-box;
 		width: 100%;
+		cursor: pointer;
+
+		&:hover {
+			background: color($correct lightness(90%))
+		}
 
 		.number, .content {
 			display: table-cell;
@@ -70,6 +73,8 @@
 		.number {
 			size: 1.5em;
 			text-align: center;
+			background: $correct;
+			color: white;
 		}
 
 		.content {
@@ -80,39 +85,86 @@
 
 	.normal {
 		border: 2px solid #192867;
-
-		.number {		
-			background: #045e1c;
-			color: white;
-		}
 	}
 
 	.correct {
-		.number {
+		border: 2px solid #192867;
+		cursor: auto;
 
-		}
-
-		.content {
-
+		&:hover {
+			background: inherit;
 		}
 	}
 
-	.wrong {
-		.number {
+	.answer {
+		border: 2px solid $correct;
+		cursor: auto;
+	}
 
+	.wrong {
+		border: 2px solid $wrong;
+		background: color($wrong lightness(90%));
+		cursor: auto;
+		
+		.number {
+			background: $wrong;
 		}
 
-		.content {
+		&:hover {
+			background: color($wrong lightness(90%));
+		}
+	}
 
+	.correct-message {
+		margin: 0.5em;
+		font-size: 0.8em;
+
+		.icon-wrap {
+			display: inline-block;
+			size: 1.2em;
+			margin-right: 0.5em;
+
+			.icon {
+				size: 100%;
+				fill: #f26522;
+			}
 		}
 	}
 }
 
+.wrong-message {
+	width: 100%;
+	padding: 1em;
+	border: 3px solid $wrong;
+	box-sizing: border-box;
+	margin: 1em;
+
+	h2 {
+		margin: 0;
+		font-size: 1em;
+	}
+}
+
 .button-wrap {
-	.check {
-		background: #39b54a;
+	.check, .next {
 		color: white;
 		padding: 10px 20px;
 		border: none;
+	}
+
+	@define-mixin color-scheme $bg {
+		background: $bg;
+
+		&:hover {
+			background: color($bg lightness(40%))
+		}
+	}
+
+	.check {
+		@mixin color-scheme #39b54a;
+	}
+
+	.next {
+		@mixin color-scheme #f26522;
 	}
 }
