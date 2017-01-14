@@ -1,7 +1,8 @@
 'use strict';
 
 import * as React from 'react';
-import { PageLayout, PageLayoutProps, FetchablePageComponent } from '../common/Page'
+import { PageLayoutProps, FetchablePageComponent } from '../common/Page'
+import { AuthPage, AccessLevel } from '../common/AuthPage'
 import MainBar from '../common/menu/MainBar'
 import Section from './Section'
 import Lecture from './Lecture'
@@ -10,14 +11,22 @@ import Overview from './Overview'
 interface LayoutProps extends PageLayoutProps {
 }
 
-class Layout extends PageLayout<PageLayoutProps, {}> {
+class Layout extends AuthPage<PageLayoutProps, {}> {
 	constructor(props) {
 		super(props);
 
 		this.parseToc = this.parseToc.bind(this)
 	}
 
-	content() {
+	protected approved(userLevel, contentLevel) {
+		return this.renderLayout(true)
+	}
+
+	protected denied(userLevel, contentLevel) {
+		return this.renderLayout(false)
+	}
+
+	private renderLayout(approved) {
 		let { title, description, slug, content } = this.props.content
 		return (
 			<div>
@@ -45,7 +54,11 @@ class Layout extends PageLayout<PageLayoutProps, {}> {
 					let parts = line.split('|').map(v => {
 						return v.trim()
 					})
-					return <Lecture title={parts[0]} courseSlug={courseSlug} slug={parts[1]} userAccessLevel={this.props.accessLevel} contentAccessLevel={parts[2]} time={parts[3]} />
+					let userLevel = this.accessLevelCode(this.props.accessLevel)
+					let contentLevel = this.accessLevelCode(parts[2])
+					return <Lecture title={parts[0]} courseSlug={courseSlug} slug={parts[1]} time={parts[3]} 
+						userAccessLevel={this.props.accessLevel} contentAccessLevel={parts[2]} 
+						approved={contentLevel <= userLevel}/>
 			}
 		})
 	}
