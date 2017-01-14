@@ -85,7 +85,7 @@ var Quiz = seq.define('Quiz', {
 	slug: Sequelize.TEXT,
 	courseSlug: Sequelize.TEXT,
 	title: Sequelize.TEXT,
-	quizIDs: Sequelize.TEXT,
+	questionIDs: Sequelize.TEXT,
 	accessLevel: Sequelize.TEXT,
 }).sync()
 

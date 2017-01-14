@@ -15,7 +15,7 @@ class PageLayout extends EditorLayout<LayoutProps, {}> {
 	}
 
 	main() {
-		const { ID, title, slug, courseSlug, quizIDs, accessLevel } = this.props.content
+		const { ID, title, slug, courseSlug, questionIDs, accessLevel } = this.props.content
 		return (
 			<div className="wrap">
 				<form className="wide-form" name={this.formName} action="POST" onSubmit={this.submit}>
@@ -34,8 +34,8 @@ class PageLayout extends EditorLayout<LayoutProps, {}> {
 						<input type="text" className="form-field" name="courseSlug" defaultValue={courseSlug} placeholder="course slug" />
 					</div>
 					<div className="form-group">
-						<label>Quiz IDs</label>
-						<input type="text" className="form-field" name="quizIDs" defaultValue={quizIDs} placeholder="quiz IDs" />
+						<label>Question IDs</label>
+						<input type="text" className="form-field" name="questionIDs" defaultValue={questionIDs} placeholder="question IDs" />
 					</div>
 					<div className="form-group">
 						<label>AccessLevel</label>
