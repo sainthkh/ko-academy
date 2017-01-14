@@ -3,9 +3,9 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 
-import { PageLayout, PageLayoutProps, FetchablePageComponent } from '../common/Page'
+import { PageLayoutProps, FetchablePageComponent } from '../common/Page'
+import { AuthPage, AccessLevel } from '../common/AuthPage'
 import { openDialog } from '../common/Dialog'
-import { RenderGrid } from '../common/RenderGrid'
 
 import MainBar from '../common/menu/MainBar'
 import Video from './Video'
@@ -16,7 +16,7 @@ import Downloads from './Downloads'
 import * as CSSModules from 'react-css-modules'
 import styles from './style.css'
 
-class Layout extends PageLayout<PageLayoutProps, {}> {
+class Layout extends AuthPage<PageLayoutProps, {}> {
 	componentWillMount() {
 		this.props.load({
 			courseSlug: this.props.params.courseSlug,
@@ -24,54 +24,25 @@ class Layout extends PageLayout<PageLayoutProps, {}> {
 		})
 	}
 
-	content() {
-		const userAccessLevel = this.props.accessLevel
-		const contentAccessLevel = this.props.content.accessLevel
-		let grid = new RenderGrid(userAccessLevel, contentAccessLevel, [
-			[this.guest, this.signup],
-			[this.free, this.signup],
-			[this.gold, this.gold],
-		])
-		return grid.render()
-	}
-
-	guest() {
-		let { title, video, downloads, script } = this.props.content
+	protected approved(userLevel:AccessLevel, contentLevel:AccessLevel): JSX.Element {
+		let { title, video, downloads, script, courseSlug, quizSlug, quizContentLevel } = this.props.content
 		return (
 			<div>
 				<MainBar />
 				<div className="wrap">
 					<div styleName="lecture">
-						<h1>{title}<span styleName="preview">Preview</span></h1>
+						<h1>{title}{userLevel == AccessLevel.GUEST && <span styleName="preview">Preview</span>}</h1>
 						<Video url={video} />
-						<div styleName="signup-message">
-							<span styleName="message">Isn't this cool? How about signing up and getting unlimited access to all vides?</span>
-							<span styleName="button-wrap"><a styleName="button" onClick={ e => openDialog(e, "signup")}>Join Now</a></span>
-						</div>
+						{userLevel == AccessLevel.GUEST && (
+							<div styleName="signup-message">
+								<span styleName="message">Isn't this cool? How about signing up and getting unlimited access to all vides?</span>
+								<span styleName="button-wrap"><a styleName="button" onClick={ e => openDialog(e, "signup")}>Join Now</a></span>
+							</div>
+						)}
 						<Downloads content={downloads} userLevel={this.props.accessLevel}/>
 						<Script content={script} />
-					</div>
-				</div>
-			</div>
-		);
-	}
-
-	signup(userLevel, contentLevel) {
-		this.context.router.push('/pricing')
-	}
-
-	free() {
-		let { title, video, downloads, script } = this.props.content
-		return (
-			<div>
-				<MainBar />
-				<div className="wrap">
-					<div styleName="lecture">
-						<h1>{title}</h1>
-						<Video url={video} />
-						<Script content={script} />
 						<div styleName="quiz">
-							<Link to="/pricing">▶ Quiz<span styleName="gold">Gold Only</span></Link>
+							{this.quiz(courseSlug, quizSlug, userLevel, this.accessLevelCode(quizContentLevel))}
 						</div>
 					</div>
 				</div>
@@ -79,37 +50,23 @@ class Layout extends PageLayout<PageLayoutProps, {}> {
 		);
 	}
 
-	gold() {
-		let { title, video, downloads, script, courseSlug, quizSlug } = this.props.content
-		return (
-			<div>
-				<MainBar />
-				<div className="wrap">
-					<div styleName="lecture">
-						<h1>{title}</h1>
-						<Video url={video} />
-						<Script content={script} />
-						<div styleName="quiz">
-							<Link to={`/quiz/${courseSlug}/${quizSlug}`}>▶ Quiz</Link>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
+	quiz(courseSlug, quizSlug, userLevel, quizContentLevel) {
+		if(userLevel < AccessLevel.GOLD) {
+			if(quizContentLevel != AccessLevel.FREE) {
+				return <Link to="/pricing">▶ Quiz<span styleName="gold">Gold</span></Link>
+			} else {
+				return <Link to={`/quiz/${courseSlug}/${quizSlug}`}>▶ Quiz<span styleName="gold">Gold Trial</span></Link>
+			}			
+		} else {
+			return <Link to={`/quiz/${courseSlug}/${quizSlug}`}>▶ Quiz</Link>
+		}
 	}
 
 	constructor(props) {
 		super(props)
 
-		this.guest = this.guest.bind(this)
-		this.signup = this.signup.bind(this)
-		this.free = this.free.bind(this)
-		this.gold = this.gold.bind(this)
+		this.quiz = this.quiz.bind(this)
 	}
-
-	static contextTypes = {
-		router: React.PropTypes.object.isRequired
-    }
 }
 
 export const LecturePage = FetchablePageComponent({

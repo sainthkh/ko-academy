@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { PageLayout, PageLayoutProps } from './Page'
-import { AuthRenderer } from './AuthRenderer'
+
+export enum AccessLevel {
+	GUEST,
+	FREE, 
+	GOLD,
+}
 
 export abstract class AuthPage<P extends PageLayoutProps, S> extends PageLayout<P, S> {
 	content() {
@@ -20,21 +25,21 @@ export abstract class AuthPage<P extends PageLayoutProps, S> extends PageLayout<
 	}
 
 	protected denied(userLevel, contentLevel) {
-		this.context.router.push(contentLevel == 1 ? '/signup' : '/pricing')
+		this.context.router.push(contentLevel == AccessLevel.FREE ? '/signup' : '/pricing')
 	}
 
 	static contextTypes = {
 		router: React.PropTypes.object.isRequired
     }
 
-	protected abstract approved(userLevel:number, contentLevel:number): JSX.Element
+	protected abstract approved(userLevel:AccessLevel, contentLevel:AccessLevel): JSX.Element
 
-	protected accessLevelCode(level) {
+	protected accessLevelCode(level:string):AccessLevel {
 		switch(level) {
-			case "guest":	return 0
-			case "free":	return 1
-			case "gold":	return 2
-			default:		return 0
+			case "guest":	return AccessLevel.GUEST
+			case "free":	return AccessLevel.FREE
+			case "gold":	return AccessLevel.GOLD
+			default:		return AccessLevel.GUEST
 		}
 	}
 }
