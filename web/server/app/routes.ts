@@ -5,18 +5,24 @@ marked.setOptions({
 })
 
 import { handleGetRequest } from '../common/request'
-import { Lecture } from '../common/data'
+import { Lecture, Course } from '../common/data'
 
 const router = express.Router()
 
 handleGetRequest({
 	router, 
 	Model: Lecture, 
-	path: '/',
+	path: '/lecture',
 	modifyContent: data => {
 		data.script = marked(data.script)
 		return data
 	},
+})
+
+handleGetRequest({
+	router, 
+	Model: Course, 
+	path: '/course',
 })
 
 export default router
