@@ -5,7 +5,7 @@ marked.setOptions({
 })
 
 import { handleGetRequest } from '../common/request'
-import { Lecture, Course } from '../common/data'
+import { Lecture, Course, Quiz, Question } from '../common/data'
 
 const router = express.Router()
 
@@ -14,8 +14,10 @@ handleGetRequest({
 	Model: Lecture, 
 	path: '/lecture',
 	modifyContent: data => {
-		data.script = marked(data.script)
-		return data
+		return new Promise((resolve, reject) => {
+			data.script = marked(data.script)
+			resolve(data)
+		})
 	},
 })
 
@@ -23,6 +25,34 @@ handleGetRequest({
 	router, 
 	Model: Course, 
 	path: '/course',
+})
+
+handleGetRequest({
+	router,
+	Model: Quiz,
+	path: '/quiz',
+	modifyContent: data => {
+		return new Promise((resolve, reject) => {
+			let IDs = data.questionIDs.split(',').map(ID => {
+				return ID.trim()
+			})
+
+			Question.then(db => {
+				return db.all({where: {ID: IDs}})
+			})
+			.then((results: any[]) => {
+				let questions = results.map(result => {
+					let values = result.dataValues
+					delete values.createdAt
+					delete values.updatedAt
+					return values
+				})
+
+				data.questions = questions
+				resolve(data)
+			})
+		})
+	}
 })
 
 export default router

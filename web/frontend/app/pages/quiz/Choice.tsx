@@ -5,6 +5,7 @@ import styles from './style.css'
 
 export enum ChoiceStatus {
 	NORMAL,
+	SELECTED,
 	CORRECT,
 	WRONG,
 }
@@ -15,20 +16,24 @@ export interface ChoiceProps {
 	correctMessage: string
 	status: ChoiceStatus
 	answer: boolean
+	showMessage: boolean
+	onClick: any
 }
 
 class Choice extends React.Component<ChoiceProps, {}> {
 	render() {
-		const { number, content, correctMessage, status, answer } = this.props
-		let backgroundStyle = answer && status == ChoiceStatus.CORRECT ?  
-			{ background: "#CEFDDB" } : {}
+		const { number, content, correctMessage, status, answer, showMessage } = this.props
+		let backgroundStyle = (answer && status == ChoiceStatus.CORRECT) || 
+			status == ChoiceStatus.SELECTED ? { background: "#CEFDDB" } : {}
 		return (
 			<div styleName="choice">
-				<div style={backgroundStyle} styleName={this.statusToStyle(status, answer)}>
+				<div style={backgroundStyle} styleName={this.statusToStyle(status, answer)}
+					onClick={this.props.onClick}
+				>
 					<span styleName="number">{number}</span>
 					<span styleName="content">{content}</span>
 				</div>
-				{status == ChoiceStatus.CORRECT && (
+				{showMessage && (
 					<div styleName="correct-message">
 						<div styleName="icon-wrap">
 							<svg styleName="icon">
@@ -47,7 +52,8 @@ class Choice extends React.Component<ChoiceProps, {}> {
 			case ChoiceStatus.NORMAL:	return "normal"
 			case ChoiceStatus.CORRECT:	return answer? "answer" : "correct"
 			case ChoiceStatus.WRONG:	return "wrong"
-			default:					return ""
+			case ChoiceStatus.SELECTED:	return "normal"
+			default:					return "normal"
 		}
 	}
 

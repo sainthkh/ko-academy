@@ -168,3 +168,38 @@ $correct: #045e1c;
 		@mixin color-scheme #f26522;
 	}
 }
+
+.result {
+	h1, h2 {
+		text-align: center;
+	}
+}
+
+.cta {
+	background: #431ba9;
+	padding: 10px;
+	
+	.message {
+		font-size: 1.2rem;
+		color: white;
+	}
+
+	.signup-button-wrap {
+		display: flex;
+		justify-content: center;
+
+		a {
+			display: block;
+			font-size: 1.3rem;
+			text-align: center;
+			@mixin gold;
+			padding: 10px;
+			margin: 10px;
+			text-decoration: none;
+
+			&:hover {
+				@mixin gold-hover;
+			}
+		}
+	}
+}

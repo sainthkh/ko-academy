@@ -5,7 +5,7 @@ import IndexPage from './pages/index/Layout'
 import { CourseTocPage } from './pages/course-toc/Layout'
 import { LecturePage } from './pages/lecture/Layout'
 import PricingPage from './pages/pricing/Layout'
-import QuizPage from './pages/quiz/Layout'
+import { QuizPage } from './pages/quiz/Layout'
 
 export const routes = (
 	<Route path="/" component={Layout}>

@@ -32,7 +32,11 @@ export function handlePostRequest(setting:RequestSetting) {
 export function handleGetRequest(setting:RequestSetting) {
 	let { router, Model, path, onGetSuccess, modifyContent } = setting
 	onGetSuccess = onGetSuccess ? onGetSuccess : () => ({})
-	modifyContent = modifyContent ? modifyContent : c => c
+	modifyContent = modifyContent ? modifyContent : c => {
+		return new Promise((resolve, reject) => {
+			resolve(c)
+		})
+	}
 	
 	router.get(path, (req, res) => {
 		Model.then(db => {
@@ -40,13 +44,15 @@ export function handleGetRequest(setting:RequestSetting) {
 		})
 		.then((result:any) => {
 			var data = result.dataValues
-			data = modifyContent(data)
-			delete data.createdAt
-			delete data.updatedAt
-			res.json(Object.assign({
-				success: true,
-				content: data,
-			}, onGetSuccess(result)))
+			modifyContent(data)
+			.then(content => {
+				delete content.createdAt
+				delete content.updatedAt
+				res.json(Object.assign({
+					success: true,
+					content,
+				}, onGetSuccess(result)))
+			})
 		})
 	})
 }
