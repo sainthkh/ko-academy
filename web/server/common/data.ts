@@ -97,6 +97,13 @@ var Question = seq.define('Question', {
 	wrongMessages: Sequelize.TEXT,
 }).sync()
 
+var QuestionLog = seq.define('QuestionLog', {
+	userID: Sequelize.INTEGER,
+	questionID: Sequelize.INTEGER,
+	answerChoice: Sequelize.INTEGER,
+	date: Sequelize.DATE,
+}).sync()
+
 export {
 	Subscriber,
 	Broadcast,
@@ -106,6 +113,7 @@ export {
 	Lecture,
 	Quiz,
 	Question,
+	QuestionLog,
 }
 
 export function upsert(db, model) {

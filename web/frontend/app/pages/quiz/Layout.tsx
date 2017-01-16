@@ -6,6 +6,8 @@ import * as CSSModules from 'react-css-modules'
 
 import { PageLayout, PageLayoutProps, FetchablePageComponent } from '../common/Page'
 import { AuthPage, AccessLevel } from '../common/AuthPage'
+import { fetch } from '../../../common/lib/fetch'
+import { getToken } from '../../../common/lib/token'
 
 import MainBar from '../common/menu/MainBar'
 
@@ -156,7 +158,6 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 				chosenAnswer: -1,
 				questionStatus: QuestionStatus.CORRECT,
 			} as QuizLayoutState)
-			this.wrongAnswers = []
 		} else {
 			this.setState({
 				chosenAnswer,
@@ -164,14 +165,24 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 			}  as QuizLayoutState)
 			this.wrongAnswers.push(chosenAnswer)
 		}
-		this.chosenAnswers.add({
-			ID: question.ID,
-			choice: this.state.chosenAnswer,
-		})
 	}
 
 	private onClickNext(e) {
 		e.preventDefault() 
+
+		let question = this.currentQuestion()
+		fetch({
+			admin: false,
+			resource: '/log/quiz',
+			token: getToken(),
+			method: 'POST',
+			args: {
+				questionID: question.ID, 
+				answers: this.wrongAnswers.length == 0 ? 
+					[question.answerID] : this.wrongAnswers,
+			}
+		})
+		this.wrongAnswers = []
 
 		this.setState({
 			currentQuestionIndex: ++this.state.currentQuestionIndex,
