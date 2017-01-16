@@ -90,10 +90,11 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 					{userLevel <= AccessLevel.FREE && (
 						<div styleName="cta">
 							<div styleName="message">
-								You can learn Korean faster by solving quizzes. How about joining our gold membership and getting access to unlimited quizzes?
+								<h1>Join our Gold Plan</h1>
+								You can learn Korean faster by solving quizzes. <br/> How about joining our gold membership and getting access to unlimited quizzes?
 							</div>
 							<div styleName="signup-button-wrap">
-								<Link to="/pricing">SIGN UP NOW</Link>
+								<Link to="/pricing">JOIN NOW</Link>
 							</div>
 						</div>
 					)}
