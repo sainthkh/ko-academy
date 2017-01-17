@@ -2,6 +2,9 @@
 
 import * as React from 'react';
 import * as CSSModules from 'react-css-modules'
+
+import { isTokenValid } from '../../../common/lib/token'
+
 import MainBar from '../common/menu/MainBar'
 import { openDialog } from '../common/Dialog'
 import { PaymentDialog } from './PaymentDialog'
@@ -17,7 +20,7 @@ class Layout extends React.Component<{}, {}> {
 					<div className="wrap">
 						<h1>Learn Korean in Faster, Better Way</h1>
 						<h2>$9.99/month</h2>
-						<a href="#" onClick={e => openDialog(e, "payment")}>Join Now</a>
+						<a href="#" onClick={e => openDialog(e, isTokenValid() ? "payment":"login")}>Join Now</a>
 					</div>
 				</div>
 				<div className="wrap">
