@@ -50,6 +50,7 @@ var User = seq.define('User', {
 	accessLevel: Sequelize.STRING,
 	signupDate: Sequelize.DATE,
 	lastLogin: Sequelize.DATE,
+	stripeID: Sequelize.TEXT,
 }).sync()
 
 export interface CourseRecord {
