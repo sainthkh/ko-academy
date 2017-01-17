@@ -1,8 +1,8 @@
 'use strict'
 import * as React from 'react'
 
-import { FetchProps } from '../../../../common/lib/fetch/props'
-import { FetchableLayout } from '../../../../common/lib/fetch'
+import { FetchProps } from '../../../common/lib/fetch/props'
+import { FetchableLayout } from '../../../common/lib/fetch'
 
 export abstract class DialogLayout<P extends FetchProps, S> extends FetchableLayout<P, S> {
 	constructor(props) {

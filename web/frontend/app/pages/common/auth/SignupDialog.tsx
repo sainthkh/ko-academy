@@ -5,7 +5,7 @@ import { default as Spinner } from '../Spinner'
 import { FetchProps } from '../../../../common/lib/fetch/props'
 import { setToken } from '../../../../common/lib/token'
 import { FetchableComponent } from '../../../../common/lib/fetch'
-import { DialogLayout } from './AuthDialog'
+import { DialogLayout } from '../FetchableDialog'
 
 export interface LayoutProps extends FetchProps {
 	feedback: any
