@@ -64,14 +64,13 @@ class Layout extends DialogLayout<LayoutProps, {}> {
 	}
 
 	protected done() {
-		var title = "Thank you for signing up."
 		var main = (
 			<div styleName="message">
-				<p>I'll contact you soon when I open the site. </p>
-				<p><a href="/uploads/hangeul-practice">Here is your gift.</a></p>
+				<p>Let's get started.</p>
+				<p><a href="/hangeul">Go to Hangeul Course</a></p>
 			</div>
 		)
-		return <Dialog ID={this.formName} title={title} main={main} />
+		return <Dialog ID={this.formName} main={main} />
 	}
 }
 
