@@ -14,7 +14,7 @@ class Layout extends DialogLayout<FetchProps, {}> {
 		let main = (
 			<div>
 				<form name="payment-form" id="payment-form" onSubmit={this.submit}>
-					<span className="payment-errors"></span>
+					<div id="payment-errors" styleName="invalid"></div>
 					<input type="text" styleName="field" size={20} data-stripe="number" placeholder="card number"/>
 					<div styleName="card-info">
 						<div styleName="expiration">
@@ -66,10 +66,16 @@ class Layout extends DialogLayout<FetchProps, {}> {
 		button.disabled = true
 
 		Stripe.setPublishableKey('pk_test_EqP0OlXN1LSgmF42nzhh3TKs');
-		Stripe.card.createToken(document.forms['payment-form'], (err, res) => {
-			this.props.submit({
-				token: res.id
-			})
+		Stripe.card.createToken(document.forms['payment-form'], (status, res) => {
+			if(res.error) {
+				let errDiv = document.getElementById('payment-errors')
+				errDiv.textContent = res.error.message
+				button.disabled = false
+			} else {
+				this.props.submit({
+					token: res.id
+				})
+			}
 		});
 	}
 
