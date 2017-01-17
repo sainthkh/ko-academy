@@ -169,15 +169,21 @@ router.post('/renew-token', (req, res) => {
 				return db.find({ where: { email }})
 			})
 			.then((result:any) => {
-				let token = jwt.sign({ email }, config.secret, {
-					expiresIn: "3d"
-				})
-				res.json({
-					success: true,
-					token,
-					username: result.username,
-					accessLevel: result.accessLevel
-				})
+				if(result) {
+					let token = jwt.sign({ email }, config.secret, {
+						expiresIn: "3d"
+					})
+					res.json({
+						success: true,
+						token,
+						username: result.username,
+						accessLevel: result.accessLevel
+					})
+				} else {
+					res.json({
+						success: false,
+					})
+				}
 			})
 		}
 	})
