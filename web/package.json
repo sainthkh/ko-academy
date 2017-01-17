@@ -65,6 +65,7 @@
     "yargs": "^6.5.0"
   },
   "dependencies": {
+    "@types/stripe": "0.0.33",
     "async": "^2.1.4",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
@@ -85,6 +86,7 @@
     "sequelize": "^3.28.0",
     "sodium": "^2.0.1",
     "sqlite3": "^3.1.8",
+    "stripe": "^4.14.0",
     "zxcvbn": "^4.4.1"
   }
 }

@@ -171,3 +171,26 @@
 	text-align: center;
 	color: #666;
 }
+
+.card-info {
+	label {
+		display: inline-block;
+		@mixin dialog-font-size;
+		width: 50%;
+	}
+
+	.expiration {
+		@media(--medium) {
+			display: inline-block;
+			width: 50%;
+		}
+	}
+
+	.cvc {
+		@media(--medium) {
+			display: inline-block;
+			width: 49%;
+			margin-left: 1%;
+		}
+	}
+}
