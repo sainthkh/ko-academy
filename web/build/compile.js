@@ -71,7 +71,7 @@ function compileTsToES6(fileName, production) {
 	var result = compileTsFile(fileName, {
 		jsx: "react",
 		module: "es6",
-		target: "es5",
+		target: "es3",
 		moduleResolution: "node",
 	})
 	let replacements = [

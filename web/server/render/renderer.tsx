@@ -10,6 +10,7 @@ export function renderer(name, routes, createStore, publicUrl) {
 	const router = express.Router();
 
 	router.use('*', (req, res) => {
+		let IE = require('platform').parse(req.headers['user-agent']).name == 'IE'
 		var code = [
 			`<!DOCTYPE html>`,
 			`<html>`,
@@ -21,6 +22,7 @@ export function renderer(name, routes, createStore, publicUrl) {
 				`</head>`,
 			`<body>`,
 				`<div id="main">{{{markup}}}</div>`,
+				IE ? `<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-shim.min.js"></script>` + `<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.34.2/es6-shim.min.js"></script>` : ``,
 				`<script src="/${name}/bundle.js"></script>`,
 			`</body>`,
 			`</html>`,

@@ -40,7 +40,7 @@ router.use((req, res, next) => {
 						})
 						.then(customer => {
 							let user = result.dataValues
-							user.stripeID = customer.id
+							user.stripeID = customer.id;
 							(<any>req).user = user
 
 							next()

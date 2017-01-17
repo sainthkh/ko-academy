@@ -3,18 +3,19 @@
 .main-menu {
 	background: $main-bg;
 	font-size: 1rem;
-	min-height: 2rem;
+	height: 2rem;
 	@media (--medium) {
-		min-height: 4rem;
+		height: 4rem;
 	}
 	display: flex;
-	align-items: center;
 	border-bottom: 1px solid #9eaff6;
 }
 
 .content {
-	@mixin flex-center;
+	display: flex;
 	padding: 0 1rem;
+	align-items: center;
+	height: 100%;
 }
 
 .logo {
