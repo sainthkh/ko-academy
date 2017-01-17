@@ -53,7 +53,7 @@ class Layout extends DialogLayout<LayoutProps, {}> {
 		var main = (
 			<div styleName="message">
 				<p>Welcome back!</p>
-				<p><a href="/hangeul">Go to Hangeul Course</a></p>
+				<p><a href="/course/hangeul">Go to Hangeul Course</a></p>
 			</div>
 		)
 		return <Dialog ID={this.formName} main={main} />
