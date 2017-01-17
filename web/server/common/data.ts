@@ -79,6 +79,7 @@ var Lecture = seq.define('Lecture', {
 	downloads: Sequelize.TEXT,
 	script: Sequelize.TEXT,
 	quizSlug: Sequelize.TEXT,
+	nextSlug: Sequelize.TEXT,
 }).sync()
 
 var Quiz = seq.define('Quiz', {
@@ -88,6 +89,7 @@ var Quiz = seq.define('Quiz', {
 	title: Sequelize.TEXT,
 	questionIDs: Sequelize.TEXT,
 	accessLevel: Sequelize.TEXT,
+	nextSlug: Sequelize.TEXT,
 }).sync()
 
 var Question = seq.define('Question', {

@@ -15,7 +15,7 @@ class PageLayout extends EditorLayout<LayoutProps, {}> {
 	}
 
 	main() {
-		const { ID, title, slug, courseSlug, video, accessLevel, downloads, script } = this.props.content
+		const { ID, title, slug, courseSlug, video, accessLevel, downloads, script, quizSlug, nextSlug } = this.props.content
 		return (
 			<div className="wrap">
 				<form className="wide-form" name={this.formName} action="POST" onSubmit={this.submit}>
@@ -49,6 +49,14 @@ class PageLayout extends EditorLayout<LayoutProps, {}> {
 						<label htmlFor="content">Script</label>
 						<textarea name="script" className="form-field" rows={20}>{script}</textarea>
 					</div>
+					<div className="form-group">
+						<label>Quiz Slug</label>
+						<input type="text" className="form-field" name="quizSlug" defaultValue={quizSlug} placeholder="quiz slug" />
+					</div>	
+					<div className="form-group">
+						<label>Next Slug</label>
+						<input type="text" className="form-field" name="nextSlug" defaultValue={nextSlug} placeholder="next slug" />
+					</div>	
 					{this.props.waiting && (<div>Now saving lecture...</div>)}
 					{this.props.succeeded && (<div>Lecture saved</div>)}
 					{this.props.failed && (<div>Save failed. Maybe slug problem.</div>)}

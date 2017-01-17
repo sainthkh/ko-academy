@@ -25,7 +25,7 @@ class Layout extends AuthPage<PageLayoutProps, {}> {
 	}
 
 	protected approved(userLevel:AccessLevel, contentLevel:AccessLevel): JSX.Element {
-		let { title, video, downloads, script, courseSlug, quizSlug, quizContentLevel } = this.props.content
+		let { title, video, downloads, script, courseSlug, quizSlug, quizContentLevel, nextSlug } = this.props.content
 		return (
 			<div>
 				<MainBar />
@@ -43,6 +43,9 @@ class Layout extends AuthPage<PageLayoutProps, {}> {
 						<Script content={script} />
 						<div styleName="quiz">
 							{this.quiz(courseSlug, quizSlug, userLevel, this.accessLevelCode(quizContentLevel))}
+						</div>
+						<div className="next-btn">
+							<Link to={`/lecture/${courseSlug}/${nextSlug}`}>Go to Next</Link>
 						</div>
 					</div>
 				</div>

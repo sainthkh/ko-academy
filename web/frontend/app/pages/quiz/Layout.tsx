@@ -79,6 +79,7 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 	}
 
 	private renderResult(userLevel) {
+		const { courseSlug, nextSlug } = this.props.content
 		return (
 			<div>
 				<MainBar />
@@ -98,6 +99,9 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 							</div>
 						</div>
 					)}
+					<div className="next-btn">
+						<Link to={`/lecture/${courseSlug}/${nextSlug}`}>Go to Next</Link>
+					</div>
 				</div>
 			</div>
 		)

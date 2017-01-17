@@ -15,7 +15,7 @@ class PageLayout extends EditorLayout<LayoutProps, {}> {
 	}
 
 	main() {
-		const { ID, title, slug, courseSlug, questionIDs, accessLevel } = this.props.content
+		const { ID, title, slug, courseSlug, questionIDs, accessLevel, nextSlug } = this.props.content
 		return (
 			<div className="wrap">
 				<form className="wide-form" name={this.formName} action="POST" onSubmit={this.submit}>
@@ -41,6 +41,10 @@ class PageLayout extends EditorLayout<LayoutProps, {}> {
 						<label>AccessLevel</label>
 						<input type="text" className="form-field" name="accessLevel" defaultValue={accessLevel} placeholder="access level" />
 					</div>
+					<div className="form-group">
+						<label>Next Slug</label>
+						<input type="text" className="form-field" name="nextSlug" defaultValue={nextSlug} placeholder="next slug" />
+					</div>	
 					{this.props.waiting && (<div>Now saving quiz...</div>)}
 					{this.props.succeeded && (<div>Quiz saved</div>)}
 					{this.props.failed && (<div>Save failed. Maybe slug problem.</div>)}
