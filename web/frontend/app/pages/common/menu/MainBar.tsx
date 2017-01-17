@@ -12,7 +12,7 @@ class MainBar extends React.Component<{}, {}> {
 				<div className="wrap">
 					<div styleName="content">
 						<div styleName="logo">
-							<Link to="/">
+							<Link to="/course/hangeul">
 								<span styleName="title">WiseInit Academy</span>
 							</Link>
 						</div>
