@@ -65,7 +65,7 @@ class Layout extends DialogLayout<FetchProps, {}> {
 		let button = document.getElementById('submit-payment') as HTMLInputElement
 		button.disabled = true
 
-		Stripe.setPublishableKey('pk_test_EqP0OlXN1LSgmF42nzhh3TKs');
+		Stripe.setPublishableKey('pk_live_9L2fEsP7TWwUc9RML7hujfOx');
 		Stripe.card.createToken(document.forms['payment-form'], (status, res) => {
 			if(res.error) {
 				let errDiv = document.getElementById('payment-errors')
