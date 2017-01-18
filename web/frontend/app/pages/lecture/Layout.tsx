@@ -41,12 +41,16 @@ class Layout extends AuthPage<PageLayoutProps, {}> {
 						)}
 						<Downloads content={downloads} userLevel={this.props.accessLevel}/>
 						<Script content={script} />
-						<div styleName="quiz">
-							{this.quiz(courseSlug, quizSlug, userLevel, this.accessLevelCode(quizContentLevel))}
-						</div>
-						<div className="next-btn">
-							<Link to={`/lecture/${courseSlug}/${nextSlug}`}>Go to Next</Link>
-						</div>
+						{ quizSlug && (
+							<div styleName="quiz">
+								{this.quiz(courseSlug, quizSlug, userLevel, this.accessLevelCode(quizAccessLevel))}
+							</div>
+						)}
+						{ nextSlug && (
+							<div className="next-btn">
+								<Link to={`/lecture/${courseSlug}/${nextSlug}`}>Go to Next</Link>
+							</div>
+						)}
 					</div>
 				</div>
 			</div>

@@ -99,9 +99,11 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 							</div>
 						</div>
 					)}
-					<div className="next-btn">
-						<Link to={`/lecture/${courseSlug}/${nextSlug}`}>Go to Next</Link>
-					</div>
+					{ nextSlug && (
+						<div className="next-btn">
+							<Link to={`/lecture/${courseSlug}/${nextSlug}`}>Go to Next</Link>
+						</div>
+					)}
 				</div>
 			</div>
 		)
