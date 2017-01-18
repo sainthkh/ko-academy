@@ -27,7 +27,7 @@ class Downloads extends React.Component<DownloadsProps, {}> {
 		return content.split('\n').map(line => {
 			let parts = line.split('|')
 			if(this.props.userLevel == "guest") {
-				return <a href="#" onClick={ e => openDialog(e, "signup")}>{parts[0]}</a>
+				return <a href="#" onClick={ e => openDialog(e, "login")}>{parts[0]}</a>
 			} else {
 				return <a href={`/uploads/${parts[1]}`}>{parts[0]}</a>
 			}
