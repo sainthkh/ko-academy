@@ -25,7 +25,7 @@ class Layout extends AuthPage<PageLayoutProps, {}> {
 	}
 
 	protected approved(userLevel:AccessLevel, contentLevel:AccessLevel): JSX.Element {
-		let { title, video, downloads, script, courseSlug, quizSlug, quizContentLevel, nextSlug } = this.props.content
+		let { title, video, downloads, script, courseSlug, quizSlug, quizAccessLevel, nextSlug } = this.props.content
 		return (
 			<div>
 				<MainBar />
@@ -53,9 +53,9 @@ class Layout extends AuthPage<PageLayoutProps, {}> {
 		);
 	}
 
-	quiz(courseSlug, quizSlug, userLevel, quizContentLevel) {
+	quiz(courseSlug, quizSlug, userLevel, quizAccessLevel) {
 		if(userLevel < AccessLevel.GOLD) {
-			if(quizContentLevel != AccessLevel.FREE) {
+			if(quizAccessLevel != AccessLevel.FREE) {
 				return <Link to="/pricing">▶ Quiz<span styleName="gold">Gold</span></Link>
 			} else {
 				return <Link to={`/quiz/${courseSlug}/${quizSlug}`}>▶ Quiz<span styleName="gold">Gold Trial</span></Link>
