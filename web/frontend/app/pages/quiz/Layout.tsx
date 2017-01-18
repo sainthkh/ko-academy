@@ -62,7 +62,7 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 						{this.state.questionStatus == QuestionStatus.WRONG && (
 							<div styleName="wrong-message">
 								<h2>Hint:</h2>
-								<p>{question.choices[this.wrongAnswers[this.wrongAnswers.length - 1]-1].wrong}</p>
+								<p>{this.wrongMessage()}</p>
 							</div>
 						)}
 						<div styleName="button-wrap">
@@ -131,6 +131,17 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 			return s[this.randomInt(0, s.length)]
 		} else {
 			return "How about reviewing now? You can do better than this."
+		}
+	}
+
+	private wrongMessage() {
+		let id = this.wrongAnswers[this.wrongAnswers.length - 1]
+		let choices = this.currentQuestion().choices
+
+		for(let i = 0; i < choices.length; i++) {
+			if(choices[i].ID == id) {
+				return choices[i].wrong
+			}
 		}
 	}
 
