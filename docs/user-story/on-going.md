@@ -1,9 +1,10 @@
-# email
-* As an admin, I want to send my new practice sheets by email. 
- * I want to compose my email in admin UI because it's intuitive and easy.
- * To follow the law(CANSPAM), I have to show the address and physical address.
- * Users should be added to default email list when they signed up the form. 
+# Development Tools
+* As a developer, I can create the diff of files, and DB. 
+* As a system, config files should not be copied when making release version.
 
-
-
+# Quiz
+## Exercise Quiz
+* As a user, I can see the result and explanation at the end of the quiz, not each quiz. 
+* As a user, I can go back to previous questions. 
+* As a user, I can skip questions. 
 
