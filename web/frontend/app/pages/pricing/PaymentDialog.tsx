@@ -83,6 +83,7 @@ class Layout extends DialogLayout<FetchProps, {}> {
 
 	constructor(props) {
 		super(props)
+		this.formName = "payment-form"
 
 		this.submit = this.submit.bind(this)
 	}
