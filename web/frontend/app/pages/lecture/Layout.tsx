@@ -62,8 +62,8 @@ class Layout extends AuthPage<PageLayoutProps, {}> {
 			if(quizAccessLevel != AccessLevel.FREE) {
 				return <Link to="/pricing">▶ Quiz<span styleName="gold">Gold</span></Link>
 			} else {
-				return <Link to={`/quiz/${courseSlug}/${quizSlug}`}>▶ Quiz<span styleName="gold">Gold Trial</span></Link>
-			}			
+				return <a onClick={e => openDialog(e, "signup")}>▶ Quiz<span styleName="gold">Gold Trial</span></a>
+			}
 		} else {
 			return <Link to={`/quiz/${courseSlug}/${quizSlug}`}>▶ Quiz</Link>
 		}
