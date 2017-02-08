@@ -95,25 +95,64 @@
 	}
 }
 
-.quiz {
-	@mixin lecture-margin;
-	
-	a {
-		font-size: 1.2rem;
-		text-decoration: none;
-		color: black;
+.lecture-nav {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-bottom: 2rem;
 
+	.quiz,
+	.next-btn {
+		width: 80%;
+		box-sizing: border-box;
+		padding: 0.5rem 1.5rem;
 		@media(--medium) {
-			font-size: 1.8rem;
+			width: 30%;
+			text-align: center;
 		}
 	}
 
-	.gold {
-		@mixin gold;
-		padding: 0 10px;
-		margin-left: 10px;
+	a {
+		display: block;
+		width: 100%;
+		height: 100%;
+		font-size: 1.2rem;
+		text-decoration: none;
+		cursor: pointer;
+
 		@media(--medium) {
-			font-size: 0.6em;
+			font-size: 1.5rem;
+		}
+	}
+	
+	.quiz {		
+		background: #f67b0e;
+		margin-bottom: 1rem;
+
+		@media(--medium) {
+			margin-right: 1.5rem;
+			margin-bottom: 0;
+		}
+
+		a {
+			color: black;
+		}
+
+		.gold {
+			@mixin gold;
+			padding: 0 10px;
+			margin-left: 10px;
+			font-size: 1.1rem;
+			@media(--medium) {
+				font-size: 0.6em;
+			}
+		}
+	}
+
+	.next-btn {
+		background: #2227f2;
+		a {
+			color: white;
 		}
 	}
 }

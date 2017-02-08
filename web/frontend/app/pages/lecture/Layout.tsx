@@ -41,16 +41,18 @@ class Layout extends AuthPage<PageLayoutProps, {}> {
 						)}
 						<Downloads content={downloads} userLevel={this.props.accessLevel}/>
 						<Script content={script} />
+						<nav styleName="lecture-nav">
 						{ quizSlug && (
 							<div styleName="quiz">
 								{this.quiz(courseSlug, quizSlug, userLevel, this.accessLevelCode(quizAccessLevel))}
 							</div>
 						)}
 						{ nextSlug && (
-							<div className="next-btn">
+							<div styleName="next-btn">
 								<Link to={`/lecture/${courseSlug}/${nextSlug}`}>Go to Next</Link>
 							</div>
 						)}
+						</nav>
 					</div>
 				</div>
 			</div>
@@ -60,12 +62,12 @@ class Layout extends AuthPage<PageLayoutProps, {}> {
 	quiz(courseSlug, quizSlug, userLevel, quizAccessLevel) {
 		if(userLevel < AccessLevel.GOLD) {
 			if(quizAccessLevel != AccessLevel.FREE) {
-				return <Link to="/pricing">▶ Quiz<span styleName="gold">Gold</span></Link>
+				return <Link to="/pricing">Quiz<span styleName="gold">Gold</span></Link>
 			} else {
-				return <a onClick={e => openDialog(e, "signup")}>▶ Quiz<span styleName="gold">Gold Trial</span></a>
+				return <a onClick={e => openDialog(e, "signup")}>Quiz<span styleName="gold">Gold Trial</span></a>
 			}
 		} else {
-			return <Link to={`/quiz/${courseSlug}/${quizSlug}`}>▶ Quiz</Link>
+			return <Link to={`/quiz/${courseSlug}/${quizSlug}`}>Quiz</Link>
 		}
 	}
 
