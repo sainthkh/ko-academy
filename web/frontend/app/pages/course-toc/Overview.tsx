@@ -14,7 +14,7 @@ class Overview extends React.Component<OverviewProps, {}> {
 			<div styleName="overview">
 				<div className="wrap">
 					<h1>{this.props.title}</h1>
-					<p>{this.props.description}</p>
+					<div styleName="description" dangerouslySetInnerHTML={{__html:this.props.description}} />
 				</div>
 			</div>
 		);

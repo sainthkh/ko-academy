@@ -16,7 +16,7 @@ handleGetRequest({
 	path: '/lecture',
 	modifyContent: data => {
 		return new Promise((resolve, reject) => {
-			data.script = marked(data.script)
+			data.script = compileContent(data.script)
 			resolve(data)
 		})
 	},
@@ -26,6 +26,12 @@ handleGetRequest({
 	router, 
 	Model: Course, 
 	path: '/course',
+	modifyContent: data => {
+		return new Promise((resolve, reject) => {
+			data.description = compileContent(data.description)
+			resolve(data)
+		})
+	}
 })
 
 handleGetRequest({
@@ -44,7 +50,7 @@ handleGetRequest({
 			.then((results: any[]) => {
 				let questions = results.map(result => {
 					let values = result.dataValues
-					values.question = marked(shortcode.parse(values.question))
+					values.question = compileContent(values.question)
 					delete values.createdAt
 					delete values.updatedAt
 					return values
@@ -56,5 +62,9 @@ handleGetRequest({
 		})
 	}
 })
+
+function compileContent(content) {
+	return marked(shortcode.parse(content))
+}
 
 export default router
