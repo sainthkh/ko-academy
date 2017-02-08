@@ -3,6 +3,7 @@ import * as marked from 'marked'
 marked.setOptions({
 	breaks: true
 })
+import * as shortcode from 'shortcode-parser'
 
 import { handleGetRequest } from '../common/request'
 import { Lecture, Course, Quiz, Question } from '../common/data'
@@ -43,6 +44,7 @@ handleGetRequest({
 			.then((results: any[]) => {
 				let questions = results.map(result => {
 					let values = result.dataValues
+					values.question = marked(shortcode.parse(values.question))
 					delete values.createdAt
 					delete values.updatedAt
 					return values
