@@ -162,6 +162,10 @@ $correct: #045e1c;
 
 	.check {
 		@mixin color-scheme #39b54a;
+
+		&:disabled {
+			@mixin color-scheme #aeaeae;
+		}
 	}
 
 	.next {

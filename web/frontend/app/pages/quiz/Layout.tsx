@@ -24,6 +24,7 @@ interface QuizLayoutState {
 	chosenAnswer: number
 	questionStatus: QuestionStatus
 	currentQuestionIndex: number
+	disableCheck: boolean
 }
 
 class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
@@ -67,7 +68,7 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 						)}
 						<div styleName="button-wrap">
 							{this.state.questionStatus != QuestionStatus.CORRECT && (
-								<button styleName="check" onClick={this.onClickCheck}>check answer</button>
+								<button styleName="check" onClick={this.onClickCheck} disabled={this.state.disableCheck}>check answer</button>
 							) || (
 								<button styleName="next" onClick={this.onClickNext}>go to next</button>
 							)}
@@ -158,6 +159,7 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 			if(this.wrongAnswers.indexOf(ID) == -1) {
 				this.setState({
 					chosenAnswer: ID,
+					disableCheck: false,
 				} as QuizLayoutState)
 			}
 		}
@@ -167,22 +169,24 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 		e.preventDefault()
 
 		let question = this.currentQuestion()
-		const chosenAnswer = this.state.chosenAnswer
+		let chosenAnswer = this.state.chosenAnswer
+		let questionStatus;
 		if(chosenAnswer == question.answerID) {
 			if(this.state.questionStatus == QuestionStatus.NORMAL) {
 				this.correctCount++
 			}
-			this.setState({
-				chosenAnswer: -1,
-				questionStatus: QuestionStatus.CORRECT,
-			} as QuizLayoutState)
+			chosenAnswer = -1
+			questionStatus =  QuestionStatus.CORRECT
 		} else {
-			this.setState({
-				chosenAnswer,
-				questionStatus: QuestionStatus.WRONG,
-			}  as QuizLayoutState)
+			questionStatus = QuestionStatus.WRONG
 			this.wrongAnswers.push(chosenAnswer)
 		}
+		
+		this.setState({
+			chosenAnswer,
+			questionStatus,
+			disableCheck: true,
+		} as QuizLayoutState)
 	}
 
 	private onClickNext(e) {
@@ -205,6 +209,7 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 		this.setState({
 			currentQuestionIndex: ++this.state.currentQuestionIndex,
 			questionStatus: QuestionStatus.NORMAL,
+			disableCheck: true,
 		} as QuizLayoutState)
 	}
 
@@ -272,6 +277,7 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 			chosenAnswer: -1,
 			questionStatus: QuestionStatus.NORMAL,
 			currentQuestionIndex: 0,
+			disableCheck: true,
 		}
 
 		this.correctCount = 0
