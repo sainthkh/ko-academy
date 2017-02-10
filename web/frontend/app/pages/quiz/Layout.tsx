@@ -230,7 +230,7 @@ class Layout extends AuthPage<PageLayoutProps, QuizLayoutState> {
 
 	private parseQuestions(questions) {
 		this.questions = questions.map(question => {
-			let answerChoices = question.answerChoices.split('\n')
+			let answerChoices = question.answerChoices.split('\n').filter(v => !v.match(/^\s*$/)) // to remove empty lines
 			let correctMessages = question.correctMessages.split('\n')
 			let wrongMessages = question.wrongMessages.split('\n')
 			let choices = []
