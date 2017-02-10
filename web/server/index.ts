@@ -18,6 +18,7 @@ if (app.get('env') === 'development') {
 		}
 	});
 
+	app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
 	app.use(express.static(path.join(__dirname, '..', 'static')))
 }
 
