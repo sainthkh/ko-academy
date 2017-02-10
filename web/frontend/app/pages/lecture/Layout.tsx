@@ -18,10 +18,16 @@ import styles from './style.css'
 
 class Layout extends AuthPage<PageLayoutProps, {}> {
 	componentWillMount() {
-		this.props.load({
-			courseSlug: this.props.params.courseSlug,
-			slug: this.props.params.slug,
-		})
+		const { courseSlug, slug } = this.props.params
+		this.load(courseSlug, slug)
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		const { courseSlug, slug } = nextProps.params
+		if(this.currentSlug != `${courseSlug}/${slug}`) {
+			this.load(courseSlug, slug)
+		}
+		return true
 	}
 
 	protected approved(userLevel:AccessLevel, contentLevel:AccessLevel): JSX.Element {
@@ -71,11 +77,22 @@ class Layout extends AuthPage<PageLayoutProps, {}> {
 		}
 	}
 
+	load(courseSlug, slug) {
+		this.props.load({
+			courseSlug,
+			slug,
+		})
+		this.currentSlug = `${courseSlug}/${slug}`
+	}
+
 	constructor(props) {
 		super(props)
 
 		this.quiz = this.quiz.bind(this)
+		this.load = this.load.bind(this)
 	}
+
+	private currentSlug:string
 }
 
 export const LecturePage = FetchablePageComponent({
