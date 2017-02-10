@@ -40,7 +40,7 @@ export abstract class PageLayout<P extends PageLayoutProps, S> extends React.Com
 		return (
 			<div>
 				<h1>Loading...</h1>
-				<p>Please waiting</p>
+				<p>Please wait.</p>
 			</div>
 		)
 	}
