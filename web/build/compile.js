@@ -13,10 +13,16 @@ function compile(files, production) {
 	return new Promise(function(resolve, reject) {
 		async.each(files, (fileName, done) => {
 			// ignore tests in production
-			if(production && fileName.match(/.*(\/|\\)test(\/|\\).*/)) {
-				done()
-				return 
+			if(production) {
+				if (
+					fileName.match(/.*(\/|\\)test(\/|\\).*/) || 
+					fileName.match(/config\..*/)
+				) {
+					done()
+					return
+				} 
 			}
+				
 			var ext = path.extname(fileName)
 			let relPath = path.relative(PROJECT_ROOT, fileName)
 			switch(ext) {
